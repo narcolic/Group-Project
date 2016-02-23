@@ -1,3 +1,5 @@
+import Game.Pawn;
+import Menu.Language;
 
 public class Player extends Pawn {
 

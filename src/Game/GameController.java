@@ -1,5 +1,6 @@
+package Game;
 
-public class GameLogic {
+public class GameController {
 
 	private int numOfWalls[];
 	private int turnNumber;
@@ -11,7 +12,7 @@ public class GameLogic {
 	 * 
 	 * @param players
 	 */
-	public GameLogic(Player[] players){
+	public GameController(Player[] players){
 		
 	}
 	
