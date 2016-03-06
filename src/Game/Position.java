@@ -1,4 +1,3 @@
-package Game;
 
 public class Position {
 
@@ -19,7 +18,8 @@ public class Position {
 	 * @param y
 	 */
 	public Position(int x, int y){
-		
+		this.x = x;
+		this.y = y;
 	}
 	
 	/**
@@ -27,7 +27,7 @@ public class Position {
 	 * @return
 	 */
 	public int getX(){
-		return 0;
+		return x;
 	}
 	
 	/**
@@ -35,15 +35,15 @@ public class Position {
 	 * @param x
 	 */
 	public void setX(int x){
-		
+		this.x = x;
 	}
 	
 	/**
 	 * 
-	 * @return
+	 * @return y
 	 */
 	public int getY(){
-		return 0;
+		return y;
 	}
 	
 	/**
@@ -51,6 +51,6 @@ public class Position {
 	 * @param y
 	 */
 	public void setY(int y){
-		
+		this.y = y;
 	}
 }
