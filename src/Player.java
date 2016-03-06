@@ -14,18 +14,18 @@ public class Player extends Pawn {
 	
 	/**
 	 * 
-	 * @return
+	 * @return name 
 	 */
 	public String getName(){
-		return null;
+		return name;
 	}
 	
 	/**
 	 * 
-	 * @return
+	 * @return playerID 
 	 */
 	public int getPlayerID(){
-		return 0;
+		return playerID;
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public class Player extends Pawn {
 	 * @param name
 	 */
 	public void setName(String name){
-		
+		this.name = name;
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class Player extends Pawn {
 	 * @param playerID
 	 */
 	public void setPlayerID(int playerID){
-		
+		this.playerID = playerID;
 	}
 	
 }
