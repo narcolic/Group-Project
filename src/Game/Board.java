@@ -1,20 +1,30 @@
-package Game;
-
 import java.util.ArrayList;
 
 
 public class Board implements BoardGUI{
 	
-	private int width;
-	private int length;
+	private static Board boardInstance = null; // limit to 1 instance
+	private static final int width = 9;
+	private static final int length = 9;
 	private Pawn[] pawns;
-	private ArrayList<Wall> walls;
+	private ArrayList<Fence> walls;
 	
 	/**
 	 * Constructor
 	 */
-	public Board(){
+	private Board(){
 		
+	}
+	
+	/**
+	 * Board created only when required
+	 * @return boardInstance 
+	 */
+	public static Board getInstance(){
+		if(boardInstance == null){
+			boardInstance = new Board(); // only creates the board if no other board exists
+		}
+		return boardInstance;
 	}
 	
 	/**
@@ -26,6 +36,7 @@ public class Board implements BoardGUI{
 	}
 
 	/**
+	 * METHOD NOT NEEDED FOR CURRENT IMPLEMENTATION
 	 * @param width
 	 * @param length
 	 */
@@ -48,8 +59,12 @@ public class Board implements BoardGUI{
 	 * 
 	 * @return
 	 */
-	public ArrayList<Wall> getWalls(){
+	public ArrayList<Fence> getWalls(){
 		return null;
 		
+	}
+	
+	public boolean placeFence(Position pos, boolean isVertical, int size){
+		return false;
 	}
 }
