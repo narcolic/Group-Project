@@ -45,13 +45,13 @@ public class Fence {
 	}
 	
 	/**
-	 * Adds fences to the provided list as long as there is no obstruction from other fences. Does not check for board boundaries.
+	 * Creates a fence using the parameters provided there is no intersection.
 	 * @param fenceList
 	 * @param origin
 	 * @param isVertical
-	 * @return True if there was no obstruction - fenced added with no error.
+	 * @return returns a fence if valid, null otherwise
 	 */
-	public static boolean addFence(ArrayList<Fence> fenceList, Position origin, boolean isVertical)
+	public static ArrayList<Fence> generateFence(ArrayList<Fence> fenceList, Position origin, boolean isVertical)
 	{
 		boolean obstructed = false;
 		ArrayList<Fence> tempList = new ArrayList<Fence>();
@@ -91,12 +91,77 @@ public class Fence {
 			tempList.add(tempF);
 		}
 		
-		//completed process without breaking
-		if(!obstructed)
+		if(obstructed)
 		{
-			fenceList.addAll(tempList);
+			return null;
 		}
+		else
+		{
+			return tempList;
+		}
+	}
+	
+	/**
+	 * Adds fences to the provided list as long as there is no obstruction from other fences. Does not check for board boundaries.
+	 * @param fenceList
+	 * @param origin
+	 * @param isVertical
+	 * @return True if there was no obstruction - fenced added with no error.
+	 */
+	private static boolean addFence(ArrayList<Fence> fenceList, Position origin, boolean isVertical)
+	{
+		ArrayList<Fence> tempList = new ArrayList<Fence>();
 		
-		return !obstructed;
+		tempList = generateFence(fenceList, origin, isVertical);
+		
+		//completed process without breaking
+		if(tempList == null) return false;
+		
+		fenceList.addAll(tempList);
+		return true;
+	}
+
+	public static boolean addFence(ArrayList<Fence> fenceList, Position origin, boolean isVertical, int boardWidth, int boardHeight)
+	{
+		ArrayList<Fence> tempList = new ArrayList<Fence>();
+		
+		tempList = generateFence(fenceList, origin, isVertical);
+		
+		//completed process without breaking
+		if(tempList == null) return false;
+		
+		//fence does not go past the board boundary
+		if(checkBoundaryCollision(tempList, Board.getInstance().getSizeX(), Board.getInstance().getSizeY())) return false;
+		
+		fenceList.addAll(tempList);
+		return true;
+	}
+	
+	/**
+	 * Checks a proposed place-able fence list against the boundaries of a game board
+	 * @param placedFence
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	public static boolean checkBoundaryCollision(ArrayList<Fence> placedFence, int width, int height)
+	{
+		for(Fence f : placedFence)
+		{
+			if(f.pos1.getX() < 0 || f.pos1.getX() > width - 2) return true;
+			if(f.pos1.getY() < 0 || f.pos1.getY() > width - 2) return true;
+			if(f.pos2.getX() < 0 || f.pos2.getX() > width - 2) return true;
+			if(f.pos2.getY() < 0 || f.pos2.getY() > width - 2) return true;
+		}
+		return false;
+	}
+	
+	public static boolean checkBoundaryCollision(Fence fence, int width, int height)
+	{
+		if(fence.pos1.getX() < 0 || fence.pos1.getX() > width - 2) return true;
+		if(fence.pos1.getY() < 0 || fence.pos1.getY() > width - 2) return true;
+		if(fence.pos2.getX() < 0 || fence.pos2.getX() > width - 2) return true;
+		if(fence.pos2.getY() < 0 || fence.pos2.getY() > width - 2) return true;
+		return false;
 	}
 }
