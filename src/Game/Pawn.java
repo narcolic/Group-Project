@@ -33,16 +33,16 @@ public class Pawn {
     public void setDefaultPosition() {
         switch (pawnID) {
             case 1:
-                this.position = null;
+                this.position.setXY(9,0);
                 break;
             case 2:
-                this.position = null;
+                this.position.setXY(9,17);
                 break;
             case 3:
-                this.position = null;
+                this.position.setXY(17,9);
                 break;
             case 4:
-                this.position = null;
+                this.position.setXY(0,9);
                 break;
         }
     }
