@@ -1,11 +1,10 @@
 package Menu;
 
-public class Menu implements MenuUI{
+public class Menu {
 
 	private String selection;
 	private Options optionMenu;
-	private GameMode startGameMenu;
-	private Menu.Help helpMenu;
+	private Help helpMenu;
 
 	/**
 	 * Constructor

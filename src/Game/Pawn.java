@@ -29,7 +29,6 @@ public class Pawn {
 /*    public void setNewPawnID(int newID) {
         this.pawnID = newID;
     }*/
-
     public void setDefaultPosition() {
         switch (pawnID) {
             case 1:
