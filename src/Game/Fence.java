@@ -1,6 +1,6 @@
 package Game;
 
-public class Wall {
+public class Fence {
 
 	private static int size;
 	private Position pos1;
@@ -9,7 +9,7 @@ public class Wall {
 	/**
 	 * Constructor
 	 */
-	public Wall(){
+	public Fence(){
 		
 	}
 }

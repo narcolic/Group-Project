@@ -8,7 +8,8 @@ public class Position {
 	 * Constructor
 	 */
 	public Position(){
-		
+		setX(0);
+		setY(0);
 	}
 	
 	/**
@@ -18,15 +19,16 @@ public class Position {
 	 * @param y
 	 */
 	public Position(int x, int y){
-		this.x = x;
-		this.y = y;
+		
+		setX(x);
+		setY(y);
 	}
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public int getX(){
+	public int getX(){		
 		return x;
 	}
 	
