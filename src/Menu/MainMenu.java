@@ -37,6 +37,8 @@ public class MainMenu {
         public MenuPanel() {
             JLabel label = new JLabel("Quoridor");
             setLayout(new GridBagLayout());
+            setPreferredSize(new Dimension(800,600));
+            setMinimumSize(getPreferredSize());
 
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
