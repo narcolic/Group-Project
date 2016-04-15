@@ -2,9 +2,9 @@ package Menu;
 
 public class Options {
 
-    private double volume; //sliders value
+    public double volume; //VolumeSlider value
     //private Slider volumeSlider; //maybe on MenuView
-    private boolean mute;
+    public boolean mute;
     private static double DEFAULT_VOLUME = 50.0; // Scale to 1-100 probably
 
     /**
@@ -16,10 +16,7 @@ public class Options {
         //volumeSlider=new Slider("Volume", DEFAULT_VOLUME, 0, 100,1); //maybe on MenuView
     }
 
-    public void muteVolume(){
-        this.volume=0;
-        mute=true;
-    }
+
 
     public void setVolume(double newVolume){
         this.volume=newVolume;

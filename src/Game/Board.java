@@ -1,7 +1,13 @@
+package Game;
+
+import Game.BoardGUI;
+import Game.Fence;
+import Game.Pawn;
+
 import java.util.ArrayList;
 
 
-public class Board implements BoardGUI{
+public class Board implements BoardGUI {
 	
 	private static Board boardInstance = null; // limit to 1 instance
 	private static final int width = 9;

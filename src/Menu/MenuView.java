@@ -53,7 +53,7 @@ public class MenuView {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false); // hide this window
 				Options op = new Options();
-				op.Options(); // open Options window
+				//op.Options(); // open Options window
 			}
 		});		
 		btnOptions.setBounds(132, 137, 155, 46);
@@ -65,7 +65,7 @@ public class MenuView {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false); // hide this window
 				Help help = new Help();
-				help.Help(); // open Help window
+				//help.Help(); // open Help window
 			}
 		});
 		btnHelp.setBounds(132, 80, 155, 46);
