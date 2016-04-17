@@ -1,12 +1,13 @@
 package Menu;
 
 public class MenuController {
-    private MenuView mview;
+    private MenuView menuView;
     private Options options;
-    private Menu menu_model;
+    private Menu menuModel;
 
-    public MenuController(){}
-
+    public MenuController(){
+        
+    }
 
     public void setMute(){
         options.volume=0;
