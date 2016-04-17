@@ -22,6 +22,7 @@ public class MainMenu {
                 }
 
                 JFrame frame = new JFrame();
+                frame.setTitle("Quoridor");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setLayout(new BorderLayout());
                 frame.add(new MenuPanel());
@@ -35,23 +36,24 @@ public class MainMenu {
     protected class MenuPanel extends JPanel {
 
         public MenuPanel() {
-            JLabel label = new JLabel("Quoridor");
+           // JLabel label = new JLabel("Quoridor");
             setLayout(new GridBagLayout());
             setPreferredSize(new Dimension(800,600));
             setMinimumSize(getPreferredSize());
+            
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.gridx = 0;
+            constraints.gridy = 0;
+           // add(label, constraints);
 
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            add(label, gbc);
-
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.gridy++;
-            add(new JButton("Start Game"), gbc);
-            gbc.gridy++;
-            add(new JButton("Options"), gbc);
-            gbc.gridy++;
-            add(new JButton("Quit"), gbc);
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            constraints.gridy++;
+            add(new JButton("Start Game"), constraints);
+            constraints.gridy++;
+            
+            add(new JButton("Options"), constraints);
+            constraints.gridy++;
+            add(new JButton("Quit"), constraints);
         }
     }
 }
