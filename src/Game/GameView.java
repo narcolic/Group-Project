@@ -36,8 +36,7 @@ public class GameView extends Application {
         	grid.setHeight(50);
         	grid.setFill(Color.RED);
         	
-
-        root.getChildren().add(grid); 
+        	root.getChildren().add(grid); 
         	x++;
         	posX = posX+60;
         	
@@ -51,8 +50,6 @@ public class GameView extends Application {
         	}
         }
 
-
-        
         gameStage.setScene(scene);
         gameStage.show();
     }
