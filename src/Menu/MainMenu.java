@@ -55,8 +55,7 @@ public class MainMenu extends Application {
             public void handle(ActionEvent event) {
                 System.out.println("Help");
             }
-        });
-        
+        });   
         
         //create the Quit button
         Button quit = new Button();
