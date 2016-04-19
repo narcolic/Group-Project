@@ -41,7 +41,7 @@ public class Position {
 	 * @return
 	 */
 	public int getX(){
-		return 0;
+		return this.x;
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class Position {
 	 * @return
 	 */
 	public int getY(){
-		return 0;
+		return this.y;
 	}
 	
 	/**

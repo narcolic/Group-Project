@@ -13,8 +13,47 @@ public class Fence
 	/**Determines the orientation of this fence*/ 
 	private boolean isVertical;
 	
+	
+	//debugging
+	public static void main(String[] args)
+	{
+		Fence[] allFences = new Fence[10];
+		int size = 4;
+		boolean result = false;
+		allFences[0] = new Fence(new Position(0,1), false, 2);
+		
+		result = validateMovement(new Position(1,0), Orientation.Direction.SOUTH, allFences);
+		System.out.println(result + ": Attempt move from 1,0 to 1,1 with fence blocking.");
+		result = validateMovement(new Position(1,1), Orientation.Direction.NORTH, allFences);
+		System.out.println(result + ": Attempt move from 1,1 to 1,0 with fence blocking.");
+		result = validateMovement(new Position(2,0), Orientation.Direction.SOUTH, allFences);
+		System.out.println(result + ": Move from 2,0 to 2,1 while clear.");
+		
+		result = validateBoundary(new Fence(-1, 0, false, 2), size, size);
+		System.out.println(result + ": Check boundary place horizontal fence at -1,0.");
+		result = validateBoundary(new Fence(2, 0, false, 2), size, size);
+		System.out.println(result + ": Boundary place horizontal fence at 2,0.");
+		result = validateBoundary(new Fence(3, 0, false, 2), size, size);
+		System.out.println(result + ": Check boundary place horizontal fence at 3,0.");
+		
+		result = validateInteresections(new Fence(new Position(1,0), true, 1), allFences);
+		System.out.println(result + ": Check place short vertical fence at 1,0.");
+		result = validateInteresections(new Fence(new Position(1,0), true, 2), allFences);
+		System.out.println(result + ": Check attempt placing intersecting vertical fence at 1,0.");
+
+		result = validateInteresections(new Fence(new Position(1,1), false, 2), allFences);
+		System.out.println(result + ": Check place vertical fence at 1,1.");
+		result = validateInteresections(new Fence(new Position(2,1), false, 2), allFences);
+		System.out.println(result + ": Check place vertical fence at 2,1.");
+		result = validateInteresections(new Fence(new Position(2,0), true, 2), allFences);
+		System.out.println(result + ": Check place vertical fence at 2,0.");
+		allFences[1] = new Fence(new Position(2,0), false, 2);
+		
+	}
+	
+	
 	/**
-	 * Constructor
+	 * Standard Constructor
 	 */
 	public Fence(Position pos, boolean isVertical, int length)
 	{
@@ -31,23 +70,43 @@ public class Fence
 		this.isVertical = isVertical;
 		this.length = FENCE_LENGTH;
 	}
+	/**
+	 * Constructor building its own position
+	 */
+	public Fence(int X, int Y, boolean isVertical, int length)
+	{
+		this.pos = new Position(X,Y);
+		this.isVertical = isVertical;
+		this.length = length;
+	}
+	/**
+	 * Constructor building its own position and default length (2)
+	 */
+	public Fence(int X, int Y, boolean isVertical)
+	{
+		this.pos = new Position(X,Y);
+		this.isVertical = isVertical;
+		this.length = FENCE_LENGTH;
+	}
 	
 	/**
 	 * Validates if a fence can be placed at this position, given a board boundary
 	 * @param fence
 	 * @param boardWidth
 	 * @param boardHeight
-	 * @return true if successful
+	 * @return True if there is no boundary crossing
 	 */
 	public static boolean validateBoundary(Fence fence, int boardWidth, int boardHeight)
 	{
 		if(fence.isVertical)
 		{
-			if(fence.pos.getY() + fence.length >= boardHeight) return false;
+			if(fence.pos.getY() < 0
+			|| fence.pos.getY() + fence.length > boardHeight) return false;
 		}
 		else
 		{
-			if(fence.pos.getX() + fence.length >= boardWidth) return false;
+			if(fence.pos.getX() < 0
+			|| fence.pos.getX() + fence.length > boardWidth) return false;
 		}
 		return true;
 	}
@@ -56,12 +115,13 @@ public class Fence
 	 * Validates if any fences intersect with each other
 	 * @param fence
 	 * @param allFences
-	 * @return true if no intersections
+	 * @return True if there are no intersections
 	 */
 	public static boolean validateInteresections(Fence fence, Fence[] allFences)
 	{
 		int fenceParallel, fencePerpendicular, checkParallel, checkPerpendicular;
 		//establish which side direction is in
+		//System.out.println("	Fence: " + fence.pos.getX() + "|" + fence.pos.getY() + ", length " + fence.length);
 		if (!fence.isVertical) {
 			//fence is horizontal, so parallel fences are along the x
 			fenceParallel = fence.pos.getX();
@@ -74,6 +134,8 @@ public class Fence
 		
 		for(Fence check : allFences)
 		{
+			if(check == null) continue;
+			//System.out.println("	Check: " + check.pos.getX() + "|" + check.pos.getY() + ", length " + check.length);
 			if (!check.isVertical){
 				checkParallel = check.pos.getX();
 				checkPerpendicular = check.pos.getY();
@@ -85,10 +147,10 @@ public class Fence
 			if (check.isVertical == fence.isVertical)
 			{
 				//is parallel
-				if(fenceParallel != checkParallel) continue; //not on same axis
+				if(fencePerpendicular != checkPerpendicular) continue; //not lying on same axis
 				
-				if((fencePerpendicular < checkPerpendicular && fenceParallel + fence.length > fencePerpendicular)
-				|| (checkPerpendicular < fencePerpendicular && fencePerpendicular + check.length > fenceParallel))
+				if((fenceParallel < checkParallel + check.length && fenceParallel + fence.length > checkParallel)
+				|| (checkParallel < fenceParallel + fence.length && checkParallel + check.length > fenceParallel))
 				{
 					//intersection here by means of fences layered inside one another
 					return false; 
@@ -97,11 +159,11 @@ public class Fence
 			else
 			{
 				//is perpendicular
-				if(checkPerpendicular <= fencePerpendicular
-				|| checkPerpendicular >= fencePerpendicular + fence.length) continue; //wouldn't intersect
+				if(checkParallel >= fencePerpendicular
+				|| checkParallel + check.length <= fencePerpendicular) continue; //not along fence's parallel line
 				
-				if(fenceParallel < checkParallel
-				&& fenceParallel + fence.length > checkParallel)
+				if(fenceParallel < checkPerpendicular
+				&& fenceParallel + fence.length > checkPerpendicular) //intersects along perpendicular
 				{
 					//intersection here by fully crossing a fence's line
 					return false;
@@ -111,6 +173,50 @@ public class Fence
 		return true;
 	}
 	
+	/**
+	 * Validates if a move collides with a fence or not
+	 * @param pos
+	 * @param direction
+	 * @param allFences
+	 * @return True if there is no collision
+	 */
+	public static boolean validateMovement(Position pos, Orientation.Direction direction, Fence[] allFences)
+	{
+		for(Fence fence : allFences)
+		{
+			if(fence == null) continue;
+			//ignore fences that are parallel to the movement direction
+			if(Orientation.isParallel(direction, fence.isVertical)) continue;
+			
+			if(Orientation.isVertical(direction))
+			{
+				//	System.out.println("    px " + pos.getX() + ": left " + fence.pos.getX() + " | right " + (fence.pos.getX() + fence.length));
+				if(fence.pos.getX() <= pos.getX()
+				&& fence.pos.getX() + fence.length > pos.getX())
+				{
+					//	System.out.println("    py " + pos.getY() + ": y " + fence.pos.getY());
+					if(direction == Orientation.Direction.NORTH
+					&& fence.pos.getY() == pos.getY()) return true;
+					
+					if(direction == Orientation.Direction.SOUTH
+					&& fence.pos.getY() == pos.getY() + 1) return true;
+				}
+			}
+			else
+			{
+				if(fence.pos.getY() <= pos.getY()
+				&& fence.pos.getY() + fence.length > pos.getY())
+				{
+					if(direction == Orientation.Direction.WEST
+					&& fence.pos.getX() == pos.getX()) return true;
+					
+					if(direction == Orientation.Direction.EAST
+					&& fence.pos.getX() == pos.getX() + 1) return true;
+				}
+			}
+		}
+		return false;
+	}
 	
 	/**
 	 * Checks through a list to see if there is a fence blocking collision between two points
