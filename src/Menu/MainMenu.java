@@ -84,7 +84,6 @@ public class MainMenu extends Application {
         root.getChildren().add(quit);
         root.setAlignment(Pos.CENTER);
         
-        
         primaryStage.setScene(new Scene(root, 300, 250));
         primaryStage.show();
     }
