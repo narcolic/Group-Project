@@ -1,3 +1,4 @@
+import Game.Player;
 
 public class Room {
 
