@@ -9,66 +9,42 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
+//import javafx.scene.control.Alert;
 
-public class MainMenu extends Application {
+public class MainView extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
+    public Button start;
+    public Button options;
+    public Button help;
+    public Button quit;
+
     @Override
-    public void start(Stage primaryStage) {
+    public void start(final Stage primaryStage) {
         primaryStage.setTitle("Main Menu");
 
         //create the start button
-        Button start = new Button();
+        start = new Button();
         start.setText("Start");
         start.setMaxWidth(Double.MAX_VALUE);
-        start.setOnAction(new EventHandler<ActionEvent>() {
-        	
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Start");
-            }
-        });
-        
         
         //create the options button
-        Button options = new Button();
+        options = new Button();
         options.setText("Options");
         options.setMaxWidth(Double.MAX_VALUE);
-        options.setOnAction(new EventHandler<ActionEvent>() {
- 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Options");
-            }
-        });
         
         //create the Help button
-        Button help = new Button();
+        help = new Button();
         help.setText("Help");
         help.setMaxWidth(Double.MAX_VALUE);
-        help.setOnAction(new EventHandler<ActionEvent>() {
- 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Help");
-            }
-        });   
         
         //create the Quit button
-        Button quit = new Button();
+        quit = new Button();
         quit.setText("Quit");
         quit.setMaxWidth(Double.MAX_VALUE);
-        quit.setOnAction(new EventHandler<ActionEvent>() {
- 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Quit");
-                primaryStage.close()  ;      
-                }
-        });
+
         
         //set order of buttons
         GridPane root = new GridPane();

@@ -1,4 +1,5 @@
-package Menu;
+import Menu.Help;
+import Menu.Options;
 
 import java.awt.EventQueue;
 
@@ -9,7 +10,7 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class MenuView {
+public class MenuView_old {
 
 	private JFrame frame;
 
@@ -20,7 +21,7 @@ public class MenuView {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MenuView window = new MenuView();
+					MenuView_old window = new MenuView_old();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -32,7 +33,7 @@ public class MenuView {
 	/**
 	 * Create the application.
 	 */
-	public MenuView() {
+	public MenuView_old() {
 		initialise();
 
 	}
