@@ -36,16 +36,16 @@ public class Fence
 		result = validateBoundary(new Fence(3, 0, false, 2), size, size);
 		System.out.println(result + ": Check boundary place horizontal fence at 3,0.");
 		
-		result = validateInteresections(new Fence(new Position(1,0), true, 1), allFences);
+		result = validateIntersections(new Fence(new Position(1,0), true, 1), allFences);
 		System.out.println(result + ": Check place short vertical fence at 1,0.");
-		result = validateInteresections(new Fence(new Position(1,0), true, 2), allFences);
+		result = validateIntersections(new Fence(new Position(1,0), true, 2), allFences);
 		System.out.println(result + ": Check attempt placing intersecting vertical fence at 1,0.");
 
-		result = validateInteresections(new Fence(new Position(1,1), false, 2), allFences);
+		result = validateIntersections(new Fence(new Position(1,1), false, 2), allFences);
 		System.out.println(result + ": Check place vertical fence at 1,1.");
-		result = validateInteresections(new Fence(new Position(2,1), false, 2), allFences);
+		result = validateIntersections(new Fence(new Position(2,1), false, 2), allFences);
 		System.out.println(result + ": Check place vertical fence at 2,1.");
-		result = validateInteresections(new Fence(new Position(2,0), true, 2), allFences);
+		result = validateIntersections(new Fence(new Position(2,0), true, 2), allFences);
 		System.out.println(result + ": Check place vertical fence at 2,0.");
 		allFences[1] = new Fence(new Position(2,0), false, 2);
 		
@@ -117,7 +117,7 @@ public class Fence
 	 * @param allFences
 	 * @return True if there are no intersections
 	 */
-	public static boolean validateInteresections(Fence fence, Fence[] allFences)
+	public static boolean validateIntersections(Fence fence, Fence[] allFences)
 	{
 		int fenceParallel, fencePerpendicular, checkParallel, checkPerpendicular;
 		//establish which side direction is in
