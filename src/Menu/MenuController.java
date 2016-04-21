@@ -5,8 +5,10 @@ import javafx.event.EventHandler;
 
 public class MenuController {
 
-    private Options options;
+    private Options optionsModel;
     private Menu menuModel;
+    private Start startModel;
+    private Help helpModel;
     private OptionsView optionsView;
     private MainView menuView;
     private HelpView helpView;
@@ -18,12 +20,17 @@ public class MenuController {
     private static final String ACTION_HELP = "help";
     private static final String ACTION_QUIT = "quit";
 
-    private static final String PARAMETER_ACTION = "action";
+    private String PARAMETER_ACTION = "action";
 
     public MenuController() {
         menuView = new MainView();
-        options = new Options();
+        startView = new StartView();
+        optionsView = new OptionsView();
+        helpView = new HelpView();
+        helpModel = new Help();
+        optionsModel = new Options();
         menuModel = new Menu();
+        startModel = new Start();
 
         switch (PARAMETER_ACTION) {
             case ACTION_START:
@@ -31,48 +38,50 @@ public class MenuController {
 
                     @Override
                     public void handle(ActionEvent event) {
-                        System.out.println("Start");
+                        PARAMETER_ACTION = "start";
                     }
                 });
-                startView = new StartView();
+
+                view = new Views(startView, startModel);
                 break;
             case ACTION_OPTION:
                 menuView.options.setOnAction(new EventHandler<ActionEvent>() {
 
                     @Override
                     public void handle(ActionEvent event) {
-                        System.out.println("Options");
+                        PARAMETER_ACTION = "option";
                     }
                 });
-                optionsView = new OptionsView();
+                view = new Views(optionsView, optionsModel);
                 break;
             case ACTION_HELP:
                 menuView.help.setOnAction(new EventHandler<ActionEvent>() {
 
                     @Override
                     public void handle(ActionEvent event) {
-                        System.out.println("Help");
+                        PARAMETER_ACTION = "help";
                     }
                 });
-                helpView = new HelpView();
+                view = new Views(helpView, helpModel);
                 break;
             case ACTION_QUIT:
                 menuView.quit.setOnAction(new EventHandler<ActionEvent>() {
 
                     @Override
                     public void handle(ActionEvent event) {
+                        PARAMETER_ACTION = "quit";
                         //menuView.primaryStage.close()  ;
                     }
                 });
                 break;
             default:
-                //menuView.start();
+                view = new Views(menuView, menuModel);
         }
     }
 
     public void setMute() {
-        options.volume = 0;
-        options.mute = true;
+        optionsModel.volume = 0;
+        optionsModel.mute = true;
     }
 
 
