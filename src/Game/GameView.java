@@ -32,7 +32,6 @@ class MyCanvas extends JComponent {
 	}
 }
 
-
 public class GameView {
 	public static void main(String[] a) {
 		JFrame window = new JFrame();
