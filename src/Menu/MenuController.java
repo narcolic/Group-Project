@@ -11,6 +11,7 @@ public class MenuController {
     private MainView menuView;
     private HelpView helpView;
     private StartView startView;
+    private Views view;
 
     private static final String ACTION_START = "start";
     private static final String ACTION_OPTION = "option";
