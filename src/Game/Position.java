@@ -1,3 +1,4 @@
+package Game;
 
 public class Position {
 
@@ -8,7 +9,8 @@ public class Position {
 	 * Constructor
 	 */
 	public Position(){
-		
+		setX(0);
+		setY(0);
 	}
 	
 	/**
@@ -18,8 +20,19 @@ public class Position {
 	 * @param y
 	 */
 	public Position(int x, int y){
-		this.x = x;
-		this.y = y;
+		setXY(x,y);
+	}
+	
+	/**
+	 * Copies coordinates from parameter position to this, which additions
+	 * @param pos
+	 * @param addX
+	 * @param addY
+	 */
+	public Position(Position pos, int addX, int addY)
+	{
+		setX(pos.getX() + addX);
+		setY(pos.getY() + addY);
 	}
 	
 	/**
@@ -27,7 +40,7 @@ public class Position {
 	 * @return
 	 */
 	public int getX(){
-		return x;
+		return this.x;
 	}
 	
 	/**
@@ -40,10 +53,10 @@ public class Position {
 	
 	/**
 	 * 
-	 * @return y
+	 * @return
 	 */
 	public int getY(){
-		return y;
+		return this.y;
 	}
 	
 	/**
@@ -52,5 +65,21 @@ public class Position {
 	 */
 	public void setY(int y){
 		this.y = y;
+	}
+	
+	public void setXY(int x, int y)
+	{
+		setX(x);
+		setY(y);
+	}
+	
+	/**
+	 * Returns true when two positions have equal coordinates.
+	 * @param comparable
+	 * @return
+	 */
+	public boolean equals(Position pos)
+	{
+		return (this.x == pos.x && this.y == pos.y);
 	}
 }
