@@ -1,6 +1,7 @@
 package Game;
 
 import java.awt.Color;
+import java.util.ArrayList;;
 
 
 public class Pawn {
@@ -8,6 +9,7 @@ public class Pawn {
     private int pawnID;
     private Position position;
     private Color pawnColor;
+    private ArrayList<Position> validMoves;
 
     /**
      * Constructor
@@ -81,21 +83,42 @@ public class Pawn {
     }
     
     /**
-     * Performs various checks to see if a valid move can be made in the direction specified
+     * Calculates ALL valid moves a pawn can make this turn.
+     * @param boardWidth
+     * @param boardHeight
+     * @param allPawns
+     * @param allFences
+     */
+	public void calculateAllValidPositions(int boardWidth, int boardHeight, Pawn[] allPawns, Fence[] allFences)
+	{
+		//reset all moves
+		validMoves = new ArrayList<Position>();
+		
+		calculateValidPosition(Orientation.Direction.EAST,
+				boardWidth, boardHeight, allPawns, allFences);
+		calculateValidPosition(Orientation.Direction.NORTH,
+				boardWidth, boardHeight, allPawns, allFences);
+		calculateValidPosition(Orientation.Direction.SOUTH,
+				boardWidth, boardHeight, allPawns, allFences);
+		calculateValidPosition(Orientation.Direction.WEST,
+				boardWidth, boardHeight, allPawns, allFences);
+	}
+    
+    /**
+     * Calculates all valid moves that can be made by from moving in this direction
      * @param direction
      * @param boardWidth
      * @param boardHeight
      * @param allPawns
      * @param allFences
-     * @return True if move can be made in this direction
      */
-    public boolean canMove(Orientation.Direction direction, int boardWidth, int boardHeight, Pawn[] allPawns, Fence[] allFences)
+    public void calculateValidPosition(Orientation.Direction direction, int boardWidth, int boardHeight, Pawn[] allPawns, Fence[] allFences)
     {
     	Position newPosition = directionPosition(position, direction);
     	//can't if outside board
-    	if(outsideBoundary(newPosition, boardWidth, boardHeight)) return false;
+    	if(outsideBoundary(newPosition, boardWidth, boardHeight)) return;
     	//can't if fence is in the way
-    	if(!Fence.validateMovement(position, direction, allFences)) return false;
+    	if(!Fence.validateMovement(position, direction, allFences)) return;
     	
     	if(validatePawns(position, direction, allPawns))
     	{
@@ -116,28 +139,26 @@ public class Pawn {
             	
             	if(outsideBoundary(rightOfPawn, boardWidth, boardHeight)) noRight = true;
             	if(!Fence.validateMovement(newPosition, direction.getClockwise(), allFences)) noRight = true;
-            	
-            	if(noLeft && noRight)
+
+        		//can move in one or both0 of the two directions
+            	for(Position existingMove : validMoves)
             	{
-            		//Completely blocked, can't move in that direction
-            		return false;
+            		if(existingMove.equals(leftOfPawn)) noLeft = true;
+            		if(existingMove.equals(rightOfPawn)) noRight = true;
             	}
-            	else
-            	{
-            		//can move in one or both0 of the two directions
-            		return true;
-            	}
+        		if(!noLeft) validMoves.add(leftOfPawn);
+        		if(!noRight) validMoves.add(rightOfPawn);
         	}
         	else
         	{
         		//can make the jump
-        		return true;
+        		validMoves.add(behindPawnPosition);
         	}
     	}
     	else
     	{
     		//can move as normal
-    		return true;
+    		validMoves.add(newPosition);
     	}
     }
     
