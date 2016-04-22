@@ -1,54 +1,96 @@
 package Game;
 
-import java.awt.Graphics;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+import javafx.geometry.Pos;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 
-import java.awt.Color;
+public class GameView extends Application {
+	public static void main(String[] args) {
+		launch(args);
+	}
 
-import javax.swing.JComponent;
-import javax.swing.JFrame;
+	@Override
+	public void start(final Stage primaryStage) {
 
-class MyCanvas extends JComponent {
+		// Set up the images ready to be used
+		Image defaultSquareImg = new Image(getClass().getResourceAsStream("BoardComponents/a.png"));
+		Image clickedSquareImg = new Image(getClass().getResourceAsStream("BoardComponents/c.png"));
+		Image noVerWallImg = new Image(getClass().getResourceAsStream("BoardComponents/noVerWall.png"));
+		Image verwallPlacedImg = new Image(getClass().getResourceAsStream("BoardComponents/VerwallPlaced.png"));
+		Image noHorWallImg = new Image(getClass().getResourceAsStream("BoardComponents/noHorWall.png"));
+		Image horWallPlacedImg = new Image(getClass().getResourceAsStream("BoardComponents/horWallPlaced.png"));
 
-	public void paint(Graphics g) {
-		int rowNum = 1;
-		int colNum = 1;
-		int posX = 130;
-		int posY = 40;
+
+		// set up a 2D array to store all the components
+		ImageView[][] boardComp = new ImageView[17][17];
+
+		// fill boardComp with the board squares
+		for (int x = 0; x <= 16; x = x + 2) {
+				for (int y = 0; y <= 16; y = y + 2) {
+			ImageView gameSquare = new ImageView();
+			gameSquare.setImage(defaultSquareImg);
+			gameSquare.setOnMouseClicked(e -> {
+				gameSquare.setImage(clickedSquareImg);
+			});
+			boardComp[x][y] = gameSquare;
+		}
+		}
 		
-		//A rectangle to contain the player wall count
-		g.drawRect (750, 40, 300, 320);
+		// fill boardComp with vertical fences
+		for (int x = 1; x <= 16; x = x + 2) {
+				for (int y = 0; y <= 16; y = y + 2) {
+			ImageView verFences = new ImageView();
+			verFences.setImage(noVerWallImg);
+			verFences.setOnMouseClicked(e -> {
+				verFences.setImage(verwallPlacedImg);
+			});
+			boardComp[x][y] = verFences;
+		}
+		}
 		
-		// Each player's wall count container
-		g.drawRect(755, 45, 290, 70 );
-		g.drawRect(755, 125, 290, 70 );
-		g.drawRect(755, 205, 290, 70 );
-		g.drawRect(755, 285, 290, 70 );
 		
-		while (rowNum <= 9) {
+		//TODO fix the horizontal fence placements
+		// fill boardComp with horizontal fences
+//				for (int x = 0; x <= 16; x++) {
+//						for (int y = 1; y < 16; y = y +2) {
+//							
+//					ImageView fences = new ImageView();
+//					fences.setImage(noHorWallImg);
+//					fences.setOnMouseClicked(e -> {
+//						fences.setImage(horWallPlacedImg);
+//					});
+//					boardComp[x][y] = fences;
+//				}
+//				}
 
-			g.setColor(Color.red);
-			g.fillRect(posX, posY, 50, 50);
-			colNum++;
-			posX = posX + 55;
+		GridPane layout = new GridPane();
 
-			if (colNum == 10) {
-				colNum = 1;
-				rowNum++;
-				posY = posY + 55;
-				posX = 130;
-
+		// display the board
+		for (int x = 0; x <= 16; x++) {
+			for (int y = 0; y <= 16; y = y+2) { //TODO update this line
+												// once fixed
+			
+			ImageView toAdd = boardComp[x][y];
+			layout.add(toAdd, x, y);
 			}
 		}
 		
-	}
-}
 
-public class GameView {
-	public static void main(String[] a) {
-		JFrame window = new JFrame();
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setBounds(30, 30, 1080, 580);
-		window.getContentPane().add(new MyCanvas());
-		window.setVisible(true);
+
+		Scene GUI = new Scene(layout, 800, 800);
+
+		primaryStage.setTitle("Quoridor");
+		primaryStage.setScene(GUI);
+		primaryStage.show();
 	}
 }
