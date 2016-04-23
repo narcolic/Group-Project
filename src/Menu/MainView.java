@@ -37,7 +37,7 @@ public class MainView extends Application {
     Image[] img; // array of images
 
     //TextArea text = new TextArea(); // output help text associated with help image
-    Label text = new Label();
+    Label text;
 
     @Override
     public void start(Stage primaryStage) {
@@ -129,6 +129,7 @@ public class MainView extends Application {
     }
 
     protected Scene HelpScene(){
+    	text = new Label();
         GridPane root = new GridPane();
         VBox box = new VBox();
 
@@ -142,17 +143,22 @@ public class MainView extends Application {
 
         textHelp = new String[5];
         textHelp[0] = "asddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
+               
         text.setText(textHelp[0]);
         text.setMaxSize(550, 150);
         text.setWrapText(true);
         text.setStyle("-fx-background-color: #FFFFFF;");
         // text.appendText(textHelp[0]);
-
+        
         next = new Button();
-        next.setText("Next");
-
+        next.setText(">");
+        next.setMaxWidth(Double.MAX_VALUE);
+        next.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+        
         previous = new Button();
-        previous.setText("Previous");
+        previous.setText("<");
+        previous.setMaxWidth(Double.MAX_VALUE);
+        previous.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
 
         back = new Button();
         back.setText("Back");
@@ -182,6 +188,7 @@ public class MainView extends Application {
 
         stage.setMinWidth(800);
         stage.setMinHeight(650);
+        stage.setResizable(false); // do not allow window to be resized
         return new Scene(root, 800, 600);
     }
 
