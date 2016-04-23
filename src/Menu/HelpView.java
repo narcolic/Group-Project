@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,8 +23,8 @@ public class HelpView extends Application {
     private String[] textHelp; // array of help text 
     Image[] img; // array of images
 
-    TextArea text = new TextArea(); // output help text associated with help image
-
+    //TextArea text = new TextArea(); // output help text associated with help image
+    Label text = new Label();
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane root = new GridPane();
@@ -39,9 +40,13 @@ public class HelpView extends Application {
      //   imageView.setFitWidth(100);
 
         textHelp = new String[5];
-        textHelp[0] = "asd";
-        text.appendText(textHelp[0]);
-
+        textHelp[0] = "asddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
+        text.setText(textHelp[0]);
+        text.setMaxSize(550, 150);
+        text.setWrapText(true);
+        text.setStyle("-fx-background-color: #FFFFFF;");       
+       // text.appendText(textHelp[0]);
+       
         next = new Button();
         next.setText("Next");
 
@@ -78,5 +83,4 @@ public class HelpView extends Application {
         primaryStage.show();
 
     }
-
 }
