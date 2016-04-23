@@ -31,11 +31,12 @@ public class HelpView extends Application {
 
 
         img = new Image[5];
-        img[0] = new Image("/Menu/Images/dog.png");
+        img[0] = new Image("/Menu/Images/image.png"
+        		+ "");
 
         ImageView imageView = new ImageView(img[0]);
-        imageView.setFitHeight(100);
-        imageView.setFitWidth(100);
+      //  imageView.setFitHeight(100);
+     //   imageView.setFitWidth(100);
 
         textHelp = new String[5];
         textHelp[0] = "asd";
@@ -50,7 +51,8 @@ public class HelpView extends Application {
         box.getChildren().add(imageView);
         box.setAlignment(Pos.CENTER);
         box.setMinSize(300, 400);
-        //box.setFillWidth(true);
+
+        box.setFillWidth(true);
         box.setStyle("-fx-background-color: cadetblue;"
                 + "-fx-border-width: 2;"
                 + "-fx-border-color: black");
