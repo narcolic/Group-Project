@@ -31,7 +31,7 @@ public class MainView extends Application {
     Image[] img; // array of images
 
     //TextArea text = new TextArea(); // output help text associated with help image
-    Label text = new Label();
+    Label text; 
 
     @Override
     public void start(Stage primaryStage) {
@@ -40,7 +40,7 @@ public class MainView extends Application {
         stage.setTitle("Main Menu");
         primaryStage.setScene(scene);
         primaryStage.show();
-
+        
         //create the start button
 
 
@@ -128,6 +128,7 @@ public class MainView extends Application {
         //  imageView.setFitHeight(100);
         //   imageView.setFitWidth(100);
 
+        text = new Label();
         textHelp = new String[5];
         textHelp[0] = "asddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
         text.setText(textHelp[0]);
