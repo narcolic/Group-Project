@@ -2,6 +2,9 @@ package Menu;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.stage.Stage;
+
+import java.awt.event.ActionListener;
 
 public class MenuController {
 
@@ -22,9 +25,20 @@ public class MenuController {
 
     private String PARAMETER_ACTION = "action";
 
+
     public MenuController() {
-        menuView = new MainView();
-        startView = new StartView();
+        //menuView = new MainView();
+        //menu listeners
+        //this.menuView = menuView;
+        new Thread() {
+            @Override
+            public void run() {
+                javafx.application.Application.launch(MainView.class);
+            }
+        }.start();
+
+
+        /*startView = new StartView();
         optionsView = new OptionsView();
         helpView = new HelpView();
         helpModel = new Help();
@@ -34,49 +48,23 @@ public class MenuController {
 
         switch (PARAMETER_ACTION) {
             case ACTION_START:
-                menuView.start.setOnAction(new EventHandler<ActionEvent>() {
-
-                    @Override
-                    public void handle(ActionEvent event) {
-                        PARAMETER_ACTION = "start";
-                    }
-                });
 
                 view = new Views(startView, startModel);
                 break;
             case ACTION_OPTION:
-                menuView.options.setOnAction(new EventHandler<ActionEvent>() {
 
-                    @Override
-                    public void handle(ActionEvent event) {
-                        PARAMETER_ACTION = "option";
-                    }
-                });
                 view = new Views(optionsView, optionsModel);
                 break;
             case ACTION_HELP:
-                menuView.help.setOnAction(new EventHandler<ActionEvent>() {
 
-                    @Override
-                    public void handle(ActionEvent event) {
-                        PARAMETER_ACTION = "help";
-                    }
-                });
                 view = new Views(helpView, helpModel);
                 break;
             case ACTION_QUIT:
-                menuView.quit.setOnAction(new EventHandler<ActionEvent>() {
 
-                    @Override
-                    public void handle(ActionEvent event) {
-                        PARAMETER_ACTION = "quit";
-                        //menuView.primaryStage.close()  ;
-                    }
-                });
                 break;
             default:
-                view = new Views(menuView, menuModel);
-        }
+                menuView = new MainView();
+        }*/
     }
 
     public void setMute() {
