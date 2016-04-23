@@ -12,10 +12,7 @@ public class MenuController {
     private Menu menuModel;
     private Start startModel;
     private Help helpModel;
-    private OptionsView optionsView;
     private MainView menuView;
-    private HelpView helpView;
-    private StartView startView;
     private Views view;
 
     private static final String ACTION_START = "start";
@@ -38,8 +35,7 @@ public class MenuController {
         }.start();
 
 
-        /*startView = new StartView();
-        optionsView = new OptionsView();
+        /*
         helpView = new HelpView();
         helpModel = new Help();
         optionsModel = new Options();

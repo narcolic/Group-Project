@@ -30,21 +30,16 @@ public class HelpView extends Application {
         GridPane root = new GridPane();
         VBox box = new VBox();
 
-
         img = new Image[5];
         img[0] = new Image("/Menu/Images/dog1.png");
-
         ImageView imageView = new ImageView(img[0]);
-      //  imageView.setFitHeight(100);
-     //   imageView.setFitWidth(100);
 
         textHelp = new String[5];
         textHelp[0] = "asddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
         text.setText(textHelp[0]);
         text.setMaxSize(550, 150);
         text.setWrapText(true);
-        text.setStyle("-fx-background-color: #FFFFFF;");       
-       // text.appendText(textHelp[0]);
+        text.setStyle("-fx-background-color: #FFFFFF;");
        
         next = new Button();
         next.setText("Next");
@@ -66,10 +61,6 @@ public class HelpView extends Application {
         GridPane.setConstraints(previous, 1, 1);
         GridPane.setConstraints(text, 2, 2);
 
-        //ColumnConstraints cimg = new ColumnConstraints();
-        //cimg.setPercentWidth(10);
-        //root.getColumnConstraints().add(cimg);
-
         root.getChildren().addAll(box, next, previous, text);
         root.setVgap(10); //sets a vertical gap
         root.setHgap(10);
@@ -78,7 +69,6 @@ public class HelpView extends Application {
         primaryStage.setMinWidth(800);
         primaryStage.setMinHeight(650);
         primaryStage.setScene(new Scene(root, 800, 600));
-        //primaryStage.setResizable(false);
         primaryStage.show();
 
     }

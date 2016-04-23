@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -20,12 +21,13 @@ import java.awt.event.ActionListener;
 public class MainView extends Application {
 
     private Stage stage;
-    public Button startb;
-    public Button options;
-    public Button help;
-    public Button quit;
-    public Button next;
-    public Button previous;
+    private Button startb;
+    private Button options;
+    private Button help;
+    private Button quit;
+    private Button next;
+    private Button previous;
+    private Button back;
 
     private String[] textHelp; // array of help text
     Image[] img; // array of images
@@ -40,12 +42,6 @@ public class MainView extends Application {
         stage.setTitle("Main Menu");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        //create the start button
-
-
-        //primaryStage.setScene(new Scene(root, 800, 600));
-        //primaryStage.show();
     }
 
     public Scene menuScene(){
@@ -68,7 +64,7 @@ public class MainView extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                //PARAMETER_ACTION = "option";
+                stage.setScene(OptionsScene());
             }
         });
 
@@ -142,6 +138,9 @@ public class MainView extends Application {
         previous = new Button();
         previous.setText("Previous");
 
+        back = new Button();
+        back.setText("Back");
+
         box.getChildren().add(imageView);
         box.setAlignment(Pos.CENTER);
         box.setMinSize(300, 400);
@@ -167,6 +166,28 @@ public class MainView extends Application {
 
         stage.setMinWidth(800);
         stage.setMinHeight(650);
+        return new Scene(root, 800, 600);
+    }
+
+    protected Scene OptionsScene(){
+        GridPane root = new GridPane();
+
+        Label soundVolume = new Label("Sound Volume:");
+
+        Slider slider = new Slider();
+        slider.setMin(0);
+        slider.setMax(100);
+        slider.setValue(50);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(50);
+        slider.setMinorTickCount(5);
+        slider.setBlockIncrement(10);
+
+        root.getChildren().addAll(soundVolume,slider);
+        root.setAlignment(Pos.CENTER);
+
+
         return new Scene(root, 800, 600);
     }
 

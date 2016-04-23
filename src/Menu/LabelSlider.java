@@ -6,7 +6,7 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import java.text.*;
 
-public class Slider extends JComponent {
+public class LabelSlider extends JComponent {
 
     private static final long serialVersionUID = -1978073598544126546L;
     private String labelString;
@@ -25,8 +25,8 @@ public class Slider extends JComponent {
      * @param max an int that is the maximum value for the slider
      * @param scale an int that multiplies the value to give the value the slider displays
      */
-    public Slider(String text, double value, int min, int max,
-                          int scale) {
+    public LabelSlider(String text, double value, int min, int max,
+                       int scale) {
         if (value*scale < min || value*scale > max)
             throw new IllegalArgumentException("Value not in range for LabelledSlider.");
         this.setDoubleBuffered(true);
