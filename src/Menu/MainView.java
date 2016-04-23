@@ -4,7 +4,10 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -17,6 +20,7 @@ import javafx.application.Platform;
 
 import java.awt.event.ActionListener;
 //import javafx.scene.control.Alert;
+import java.util.Optional;
 
 public class MainView extends Application {
 
@@ -90,8 +94,20 @@ public class MainView extends Application {
             public void handle(ActionEvent event) {
                 //PARAMETER_ACTION = "quit";
                 //System.exit(0);
-                stage.close();
-            }
+            	Alert alert = new Alert(AlertType.CONFIRMATION);
+            	alert.setTitle("Quoridor");
+            	alert.setHeaderText("Quit Quoridor");
+            	alert.setContentText("Are you sure you want to quit Quoridor?");
+                
+            	Optional<ButtonType> result = alert.showAndWait();
+            	if(result.get() == ButtonType.OK){
+            		// close Quoridor
+            		System.exit(0);
+            	} else {
+            		// return to main menu
+            	} 	
+               // stage.close();
+            }          
         });
 
 
