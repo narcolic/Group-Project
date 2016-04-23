@@ -7,7 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class HelpView extends Application {
@@ -27,20 +27,16 @@ public class HelpView extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane root = new GridPane();
+        VBox box = new VBox();
+
+
         img = new Image[5];
-        img[0] = new Image("/Images/dog.png");
+        img[0] = new Image("/Menu/Images/dog.png");
 
-
-        //img[1]=new Image("/Images/cat.png");
-
-        //Image image = new Image("/Images/dog.jpg"); // image to be used
-
-        //ImageView imageView = new ImageView(image);
         ImageView imageView = new ImageView(img[0]);
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
-        
-        //	    root.getChildren().add(imageView);
+
         textHelp = new String[5];
         textHelp[0] = "asd";
         text.appendText(textHelp[0]);
@@ -51,48 +47,34 @@ public class HelpView extends Application {
         previous = new Button();
         previous.setText("Previous");
 
-       /* root.getChildren().add(new ImageView(img[0]));
-        root.getChildren().add(next);
-        root.getChildren().add(previous);
-        root.getChildren().add(text);
-*/
-        root.getChildren().addAll(new ImageView(img[0]),next,previous,text);
-        
-        GridPane.setRowIndex(imageView,1);
-        GridPane.setColumnIndex(next,2);
-        GridPane.setColumnIndex(previous,0);
-        GridPane.setRowIndex(text,2);
+        box.getChildren().add(imageView);
+        box.setAlignment(Pos.CENTER);
+        box.setMinSize(300, 400);
+        //box.setFillWidth(true);
+        box.setStyle("-fx-background-color: cadetblue;"
+                + "-fx-border-width: 2;"
+                + "-fx-border-color: black");
+
+        GridPane.setConstraints(box, 2, 1);
+        GridPane.setConstraints(next, 3, 1);
+        GridPane.setConstraints(previous, 1, 1);
+        GridPane.setConstraints(text, 2, 2);
+
+        //ColumnConstraints cimg = new ColumnConstraints();
+        //cimg.setPercentWidth(10);
+        //root.getColumnConstraints().add(cimg);
+
+        root.getChildren().addAll(box, next, previous, text);
         root.setVgap(10); //sets a vertical gap
+        root.setHgap(10);
         root.setAlignment(Pos.CENTER);
-        
+
+        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(600);
         primaryStage.setScene(new Scene(root, 800, 600));
+        //primaryStage.setResizable(false);
         primaryStage.show();
 
     }
-
-	/*public static void main(String[] args) {
-        //Application.launch(args);
-	    launch(args);
-	}*/
-
-	/*
-	private String[] textHelp;
-	private String[] imageHelp;
-	private int slideNumber;*/
-
-    /**
-     * Constructor
-     */
-	/*public Help() {
-
-	}
-	
-	public void nextSlide(){
-
-	}
-
-	public void previousSlide(){
-		
-	}*/
 
 }
