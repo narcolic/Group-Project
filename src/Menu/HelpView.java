@@ -32,8 +32,7 @@ public class HelpView extends Application {
 
 
         img = new Image[5];
-        img[0] = new Image("/Menu/Images/image.png"
-        		+ "");
+        img[0] = new Image("/Menu/Images/dog1.png");
 
         ImageView imageView = new ImageView(img[0]);
       //  imageView.setFitHeight(100);
@@ -77,7 +76,7 @@ public class HelpView extends Application {
         root.setAlignment(Pos.CENTER);
 
         primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(600);
+        primaryStage.setMinHeight(650);
         primaryStage.setScene(new Scene(root, 800, 600));
         //primaryStage.setResizable(false);
         primaryStage.show();
