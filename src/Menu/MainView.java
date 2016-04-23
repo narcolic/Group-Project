@@ -33,6 +33,8 @@ public class MainView extends Application {
     private Button previous;
     private Button back;
 
+    private int counter;
+    private ImageView imageView;
     private String[] textHelp; // array of help text
     Image[] img; // array of images
 
@@ -124,7 +126,8 @@ public class MainView extends Application {
         root.getChildren().add(help);
         root.getChildren().add(quit);
         root.setAlignment(Pos.CENTER);
-
+        
+        stage.setResizable(false);
         return new Scene(root, 800, 600);
     }
 
@@ -135,15 +138,16 @@ public class MainView extends Application {
 
 
         img = new Image[5];
-        img[0] = new Image("/Menu/Images/dog1.png");
-
-        ImageView imageView = new ImageView(img[0]);
+        img[0] = new Image("/Menu/Images/untitled.png");
+        img[1] = new Image("/Menu/Images/dog1.png");
+        imageView = new ImageView(img[0]);
         //  imageView.setFitHeight(100);
         //   imageView.setFitWidth(100);
 
         textHelp = new String[5];
         textHelp[0] = "asddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
-               
+        textHelp[1] = "fasfdhar";
+        
         text.setText(textHelp[0]);
         text.setMaxSize(550, 150);
         text.setWrapText(true);
@@ -154,15 +158,50 @@ public class MainView extends Application {
         next.setText(">");
         next.setMaxWidth(Double.MAX_VALUE);
         next.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+        next.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                if(counter >= 4){
+                	counter = 0;
+                } else {
+                	counter += 1;
+                }
+                img = new Image[counter];
+                imageView = new ImageView(img[counter]);
+                text.setText(textHelp[counter]);
+            }
+        });
         
         previous = new Button();
         previous.setText("<");
         previous.setMaxWidth(Double.MAX_VALUE);
         previous.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
+        previous.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                if(counter >= 1){
+                	counter -= 1;
+                } else {
+                	counter = 4;
+                }
+                img = new Image[counter];
+                imageView = new ImageView(img[counter]);
+                text.setText(textHelp[counter]);
+            }
+        });
 
         back = new Button();
         back.setText("Back");
+        back.setOnAction(new EventHandler<ActionEvent>() {
 
+            @Override
+            public void handle(ActionEvent event) {
+                stage.setScene(menuScene());
+            }
+        });
+        
         box.getChildren().add(imageView);
         box.setAlignment(Pos.CENTER);
         box.setMinSize(300, 400);
@@ -181,7 +220,7 @@ public class MainView extends Application {
         //cimg.setPercentWidth(10);
         //root.getColumnConstraints().add(cimg);
 
-        root.getChildren().addAll(box, next, previous, text);
+        root.getChildren().addAll(box, next, previous, text, back);
         root.setVgap(10); //sets a vertical gap
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
@@ -210,7 +249,7 @@ public class MainView extends Application {
         root.getChildren().addAll(soundVolume,slider);
         root.setAlignment(Pos.CENTER);
 
-
+        stage.setResizable(false);
         return new Scene(root, 800, 600);
     }
 
