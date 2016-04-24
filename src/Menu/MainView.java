@@ -3,6 +3,7 @@ package Menu;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -12,11 +13,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 
 import java.util.Optional;
+
+import static javafx.scene.media.AudioClip.INDEFINITE;
 
 public class MainView extends Application {
 
@@ -31,12 +35,7 @@ public class MainView extends Application {
     private Button previous;
     private Button back;
 
-    private int counter;
     private ImageView imageView;
-   //private String[] textHelp; // array of help text
-    //Image[] img; // array of images
-
-    //TextArea text = new TextArea(); // output help text associated with help image
     private Label textLabel;
 
     @Override
@@ -46,6 +45,22 @@ public class MainView extends Application {
         stage.setTitle("Main Menu");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        final Task task = new Task() {
+
+            @Override
+            protected Object call() throws Exception {
+                int s = INDEFINITE;
+                AudioClip audio = new AudioClip(getClass().getResource("/Menu/Sound/song.mp3").toExternalForm());
+                audio.setVolume(0.5f);
+                audio.setCycleCount(s);
+                audio.play();
+                return null;
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.start();
+
     }
 
     public Scene menuScene() {
