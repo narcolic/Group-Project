@@ -20,6 +20,8 @@ import java.util.Optional;
 
 public class MainView extends Application {
 
+    private Help helpModel = new Help();
+
     private Stage stage;
     private Button startb;
     private Button options;
@@ -31,11 +33,11 @@ public class MainView extends Application {
 
     private int counter;
     private ImageView imageView;
-    private String[] textHelp; // array of help text
-    Image[] img; // array of images
+   //private String[] textHelp; // array of help text
+    //Image[] img; // array of images
 
     //TextArea text = new TextArea(); // output help text associated with help image
-    Label text;
+    private Label textLabel;
 
     @Override
     public void start(Stage primaryStage) {
@@ -78,7 +80,7 @@ public class MainView extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                stage.setScene(HelpScene());
+                stage.setScene(HelpScene(helpModel));
             }
         });
 
@@ -127,28 +129,20 @@ public class MainView extends Application {
         return new Scene(root, 800, 600);
     }
 
-    protected Scene HelpScene() {
-        text = new Label();
+    protected Scene HelpScene(Help help) {
+
+        help.fillTextHelpArray();
+        help.fillImageLocArray();
+        textLabel = new Label();
         GridPane root = new GridPane();
         VBox box = new VBox();
 
+        imageView = new ImageView(new Image(help.getCurrentImageLocation()));
 
-        img = new Image[5];
-        img[0] = new Image("/Menu/Images/dog.png");
-        img[1] = new Image("/Menu/Images/dog1.png");
-        imageView = new ImageView(img[0]);
-        //  imageView.setFitHeight(100);
-        //   imageView.setFitWidth(100);
-
-        textHelp = new String[5];
-        textHelp[0] = "asddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
-        textHelp[1] = "fasfdhar";
-
-        text.setText(textHelp[0]);
-        text.setMaxSize(550, 150);
-        text.setWrapText(true);
-        text.setStyle("-fx-background-color: #FFFFFF;");
-        // text.appendText(textHelp[0]);
+        textLabel.setText(help.getCurrentText());
+        textLabel.setMaxSize(550, 150);
+        textLabel.setWrapText(true);
+        textLabel.setStyle("-fx-background-color: #FFFFFF;");
 
         next = new Button();
         next.setText(">");
@@ -158,14 +152,12 @@ public class MainView extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                if (counter >= 4) {
-                    counter = 0;
+                if (help.isNextAvailable()) {
+                    help.nextSlide();
+                    stage.setScene(HelpScene(helpModel));
                 } else {
-                    counter += 1;
+                    stage.setScene(HelpScene(helpModel));
                 }
-                img = new Image[counter];
-                imageView = new ImageView(img[counter]);
-                text.setText(textHelp[counter]);
             }
         });
 
@@ -177,14 +169,12 @@ public class MainView extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                if (counter >= 1) {
-                    counter -= 1;
+                if (help.isPreviousAvailable()) {
+                    help.previousSlide();
+                    stage.setScene(HelpScene(helpModel));
                 } else {
-                    counter = 4;
+                    stage.setScene(HelpScene(helpModel));
                 }
-                img = new Image[counter];
-                imageView = new ImageView(img[counter]);
-                text.setText(textHelp[counter]);
             }
         });
 
@@ -210,13 +200,9 @@ public class MainView extends Application {
         GridPane.setConstraints(box, 2, 1);
         GridPane.setConstraints(next, 3, 1);
         GridPane.setConstraints(previous, 1, 1);
-        GridPane.setConstraints(text, 2, 2);
+        GridPane.setConstraints(textLabel, 2, 2);
 
-        //ColumnConstraints cimg = new ColumnConstraints();
-        //cimg.setPercentWidth(10);
-        //root.getColumnConstraints().add(cimg);
-
-        root.getChildren().addAll(box, next, previous, text, back);
+        root.getChildren().addAll(box, next, previous, textLabel, back);
         root.setVgap(10); //sets a vertical gap
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
@@ -234,7 +220,7 @@ public class MainView extends Application {
         GridPane root;
         root = new GridPane();
 
-        Slider soundSlider = new Slider(0,100,50);
+        Slider soundSlider = new Slider(0, 100, 50);
         soundSlider.setShowTickLabels(true);
         soundSlider.setShowTickMarks(true);
         soundSlider.setMajorTickUnit(50);
