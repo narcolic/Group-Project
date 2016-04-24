@@ -1,9 +1,11 @@
 package Menu;
 
+import java.awt.*;
+
 public class Help {
 
 	private String[] textHelp;
-	private String[] imageHelp;
+	private Image[] images;
 	private int slideNumber;
 
 	/**

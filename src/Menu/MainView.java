@@ -1,25 +1,21 @@
 package Menu;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
-import javafx.application.Platform;
 
-import java.awt.event.ActionListener;
-//import javafx.scene.control.Alert;
 import java.util.Optional;
 
 public class MainView extends Application {
@@ -50,7 +46,7 @@ public class MainView extends Application {
         primaryStage.show();
     }
 
-    public Scene menuScene(){
+    public Scene menuScene() {
         startb = new Button();
         startb.setText("Start");
         startb.setMaxWidth(Double.MAX_VALUE);
@@ -96,20 +92,20 @@ public class MainView extends Application {
             public void handle(ActionEvent event) {
                 //PARAMETER_ACTION = "quit";
                 //System.exit(0);
-            	Alert alert = new Alert(AlertType.CONFIRMATION);
-            	alert.setTitle("Quoridor");
-            	alert.setHeaderText("Quit Quoridor");
-            	alert.setContentText("Are you sure you want to quit Quoridor?");
-                
-            	Optional<ButtonType> result = alert.showAndWait();
-            	if(result.get() == ButtonType.OK){
-            		// close Quoridor
-            		System.exit(0);
-            	} else {
-            		// return to main menu
-            	} 	
-               // stage.close();
-            }          
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.setTitle("Quoridor");
+                alert.setHeaderText("Quit Quoridor");
+                alert.setContentText("Are you sure you want to quit Quoridor?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    // close Quoridor
+                    System.exit(0);
+                } else {
+                    // return to main menu
+                }
+                // stage.close();
+            }
         });
 
 
@@ -126,19 +122,19 @@ public class MainView extends Application {
         root.getChildren().add(help);
         root.getChildren().add(quit);
         root.setAlignment(Pos.CENTER);
-        
+
         stage.setResizable(false);
         return new Scene(root, 800, 600);
     }
 
-    protected Scene HelpScene(){
-    	text = new Label();
+    protected Scene HelpScene() {
+        text = new Label();
         GridPane root = new GridPane();
         VBox box = new VBox();
 
 
         img = new Image[5];
-        img[0] = new Image("/Menu/Images/untitled.png");
+        img[0] = new Image("/Menu/Images/dog.png");
         img[1] = new Image("/Menu/Images/dog1.png");
         imageView = new ImageView(img[0]);
         //  imageView.setFitHeight(100);
@@ -147,13 +143,13 @@ public class MainView extends Application {
         textHelp = new String[5];
         textHelp[0] = "asddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd";
         textHelp[1] = "fasfdhar";
-        
+
         text.setText(textHelp[0]);
         text.setMaxSize(550, 150);
         text.setWrapText(true);
         text.setStyle("-fx-background-color: #FFFFFF;");
         // text.appendText(textHelp[0]);
-        
+
         next = new Button();
         next.setText(">");
         next.setMaxWidth(Double.MAX_VALUE);
@@ -162,17 +158,17 @@ public class MainView extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                if(counter >= 4){
-                	counter = 0;
+                if (counter >= 4) {
+                    counter = 0;
                 } else {
-                	counter += 1;
+                    counter += 1;
                 }
                 img = new Image[counter];
                 imageView = new ImageView(img[counter]);
                 text.setText(textHelp[counter]);
             }
         });
-        
+
         previous = new Button();
         previous.setText("<");
         previous.setMaxWidth(Double.MAX_VALUE);
@@ -181,10 +177,10 @@ public class MainView extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                if(counter >= 1){
-                	counter -= 1;
+                if (counter >= 1) {
+                    counter -= 1;
                 } else {
-                	counter = 4;
+                    counter = 4;
                 }
                 img = new Image[counter];
                 imageView = new ImageView(img[counter]);
@@ -201,7 +197,7 @@ public class MainView extends Application {
                 stage.setScene(menuScene());
             }
         });
-        
+
         box.getChildren().add(imageView);
         box.setAlignment(Pos.CENTER);
         box.setMinSize(300, 400);
@@ -231,23 +227,54 @@ public class MainView extends Application {
         return new Scene(root, 800, 600);
     }
 
-    protected Scene OptionsScene(){
-        GridPane root = new GridPane();
+    private Scene OptionsScene() {
+        stage.setTitle("Options");
+        final String SOUND_SLIDER_TOOLTIP = "Slide to increase sound volume.";
+        final String MUTE_TOOLTIP = "Click to mute sound.";
+        GridPane root;
+        root = new GridPane();
 
-        Label soundVolume = new Label("Sound Volume:");
+        Slider soundSlider = new Slider(0,100,50);
+        soundSlider.setShowTickLabels(true);
+        soundSlider.setShowTickMarks(true);
+        soundSlider.setMajorTickUnit(50);
+        soundSlider.setMinorTickCount(5);
+        soundSlider.setBlockIncrement(10);
+        soundSlider.setMinWidth(400);
+        soundSlider.setTooltip(new Tooltip(SOUND_SLIDER_TOOLTIP));
 
-        Slider slider = new Slider();
-        slider.setMin(0);
-        slider.setMax(100);
-        slider.setValue(50);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(50);
-        slider.setMinorTickCount(5);
-        slider.setBlockIncrement(10);
+        CheckBox muteBox = new CheckBox();
+        muteBox.setSelected(false);
+        muteBox.setTooltip(new Tooltip(MUTE_TOOLTIP));
 
-        root.getChildren().addAll(soundVolume,slider);
+        Label soundVolumeLabel = new Label("Sound Volume: ");
+        Label soundValue = new Label(Double.toString(soundSlider.getValue()));
+        Label muteLabel = new Label("Mute Sound: ");
+
+        soundVolumeLabel.setTextFill(Color.BLACK);
+        soundValue.setTextFill(Color.BLACK);
+        muteLabel.setTextFill(Color.BLACK);
+
+        GridPane.setConstraints(soundVolumeLabel, 0, 1);
+        GridPane.setConstraints(soundSlider, 1, 1);
+        GridPane.setConstraints(soundValue, 2, 1);
+        GridPane.setConstraints(muteLabel, 0, 2);
+        GridPane.setConstraints(muteBox, 1, 2);
+
+        root.getChildren().add(soundVolumeLabel);
+        root.getChildren().add(soundSlider);
+        root.getChildren().add(soundValue);
+        root.getChildren().add(muteLabel);
+        root.getChildren().add(muteBox);
+
+        soundSlider.valueProperty().addListener((ov, old_val, new_val) -> {
+            soundValue.setText(String.format("%.2f", new_val));
+        });
+
+        root.setVgap(30);
+        root.setHgap(70);
         root.setAlignment(Pos.CENTER);
+        root.setStyle("-fx-background-color: lightblue; -fx-padding:10; -fx-font-size: 16; -fx-alignment: baseline-left;");
 
         stage.setResizable(false);
         return new Scene(root, 800, 600);
