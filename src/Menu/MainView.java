@@ -142,6 +142,7 @@ public class MainView extends Application {
         root.getChildren().add(help);
         root.getChildren().add(quit);
         root.setAlignment(Pos.CENTER);
+        root.setVgap(20);
 
         root.setStyle(
                 "-fx-background-image: url(" +
@@ -439,6 +440,7 @@ public class MainView extends Application {
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
 
+        stage.setResizable(false);
         return new Scene(root, 800, 600);
     }
 
@@ -481,6 +483,7 @@ public class MainView extends Application {
         GridPane.setConstraints(singleP, 0, 1);
         root.getChildren().addAll(back, singleP);
 
+        stage.setResizable(false);
         return new Scene(root, 800, 600);
     }
 
@@ -523,6 +526,7 @@ public class MainView extends Application {
         GridPane.setConstraints(multiP, 0, 1);
         root.getChildren().addAll(back, multiP);
 
+        stage.setResizable(false);
         return new Scene(root, 800, 600);
     }
 
@@ -565,6 +569,7 @@ public class MainView extends Application {
         GridPane.setConstraints(practise, 0, 1);
         root.getChildren().addAll(back, practise);
 
+        stage.setResizable(false);
         return new Scene(root, 800, 600);
     }
 
