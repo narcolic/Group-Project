@@ -374,6 +374,7 @@ public class MainView extends Application {
 
         VBox singlePlayer = new VBox();
         VBox multiPlayer = new VBox();
+        VBox practise = new VBox();
 
         singlePlayer.setAlignment(Pos.CENTER_LEFT);
         singlePlayer.setStyle("-fx-background-image: url(/Menu/Images/1p.png);"
@@ -382,31 +383,47 @@ public class MainView extends Application {
                 + "-fx-background-color: cadetblue;"
                 + "-fx-border-width: 2;"
                 + "-fx-border-color: black");
-        singlePlayer.setMinSize(350, 350);
+        singlePlayer.setMinSize(250, 350);
         singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                stage.setScene(SingleP());
+                stage.setScene(SinglePlayerScreen());
             }
         });
 
-        multiPlayer.setAlignment(Pos.CENTER_RIGHT);
+        multiPlayer.setAlignment(Pos.CENTER);
         multiPlayer.setStyle("-fx-background-image: url(/Menu/Images/2p.png);"
                 + "-fx-background-repeat: no-repeat;"
                 + "-fx-background-position: center;"
                 + "-fx-background-color: indianred;"
                 + "-fx-border-width: 2;"
                 + "-fx-border-color: black");
-        multiPlayer.setMinSize(350, 350);
+        multiPlayer.setMinSize(250, 350);
         multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                stage.setScene(MultiP());
+                stage.setScene(MultiPlayerScreen());
+            }
+        });
+
+        practise.setAlignment(Pos.CENTER_RIGHT);
+        practise.setStyle("-fx-background-image: url(/Menu/Images/pc.png);"
+                + "-fx-background-repeat: no-repeat;"
+                + "-fx-background-position: center;"
+                + "-fx-background-color: lightgreen;"
+                + "-fx-border-width: 2;"
+                + "-fx-border-color: black");
+        practise.setMinSize(250, 350);
+        practise.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                stage.setScene(PracticeScreen());
             }
         });
 
         GridPane.setConstraints(singlePlayer, 0, 1);
         GridPane.setConstraints(multiPlayer, 1, 1);
+        GridPane.setConstraints(practise,2,1);
 
         root.setStyle(
                 "-fx-background-image: url(" +
@@ -417,7 +434,7 @@ public class MainView extends Application {
                         "-fx-font-size: 16;"
         );
 
-        root.getChildren().addAll(singlePlayer, multiPlayer, back);
+        root.getChildren().addAll(singlePlayer, multiPlayer,practise, back);
         root.setVgap(10);
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
@@ -425,7 +442,7 @@ public class MainView extends Application {
         return new Scene(root, 800, 600);
     }
 
-    private Scene SingleP() {
+    private Scene SinglePlayerScreen() {
         GridPane root;
         root = new GridPane();
 
@@ -467,7 +484,7 @@ public class MainView extends Application {
         return new Scene(root, 800, 600);
     }
 
-    private Scene MultiP() {
+    private Scene MultiPlayerScreen() {
         GridPane root;
         root = new GridPane();
 
@@ -508,4 +525,47 @@ public class MainView extends Application {
 
         return new Scene(root, 800, 600);
     }
+
+    private Scene PracticeScreen() {
+        GridPane root;
+        root = new GridPane();
+
+        Label practise = new Label("Practise Screen");
+        practise.setTextFill(Color.WHITE);
+
+        back = new Button();
+        back.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                stage.setScene(StartScene());
+            }
+        });
+        back.setStyle("-fx-background-image: url(" +
+                "/Menu/Images/backBTN.png" +
+                "); " +
+                "-fx-background-size: cover, auto;"
+                + "-fx-background-radius: 5em; " +
+                "-fx-min-width: 50px; " +
+                "-fx-min-height: 50px; " +
+                "-fx-max-width: 50px; " +
+                "-fx-max-height: 50px;"
+        );
+
+        root.setStyle(
+                "-fx-background-image: url(" +
+                        "/Menu/Images/menuBG.jpg" +
+                        "); " +
+                        "-fx-background-size: cover,auto;" +
+                        "-fx-padding:10;" +
+                        "-fx-font-size: 16;" +
+                        "-fx-alignment: baseline-left;"
+        );
+
+        GridPane.setConstraints(practise, 0, 1);
+        root.getChildren().addAll(back, practise);
+
+        return new Scene(root, 800, 600);
+    }
+
 }
