@@ -1,13 +1,12 @@
 package Game;
 
-import Game.BoardGUI;
 import Game.Fence;
 import Game.Pawn;
 
 import java.util.ArrayList;
 
 
-public class Board implements BoardGUI {
+public class Board {
 	
 	private static Board boardInstance = null; // limit to 1 instance
 	private static final int width = 9;
@@ -66,7 +65,7 @@ public class Board implements BoardGUI {
 		//populate the pawns array and give them fences
 		for(int i = 0; i < pawns.length; i++)
 		{
-			pawns[i] = new Pawn(i + 1, maxPawnFences());
+			pawns[i] = new Pawn(i, maxPawnFences());
 			if(challengeMode) pawns[i].setChallengePosition();
 		}
 		
@@ -95,6 +94,8 @@ public class Board implements BoardGUI {
 		return maxFences/pawns.length;
 	}
 	
+	//THINGS FOR GAMEVIEW TO CALL
+	
 	/**
 	 * Gets a list of all fences from all pawns.
 	 * @return Complete ArrayList of fences on the board.
@@ -115,15 +116,34 @@ public class Board implements BoardGUI {
 	 */
 	public Fence[] getFencesArray()
 	{
-		ArrayList<Fence> allFences = new ArrayList<Fence>();
-		for(Pawn p : pawns)
-		{
-			allFences.addAll(p.getFences());
-		}
-		return (Fence[]) allFences.toArray();
+		return (Fence[]) getFences().toArray();
 		
 	}
-
+	/**
+	 * @return Position of all pawns in order of pawn id.
+	 */
+	public Position[] getPawnPositionsArray()
+	{
+		Position[] pawnPositions = new Position[pawns.length];
+		for(int i = 0; i < pawns.length; i++)
+		{
+			pawnPositions[i] = pawns[i].getPosition();
+		}
+		return pawnPositions;
+	}
+	public int numberOfPawns()
+	{
+		return pawns.length;
+	}
+	/**
+	 * @return The valid positions of the current Pawn
+	 */
+	public Position[] getValidPositionArray()
+	{
+		Pawn p = this.getCurrentPawn();
+		return (Position[]) p.getValidMoves().toArray();
+	}
+	
 	/*
 	 * FOLLOWING ARE A LIST OF ACTIONS AVAILABLE TO THE PLAYERS. 
 	 * WHEN ANY OF THEM ARE CALLED, THE ACTION IS EXECUTED (IF POSSIBLE)
