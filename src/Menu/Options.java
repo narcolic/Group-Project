@@ -21,7 +21,10 @@ public class Options {
     }
 
     public double getVolume(){
-        return volume;
+        return this.volume;
     }
 
+    public boolean isMute(){
+        return mute;
+    }
 }

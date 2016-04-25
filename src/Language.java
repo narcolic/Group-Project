@@ -1,5 +1,3 @@
-package Menu;
-
 public class Language {
 
 	private String[] languageName;

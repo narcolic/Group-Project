@@ -1,11 +1,7 @@
 package Menu;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -26,18 +22,10 @@ import static javafx.scene.media.AudioClip.INDEFINITE;
 public class MainView extends Application {
 
     private Help helpModel = new Help();
+    private Options optionsModel = new Options();
 
     private Stage stage;
-    private Button startb;
-    private Button options;
-    private Button help;
-    private Button quit;
-    private Button next;
-    private Button previous;
-    private Button back;
-
-    private ImageView imageView;
-    private Label textLabel;
+    private Button backB;
 
     @Override
     public void start(Stage primaryStage) {
@@ -66,81 +54,50 @@ public class MainView extends Application {
 
     }
 
-    public Scene menuScene() {
-        startb = new Button();
-        startb.setText("Start");
-        startb.setMaxWidth(Double.MAX_VALUE);
-        startb.setOnAction(new EventHandler<ActionEvent>() {
+    private Scene menuScene() {
 
-            @Override
-            public void handle(ActionEvent event) {
-                stage.setScene(StartScene());
+        stage.setTitle("Quoridor");
+        Button startB = new Button();
+        startB.setText("Start");
+        startB.setMaxWidth(Double.MAX_VALUE);
+        startB.setOnAction(event -> stage.setScene(StartScene()));
+
+        Button optionsB = new Button();
+        optionsB.setText("Options");
+        optionsB.setMaxWidth(Double.MAX_VALUE);
+        optionsB.setOnAction(event -> stage.setScene(OptionsScene(optionsModel)));
+
+        Button helpB = new Button();
+        helpB.setText("Help");
+        helpB.setMaxWidth(Double.MAX_VALUE);
+        helpB.setOnAction(event -> stage.setScene(HelpScene(helpModel)));
+
+        Button quitB = new Button();
+        quitB.setText("Quit");
+        quitB.setMaxWidth(Double.MAX_VALUE);
+        quitB.setOnAction(event -> {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Quoridor");
+            alert.setHeaderText("Quit Quoridor");
+            alert.setContentText("Are you sure you want to quit Quoridor?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                // close Quoridor
+                System.exit(0);
             }
         });
 
-        //create the options button
-        options = new Button();
-        options.setText("Options");
-        options.setMaxWidth(Double.MAX_VALUE);
-        options.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                stage.setScene(OptionsScene());
-            }
-        });
-
-        //create the Help button
-        help = new Button();
-        help.setText("Help");
-        help.setMaxWidth(Double.MAX_VALUE);
-        help.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                stage.setScene(HelpScene(helpModel));
-            }
-        });
-
-        //create the Quit button
-        quit = new Button();
-        quit.setText("Quit");
-        quit.setMaxWidth(Double.MAX_VALUE);
-        quit.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                //PARAMETER_ACTION = "quit";
-                //System.exit(0);
-                Alert alert = new Alert(AlertType.CONFIRMATION);
-                alert.setTitle("Quoridor");
-                alert.setHeaderText("Quit Quoridor");
-                alert.setContentText("Are you sure you want to quit Quoridor?");
-
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-                    // close Quoridor
-                    System.exit(0);
-                } else {
-                    // return to main menu
-                }
-                // stage.close();
-            }
-        });
-
-
-        //set order of buttons
         GridPane root = new GridPane();
-        GridPane.setRowIndex(startb, 1);
-        GridPane.setRowIndex(options, 2);
-        GridPane.setRowIndex(help, 3);
-        GridPane.setRowIndex(quit, 4);
+        GridPane.setRowIndex(startB, 1);
+        GridPane.setRowIndex(optionsB, 2);
+        GridPane.setRowIndex(helpB, 3);
+        GridPane.setRowIndex(quitB, 4);
 
-        //add buttons to menu
-        root.getChildren().add(startb);
-        root.getChildren().add(options);
-        root.getChildren().add(help);
-        root.getChildren().add(quit);
+        root.getChildren().add(startB);
+        root.getChildren().add(optionsB);
+        root.getChildren().add(helpB);
+        root.getChildren().add(quitB);
         root.setAlignment(Pos.CENTER);
         root.setVgap(20);
 
@@ -155,24 +112,25 @@ public class MainView extends Application {
         return new Scene(root, 800, 600);
     }
 
-    protected Scene HelpScene(Help help) {
+    private Scene HelpScene(Help help) {
 
+        stage.setTitle("Help");
         help.fillTextHelpArray();
         help.fillImageLocArray();
-        textLabel = new Label();
+        Label textLabel = new Label();
         GridPane root = new GridPane();
         VBox box = new VBox();
 
-        imageView = new ImageView(new Image(help.getCurrentImageLocation()));
+        ImageView imageView = new ImageView(new Image(help.getCurrentImageLocation()));
 
         textLabel.setText(help.getCurrentText());
         textLabel.setMaxSize(550, 150);
         textLabel.setWrapText(true);
         textLabel.setStyle("-fx-background-color: #FFFFFF;");
 
-        next = new Button();
-        next.setMaxWidth(Double.MAX_VALUE);
-        next.setStyle("-fx-background-image: url(" +
+        Button nextB = new Button();
+        nextB.setMaxWidth(Double.MAX_VALUE);
+        nextB.setStyle("-fx-background-image: url(" +
                 "/Menu/Images/nextBTN.png" +
                 "); " +
                 "-fx-background-size: cover, auto;"
@@ -180,22 +138,18 @@ public class MainView extends Application {
                 "-fx-min-width: 50px; " +
                 "-fx-min-height: 50px; "
         );
-        next.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                if (help.isNextAvailable()) {
-                    help.nextSlide();
-                    stage.setScene(HelpScene(helpModel));
-                } else {
-                    stage.setScene(HelpScene(helpModel));
-                }
+        nextB.setOnAction(event -> {
+            if (help.isNextAvailable()) {
+                help.nextSlide();
+                stage.setScene(HelpScene(helpModel));
+            } else {
+                stage.setScene(HelpScene(helpModel));
             }
         });
 
-        previous = new Button();
-        previous.setMaxWidth(Double.MAX_VALUE);
-        previous.setStyle("-fx-background-image: url(" +
+        Button previousB = new Button();
+        previousB.setMaxWidth(Double.MAX_VALUE);
+        previousB.setStyle("-fx-background-image: url(" +
                 "/Menu/Images/previousBTN.png" +
                 "); " +
                 "-fx-background-size: cover, auto;"
@@ -203,22 +157,18 @@ public class MainView extends Application {
                 "-fx-min-width: 50px; " +
                 "-fx-min-height: 50px; "
         );
-        previous.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                if (help.isPreviousAvailable()) {
-                    help.previousSlide();
-                    stage.setScene(HelpScene(helpModel));
-                } else {
-                    stage.setScene(HelpScene(helpModel));
-                }
+        previousB.setOnAction(event -> {
+            if (help.isPreviousAvailable()) {
+                help.previousSlide();
+                stage.setScene(HelpScene(helpModel));
+            } else {
+                stage.setScene(HelpScene(helpModel));
             }
         });
 
-        back = new Button();
-        back.setMaxWidth(Double.MAX_VALUE);
-        back.setStyle("-fx-background-image: url(" +
+        backB = new Button();
+        backB.setMaxWidth(Double.MAX_VALUE);
+        backB.setStyle("-fx-background-image: url(" +
                 "/Menu/Images/backBTN.png" +
                 "); " +
                 "-fx-background-size: cover, auto;"
@@ -226,13 +176,7 @@ public class MainView extends Application {
                 "-fx-min-width: 50px; " +
                 "-fx-min-height: 50px; "
         );
-        back.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                stage.setScene(menuScene());
-            }
-        });
+        backB.setOnAction(event -> stage.setScene(menuScene()));
 
         box.getChildren().add(imageView);
         box.setAlignment(Pos.CENTER);
@@ -244,11 +188,11 @@ public class MainView extends Application {
                 + "-fx-border-color: black");
 
         GridPane.setConstraints(box, 2, 1);
-        GridPane.setConstraints(next, 3, 1);
-        GridPane.setConstraints(previous, 1, 1);
+        GridPane.setConstraints(nextB, 3, 1);
+        GridPane.setConstraints(previousB, 1, 1);
         GridPane.setConstraints(textLabel, 2, 2);
 
-        root.getChildren().addAll(box, next, previous, textLabel, back);
+        root.getChildren().addAll(box, nextB, previousB, textLabel, backB);
         root.setVgap(10); //sets a vertical gap
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
@@ -266,14 +210,15 @@ public class MainView extends Application {
         return new Scene(root, 800, 600);
     }
 
-    private Scene OptionsScene() {
+    private Scene OptionsScene(Options option) {
+
         stage.setTitle("Options");
         final String SOUND_SLIDER_TOOLTIP = "Slide to increase sound volume.";
         final String MUTE_TOOLTIP = "Click to mute sound.";
         GridPane root;
         root = new GridPane();
 
-        Slider soundSlider = new Slider(0, 100, 50);
+        Slider soundSlider = new Slider(0, 100, option.getVolume());
         soundSlider.setShowTickLabels(true);
         soundSlider.setShowTickMarks(true);
         soundSlider.setMajorTickUnit(50);
@@ -284,7 +229,7 @@ public class MainView extends Application {
         soundSlider.setStyle("-fx-font-size: 16; -fx-text-fill: #FFFFFF; -fx-sroke: white;");
 
         CheckBox muteBox = new CheckBox();
-        muteBox.setSelected(false);
+        muteBox.setSelected(option.isMute());
         muteBox.setTooltip(new Tooltip(MUTE_TOOLTIP));
 
         Label soundVolumeLabel = new Label("Sound Volume: ");
@@ -295,9 +240,9 @@ public class MainView extends Application {
         soundValue.setTextFill(Color.WHITE);
         muteLabel.setTextFill(Color.WHITE);
 
-        back = new Button();
-        back.setMaxWidth(Double.MAX_VALUE);
-        back.setStyle("-fx-background-image: url(" +
+        backB = new Button();
+        backB.setMaxWidth(Double.MAX_VALUE);
+        backB.setStyle("-fx-background-image: url(" +
                 "/Menu/Images/backBTN.png" +
                 "); " +
                 "-fx-background-size: cover, auto;"
@@ -307,13 +252,7 @@ public class MainView extends Application {
                 "-fx-max-width: 50px; " +
                 "-fx-max-height: 50px;"
         );
-        back.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                stage.setScene(menuScene());
-            }
-        });
+        backB.setOnAction(event -> stage.setScene(menuScene()));
 
         GridPane.setConstraints(soundVolumeLabel, 0, 1);
         GridPane.setConstraints(soundSlider, 1, 1);
@@ -326,7 +265,7 @@ public class MainView extends Application {
         root.getChildren().add(soundValue);
         root.getChildren().add(muteLabel);
         root.getChildren().add(muteBox);
-        root.getChildren().add(back);
+        root.getChildren().add(backB);
 
         root.setStyle(
                 "-fx-background-image: url(" +
@@ -351,18 +290,14 @@ public class MainView extends Application {
     }
 
     private Scene StartScene() {
+
+        stage.setTitle("Quoridor");
         GridPane root;
         root = new GridPane();
 
-        back = new Button();
-        back.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                stage.setScene(menuScene());
-            }
-        });
-        back.setStyle("-fx-background-image: url(" +
+        backB = new Button();
+        backB.setOnAction(event -> stage.setScene(menuScene()));
+        backB.setStyle("-fx-background-image: url(" +
                 "/Menu/Images/backBTN.png" +
                 "); " +
                 "-fx-background-size: cover, auto;"
@@ -385,12 +320,7 @@ public class MainView extends Application {
                 + "-fx-border-width: 2;"
                 + "-fx-border-color: black");
         singlePlayer.setMinSize(250, 350);
-        singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                stage.setScene(SinglePlayerScreen());
-            }
-        });
+        singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(SinglePlayerScreen()));
 
         multiPlayer.setAlignment(Pos.CENTER);
         multiPlayer.setStyle("-fx-background-image: url(/Menu/Images/2p.png);"
@@ -400,12 +330,7 @@ public class MainView extends Application {
                 + "-fx-border-width: 2;"
                 + "-fx-border-color: black");
         multiPlayer.setMinSize(250, 350);
-        multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                stage.setScene(MultiPlayerScreen());
-            }
-        });
+        multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(MultiPlayerScreen()));
 
         practise.setAlignment(Pos.CENTER_RIGHT);
         practise.setStyle("-fx-background-image: url(/Menu/Images/pc.png);"
@@ -415,16 +340,11 @@ public class MainView extends Application {
                 + "-fx-border-width: 2;"
                 + "-fx-border-color: black");
         practise.setMinSize(250, 350);
-        practise.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                stage.setScene(PracticeScreen());
-            }
-        });
+        practise.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(PracticeScreen()));
 
         GridPane.setConstraints(singlePlayer, 0, 1);
         GridPane.setConstraints(multiPlayer, 1, 1);
-        GridPane.setConstraints(practise,2,1);
+        GridPane.setConstraints(practise, 2, 1);
 
         root.setStyle(
                 "-fx-background-image: url(" +
@@ -435,7 +355,7 @@ public class MainView extends Application {
                         "-fx-font-size: 16;"
         );
 
-        root.getChildren().addAll(singlePlayer, multiPlayer,practise, back);
+        root.getChildren().addAll(singlePlayer, multiPlayer, practise, backB);
         root.setVgap(10);
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
@@ -451,15 +371,9 @@ public class MainView extends Application {
         Label singleP = new Label("Single Player");
         singleP.setTextFill(Color.WHITE);
 
-        back = new Button();
-        back.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                stage.setScene(StartScene());
-            }
-        });
-        back.setStyle("-fx-background-image: url(" +
+        backB = new Button();
+        backB.setOnAction(event -> stage.setScene(StartScene()));
+        backB.setStyle("-fx-background-image: url(" +
                 "/Menu/Images/backBTN.png" +
                 "); " +
                 "-fx-background-size: cover, auto;"
@@ -481,7 +395,7 @@ public class MainView extends Application {
         );
 
         GridPane.setConstraints(singleP, 0, 1);
-        root.getChildren().addAll(back, singleP);
+        root.getChildren().addAll(backB, singleP);
 
         stage.setResizable(false);
         return new Scene(root, 800, 600);
@@ -494,15 +408,9 @@ public class MainView extends Application {
         Label multiP = new Label("Multi Player");
         multiP.setTextFill(Color.WHITE);
 
-        back = new Button();
-        back.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                stage.setScene(StartScene());
-            }
-        });
-        back.setStyle("-fx-background-image: url(" +
+        backB = new Button();
+        backB.setOnAction(event -> stage.setScene(StartScene()));
+        backB.setStyle("-fx-background-image: url(" +
                 "/Menu/Images/backBTN.png" +
                 "); " +
                 "-fx-background-size: cover, auto;"
@@ -524,7 +432,7 @@ public class MainView extends Application {
         );
 
         GridPane.setConstraints(multiP, 0, 1);
-        root.getChildren().addAll(back, multiP);
+        root.getChildren().addAll(backB, multiP);
 
         stage.setResizable(false);
         return new Scene(root, 800, 600);
@@ -537,15 +445,9 @@ public class MainView extends Application {
         Label practise = new Label("Practise Screen");
         practise.setTextFill(Color.WHITE);
 
-        back = new Button();
-        back.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                stage.setScene(StartScene());
-            }
-        });
-        back.setStyle("-fx-background-image: url(" +
+        backB = new Button();
+        backB.setOnAction(event -> stage.setScene(StartScene()));
+        backB.setStyle("-fx-background-image: url(" +
                 "/Menu/Images/backBTN.png" +
                 "); " +
                 "-fx-background-size: cover, auto;"
@@ -567,7 +469,7 @@ public class MainView extends Application {
         );
 
         GridPane.setConstraints(practise, 0, 1);
-        root.getChildren().addAll(back, practise);
+        root.getChildren().addAll(backB, practise);
 
         stage.setResizable(false);
         return new Scene(root, 800, 600);

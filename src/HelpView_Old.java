@@ -1,5 +1,3 @@
-package Menu;
-
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,7 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-public class HelpView extends Application {
+public class HelpView_Old extends Application {
 
     public static void main(String[] args) {
         launch(args);

@@ -36,7 +36,6 @@ public class MenuController {
 
 
         /*
-        helpView = new HelpView();
         helpModel = new Help();
         optionsModel = new Options();
         menuModel = new Menu();
