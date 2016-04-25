@@ -10,39 +10,149 @@ public class Pawn {
     private Position position;
     private Color pawnColor;
     private ArrayList<Position> validMoves;
+    private ArrayList<Fence> myFences;
 
+
+	
+	//debugging
+	public static void main(String[] args)
+	{
+		//test for valid positions and face to face conditions
+		Fence[] allFences = new Fence[10];
+		Pawn[] allPawns = new Pawn[3];
+		int size = 9;
+		allFences[0] = new Fence(new Position(4,8), false, 2);
+		allFences[1] = new Fence(new Position(8,0), true, 1);
+		allPawns[0] = new Pawn(0, 1);
+		allPawns[1] = new Pawn(1, 1);
+		
+		//Test for valid positions from an edge with fence above
+		Pawn p = allPawns[0];
+		p.calculateAllValidPositions(size, size, allPawns, allFences);
+		System.out.println("Valid moves 1: " + p.validMoves.size());
+		for(Position pos : p.validMoves)
+		{
+			System.out.println("Valid Move from (" + p.position.getX() + "," + p.position.getY() + ") : (" + pos.getX() + "," + pos.getY() + ")");
+		}
+		
+		//Test for top right corner, fence on the left
+		p.updateCurrentPosition(new Position(8,0));
+		p.calculateAllValidPositions(size, size, allPawns, allFences);
+		System.out.println("Valid moves 2: " + p.validMoves.size());
+		for(Position pos : p.validMoves)
+		{
+			System.out.println("Valid Move from (" + p.position.getX() + "," + p.position.getY() + ") : (" + pos.getX() + "," + pos.getY() + ")");
+		}
+		//Fig.6 Test (jump over)
+		allPawns[1].updateCurrentPosition(new Position(8,1));
+		p.calculateAllValidPositions(size, size, allPawns, allFences);
+		System.out.println("Valid moves 3: " + p.validMoves.size());
+		for(Position pos : p.validMoves)
+		{
+			System.out.println("Valid Move from (" + p.position.getX() + "," + p.position.getY() + ") : (" + pos.getX() + "," + pos.getY() + ")");
+		}
+		//Fig.9 Test (jump to the side because fence behind pawn)
+		allFences[1] = new Fence(new Position(8,2), false, 1);
+		p.calculateAllValidPositions(size, size, allPawns, allFences);
+		System.out.println("Valid moves 4: " + p.validMoves.size());
+		for(Position pos : p.validMoves)
+		{
+			System.out.println("Valid Move from (" + p.position.getX() + "," + p.position.getY() + ") : (" + pos.getX() + "," + pos.getY() + ")");
+		}
+		//Fig.10 Test (jump to the side because pawn behind pawn)
+		allFences[1] = null;
+		allPawns[2] = new Pawn(2, 1);
+		p.updateCurrentPosition(new Position(4,4));
+		allPawns[1].updateCurrentPosition(new Position(4,3));
+		allPawns[2].updateCurrentPosition(new Position(4,2));
+		p.calculateAllValidPositions(size, size, allPawns, allFences);
+		System.out.println("Valid moves 5: " + p.validMoves.size());
+		for(Position pos : p.validMoves)
+		{
+			System.out.println("Valid Move from (" + p.position.getX() + "," + p.position.getY() + ") : (" + pos.getX() + "," + pos.getY() + ")");
+		}
+		
+		
+		
+		System.out.println("DONE");
+		
+	}
+	
+	
+	
+    
     /**
      * Constructor
      */
-    public Pawn(int newID) {
+    public Pawn(int newID, int fenceCount) {
         pawnID = newID;
+        position = new Position();
+        myFences = new ArrayList<Fence>();
         setDefaultPosition();
         setDefaultColor();
+    }
+    
+    /**
+     * @return The pawnID minus one, to match arrays numbering.
+     */
+    public int getPawnID()
+    {
+    	return this.pawnID;
     }
 
     public void updateCurrentPosition(Position newPosition) {
         this.position = newPosition;
     }
 
+    public void addFence(Fence fence)
+    {
+    	myFences.add(fence);
+    }
+    
+    public void removeFence(Fence fence)
+    {
+    	myFences.remove(fence);
+    }
+    
     public Position getPosition() {
-        return position;
+        return this.position;
     }
 
-/*    public void setNewPawnID(int newID) {
-        this.pawnID = newID;
-    }*/
+    public ArrayList<Fence> getFences() 
+    {
+        return this.myFences;
+    }
+
+    public int getFenceCount() {
+        return this.myFences.size();
+    }
+    
+    public ArrayList<Position> getValidMoves()
+    {
+    	return validMoves;
+    }
+
+    public boolean positionIsValidMove(Position position)
+    {
+    	for(Position pos : validMoves)
+    	{
+    		if(pos.equals(position)) return true;
+    	}
+    	return false;
+    }
+    
     public void setDefaultPosition() {
         switch (pawnID) {
-            case 1:
+            case 0:
                 this.position.setXY(4,8);
                 break;
-            case 2:
+            case 1:
                 this.position.setXY(4,0);
                 break;
-            case 3:
+            case 2:
                 this.position.setXY(0,4);
                 break;
-            case 4:
+            case 3:
                 this.position.setXY(8,4);
                 break;
         }
@@ -50,16 +160,16 @@ public class Pawn {
     
     public void setChallengePosition()  {
         switch (pawnID) {
-	        case 1:
+	        case 0:
 	            this.position.setXY(0,8);
 	            break;
-	        case 2:
+	        case 1:
 	            this.position.setXY(8,0);
 	            break;
-	        case 3:
+	        case 2:
 	            this.position.setXY(0,0);
 	            break;
-	        case 4:
+	        case 3:
 	            this.position.setXY(8,8);
 	            break;
 	    }
@@ -67,16 +177,16 @@ public class Pawn {
 
     public void setDefaultColor() {
         switch (pawnID) {
-            case 1:
+            case 0:
                 this.pawnColor = Color.RED;
                 break;
-            case 2:
+            case 1:
                 this.pawnColor = Color.BLUE;
                 break;
-            case 3:
+            case 2:
                 this.pawnColor = Color.GREEN;
                 break;
-            case 4:
+            case 3:
                 this.pawnColor = Color.YELLOW;
                 break;
         }
@@ -112,22 +222,24 @@ public class Pawn {
      * @param allPawns
      * @param allFences
      */
-    public void calculateValidPosition(Orientation.Direction direction, int boardWidth, int boardHeight, Pawn[] allPawns, Fence[] allFences)
+    private void calculateValidPosition(Orientation.Direction direction, int boardWidth, int boardHeight, Pawn[] allPawns, Fence[] allFences)
     {
     	Position newPosition = directionPosition(position, direction);
     	//can't if outside board
     	if(outsideBoundary(newPosition, boardWidth, boardHeight)) return;
     	//can't if fence is in the way
-    	if(!Fence.validateMovement(position, direction, allFences)) return;
+    	if(!Fence.noFenceCollision(position, direction, allFences)) return;
     	
-    	if(validatePawns(position, direction, allPawns))
+    	if(pawnAtPosition(position, direction, allPawns))
     	{
     		//Face to Face mechanics
     		Position behindPawnPosition = directionPosition(newPosition, direction);
     		boolean noJump = false;
         	if(outsideBoundary(behindPawnPosition, boardWidth, boardHeight)) noJump = true;
-        	if(!Fence.validateMovement(newPosition, direction, allFences)) noJump = true;
+        	if(!Fence.noFenceCollision(newPosition, direction, allFences)) noJump = true;
+        	if(pawnAtPosition(newPosition, direction, allPawns)) noJump = true;
         	
+        	//if something is preventing the pawn from jumping over
         	if(noJump)
         	{
         		boolean noLeft = false, noRight = false;
@@ -135,10 +247,10 @@ public class Pawn {
         		Position rightOfPawn = directionPosition(newPosition, direction.getClockwise());
         		
             	if(outsideBoundary(leftOfPawn, boardWidth, boardHeight)) noLeft = true;
-            	if(!Fence.validateMovement(newPosition, direction.getCounterClockwise(), allFences)) noLeft = true;
+            	if(!Fence.noFenceCollision(newPosition, direction.getCounterClockwise(), allFences)) noLeft = true;
             	
             	if(outsideBoundary(rightOfPawn, boardWidth, boardHeight)) noRight = true;
-            	if(!Fence.validateMovement(newPosition, direction.getClockwise(), allFences)) noRight = true;
+            	if(!Fence.noFenceCollision(newPosition, direction.getClockwise(), allFences)) noRight = true;
 
         		//can move in one or both0 of the two directions
             	for(Position existingMove : validMoves)
@@ -168,10 +280,9 @@ public class Pawn {
      * @param allPawns
      * @return True if a pawn is on the occupied space.
      */
-    public static boolean validatePawns (Position position, Orientation.Direction direction, Pawn[] allPawns){
+    public static boolean pawnAtPosition (Position position, Orientation.Direction direction, Pawn[] allPawns){
 		Position newPosition = directionPosition(position, direction);
-		validatePawns(newPosition, allPawns);
-    	return false;
+    	return validatePawns(newPosition, allPawns);
     }
     /**
      * Checks if there is a pawn on the specified position.
@@ -182,6 +293,7 @@ public class Pawn {
     public static boolean validatePawns (Position position, Pawn[] allPawns){
 		for(Pawn pawn : allPawns)
 		{
+			if(pawn == null) continue;
 			if(pawn.position.equals(position))
 			{
 				return true;
@@ -216,3 +328,5 @@ public class Pawn {
     	return position;
     }
 }
+
+//Ctrl-Shift * / for collapse/open
