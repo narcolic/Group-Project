@@ -1,8 +1,6 @@
 package Menu;
 
 import javafx.application.Application;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -11,11 +9,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
+
 
 import java.util.Optional;
 
@@ -33,6 +33,7 @@ public class MainView extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
         stage = primaryStage;
         Scene scene = menuScene();
         stage.setTitle("Main Menu");
@@ -61,24 +62,38 @@ public class MainView extends Application {
     private Scene menuScene() {
 
         stage.setTitle("Quoridor");
+
         Button startB = new Button();
-        startB.setText("Start");
         startB.setMaxWidth(Double.MAX_VALUE);
         startB.setOnAction(event -> stage.setScene(StartScene()));
+        startB.setStyle("-fx-background-image: url('/Menu/Images/start.png')");
+        startB.getStyleClass().add("button");
+        Label startBLabel = new Label("START");
+        startBLabel.getStyleClass().add("menu");
 
         Button optionsB = new Button();
-        optionsB.setText("Options");
         optionsB.setMaxWidth(Double.MAX_VALUE);
         optionsB.setOnAction(event -> stage.setScene(OptionsScene(optionsModel)));
+        optionsB.setStyle("-fx-background-image: url('/Menu/Images/options.png')");
+        optionsB.getStyleClass().add("button");
+        Label optionsLabel = new Label("Options");
+        optionsLabel.getStyleClass().add("menu");
 
         Button helpB = new Button();
-        helpB.setText("Help");
         helpB.setMaxWidth(Double.MAX_VALUE);
         helpB.setOnAction(event -> stage.setScene(HelpScene(helpModel)));
+        helpB.setStyle("-fx-background-image: url('/Menu/Images/help.png')");
+        helpB.getStyleClass().add("button");
+        Label helpLabel = new Label("Help");
+        helpLabel.getStyleClass().add("menu");
 
         Button quitB = new Button();
-        quitB.setText("Quit");
         quitB.setMaxWidth(Double.MAX_VALUE);
+        quitB.setStyle("-fx-background-image: url('/Menu/Images/quit.png')");
+        quitB.getStyleClass().add("button");
+        Label quitLabel = new Label("Quit");
+        quitLabel.getStyleClass().add("menu");
+
         quitB.setOnAction(event -> {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Quoridor");
@@ -93,27 +108,33 @@ public class MainView extends Application {
         });
 
         GridPane root = new GridPane();
-        GridPane.setRowIndex(startB, 1);
-        GridPane.setRowIndex(optionsB, 2);
-        GridPane.setRowIndex(helpB, 3);
-        GridPane.setRowIndex(quitB, 4);
+        GridPane.setConstraints(startB, 0, 1);
+        GridPane.setConstraints(startBLabel, 1, 1);
+        GridPane.setConstraints(optionsB, 0, 2);
+        GridPane.setConstraints(optionsLabel, 1, 2);
+        GridPane.setConstraints(helpB, 0, 3);
+        GridPane.setConstraints(helpLabel, 1, 3);
+        GridPane.setConstraints(quitB, 0, 4);
+        GridPane.setConstraints(quitLabel, 1, 4);
 
-        root.getChildren().add(startB);
+        root.getChildren().addAll(startB);
+        root.getChildren().add(startBLabel);
         root.getChildren().add(optionsB);
+        root.getChildren().add(optionsLabel);
         root.getChildren().add(helpB);
+        root.getChildren().add(helpLabel);
         root.getChildren().add(quitB);
+        root.getChildren().add(quitLabel);
         root.setAlignment(Pos.CENTER);
-        root.setVgap(20);
+        root.setHgap(40);
+        root.setVgap(50);
 
-        root.setStyle(
-                "-fx-background-image: url(" +
-                        "/Menu/Images/menuBG.jpg" +
-                        "); " +
-                        "-fx-background-size: cover,auto;"
-        );
+        root.getStyleClass().add("background");
 
         stage.setResizable(false);
-        return new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
+        return scene;
     }
 
     private Scene HelpScene(Help help) {
@@ -134,14 +155,8 @@ public class MainView extends Application {
 
         Button nextB = new Button();
         nextB.setMaxWidth(Double.MAX_VALUE);
-        nextB.setStyle("-fx-background-image: url(" +
-                "/Menu/Images/nextBTN.png" +
-                "); " +
-                "-fx-background-size: cover, auto;"
-                + "-fx-background-radius: 5em; " +
-                "-fx-min-width: 50px; " +
-                "-fx-min-height: 50px; "
-        );
+        nextB.setStyle("-fx-background-image: url('/Menu/Images/nextBTN.png')");
+        nextB.getStyleClass().add("button");
         nextB.setOnAction(event -> {
             if (help.isNextAvailable()) {
                 help.nextSlide();
@@ -153,14 +168,8 @@ public class MainView extends Application {
 
         Button previousB = new Button();
         previousB.setMaxWidth(Double.MAX_VALUE);
-        previousB.setStyle("-fx-background-image: url(" +
-                "/Menu/Images/previousBTN.png" +
-                "); " +
-                "-fx-background-size: cover, auto;"
-                + "-fx-background-radius: 5em; " +
-                "-fx-min-width: 50px; " +
-                "-fx-min-height: 50px; "
-        );
+        previousB.setStyle("-fx-background-image: url('/Menu/Images/previousBTN.png')");
+        previousB.getStyleClass().add("button");
         previousB.setOnAction(event -> {
             if (help.isPreviousAvailable()) {
                 help.previousSlide();
@@ -172,14 +181,8 @@ public class MainView extends Application {
 
         backB = new Button();
         backB.setMaxWidth(Double.MAX_VALUE);
-        backB.setStyle("-fx-background-image: url(" +
-                "/Menu/Images/backBTN.png" +
-                "); " +
-                "-fx-background-size: cover, auto;"
-                + "-fx-background-radius: 5em; " +
-                "-fx-min-width: 50px; " +
-                "-fx-min-height: 50px; "
-        );
+        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.getStyleClass().add("button");
         backB.setOnAction(event -> stage.setScene(menuScene()));
 
         box.getChildren().add(imageView);
@@ -201,17 +204,12 @@ public class MainView extends Application {
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
 
-        root.setStyle(
-                "-fx-background-image: url(" +
-                        "/Menu/Images/menuBG.jpg" +
-                        "); " +
-                        "-fx-background-size: cover,auto;"
-        );
+        root.getStyleClass().add("background");
 
-        // stage.setMinWidth(800);
-        // stage.setMinHeight(650);
         stage.setResizable(false); // do not allow window to be resized
-        return new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
+        return scene;
     }
 
     private Scene OptionsScene(Options option) {
@@ -221,6 +219,9 @@ public class MainView extends Application {
         final String MUTE_TOOLTIP = "Click to mute sound.";
         GridPane root;
         root = new GridPane();
+
+        Label soundTitle = new Label("Sound Settings:");
+        soundTitle.getStyleClass().add("settings");
 
         Slider soundSlider = new Slider(0, 100, option.getVolume());
         soundSlider.setShowTickLabels(true);
@@ -245,40 +246,27 @@ public class MainView extends Application {
         muteLabel.setTextFill(Color.WHITE);
 
         backB = new Button();
-        backB.setMaxWidth(Double.MAX_VALUE);
-        backB.setStyle("-fx-background-image: url(" +
-                "/Menu/Images/backBTN.png" +
-                "); " +
-                "-fx-background-size: cover, auto;"
-                + "-fx-background-radius: 5em; " +
-                "-fx-min-width: 50px; " +
-                "-fx-min-height: 50px; " +
-                "-fx-max-width: 50px; " +
-                "-fx-max-height: 50px;"
-        );
+        //backB.setMaxWidth(Double.MAX_VALUE);
+        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.getStyleClass().add("button");
         backB.setOnAction(event -> stage.setScene(menuScene()));
 
-        GridPane.setConstraints(soundVolumeLabel, 0, 1);
-        GridPane.setConstraints(soundSlider, 1, 1);
-        GridPane.setConstraints(soundValue, 2, 1);
-        GridPane.setConstraints(muteLabel, 0, 2);
-        GridPane.setConstraints(muteBox, 1, 2);
+        GridPane.setRowIndex(backB,1);
+        GridPane.setColumnSpan(soundTitle,2);
+        GridPane.setRowIndex(soundTitle,2);
+        GridPane.setConstraints(soundVolumeLabel, 0, 3);
+        GridPane.setConstraints(soundSlider, 1, 3);
+        GridPane.setConstraints(soundValue, 2, 3);
+        GridPane.setConstraints(muteLabel, 0, 4);
+        GridPane.setConstraints(muteBox, 1, 4);
 
+        root.getChildren().add(soundTitle);
         root.getChildren().add(soundVolumeLabel);
         root.getChildren().add(soundSlider);
         root.getChildren().add(soundValue);
         root.getChildren().add(muteLabel);
         root.getChildren().add(muteBox);
         root.getChildren().add(backB);
-
-        root.setStyle("-fx-background-image: url(" +
-                "/Menu/Images/menuBG.jpg" +
-                "); " +
-                "-fx-background-size: cover,auto;" +
-                "-fx-padding:10;" +
-                "-fx-font-size: 16;" +
-                "-fx-alignment: baseline-left;"
-        );
 
         soundSlider.valueProperty().addListener(observable -> {
             soundValue.setText(String.format("%.1f", soundSlider.getValue()));
@@ -288,32 +276,27 @@ public class MainView extends Application {
             audio.play();
         });
 
-        muteBox.setOnAction((event -> {if (muteBox.isSelected()) {
-            audio.stop();
-            option.changeMuteState();
-        } else {
-            audio.stop();
-            audio.setVolume(option.getVolumePercent());
-            audio.play();
-            option.changeMuteState();
-        }}));
-/*        if (muteBox.isSelected()) {
-            audio.stop();
-        } else {
-            audio.stop();
-            audio.setVolume(option.getVolumePercent());
-            audio.play();
-        }*/
+        muteBox.setOnAction((event -> {
+            if (muteBox.isSelected()) {
+                audio.stop();
+                option.changeMuteState();
+            } else {
+                audio.stop();
+                audio.setVolume(option.getVolumePercent());
+                audio.play();
+                option.changeMuteState();
+            }
+        }));
 
         root.setVgap(30);
-        root.setHgap(70);
-        root.setAlignment(Pos.CENTER);
+        root.setHgap(60);
+        root.setAlignment(Pos.TOP_LEFT);
+        root.getStyleClass().add("background");
 
         stage.setResizable(false);
-        return new
-
-                Scene(root, 800, 600);
-
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
+        return scene;
     }
 
     private Scene StartScene() {
@@ -324,16 +307,8 @@ public class MainView extends Application {
 
         backB = new Button();
         backB.setOnAction(event -> stage.setScene(menuScene()));
-        backB.setStyle("-fx-background-image: url(" +
-                "/Menu/Images/backBTN.png" +
-                "); " +
-                "-fx-background-size: cover, auto;"
-                + "-fx-background-radius: 5em; " +
-                "-fx-min-width: 50px; " +
-                "-fx-min-height: 50px; " +
-                "-fx-max-width: 50px; " +
-                "-fx-max-height: 50px;"
-        );
+        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.getStyleClass().add("button");
 
         VBox singlePlayer = new VBox();
         VBox multiPlayer = new VBox();
@@ -369,18 +344,12 @@ public class MainView extends Application {
         practise.setMinSize(250, 350);
         practise.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(PracticeScreen()));
 
-        GridPane.setConstraints(singlePlayer, 0, 1);
-        GridPane.setConstraints(multiPlayer, 1, 1);
-        GridPane.setConstraints(practise, 2, 1);
+        GridPane.setRowIndex(backB,1);
+        GridPane.setConstraints(singlePlayer, 0, 2);
+        GridPane.setConstraints(multiPlayer, 1, 2);
+        GridPane.setConstraints(practise, 2, 2);
 
-        root.setStyle(
-                "-fx-background-image: url(" +
-                        "/Menu/Images/menuBG.jpg" +
-                        "); " +
-                        "-fx-background-size: cover,auto;" +
-                        "-fx-padding:10;" +
-                        "-fx-font-size: 16;"
-        );
+        root.getStyleClass().add("background");
 
         root.getChildren().addAll(singlePlayer, multiPlayer, practise, backB);
         root.setVgap(10);
@@ -388,7 +357,9 @@ public class MainView extends Application {
         root.setAlignment(Pos.CENTER);
 
         stage.setResizable(false);
-        return new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
+        return scene;
     }
 
     private Scene SinglePlayerScreen() {
@@ -400,32 +371,18 @@ public class MainView extends Application {
 
         backB = new Button();
         backB.setOnAction(event -> stage.setScene(StartScene()));
-        backB.setStyle("-fx-background-image: url(" +
-                "/Menu/Images/backBTN.png" +
-                "); " +
-                "-fx-background-size: cover, auto;"
-                + "-fx-background-radius: 5em; " +
-                "-fx-min-width: 50px; " +
-                "-fx-min-height: 50px; " +
-                "-fx-max-width: 50px; " +
-                "-fx-max-height: 50px;"
-        );
+        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.getStyleClass().add("button");
 
-        root.setStyle(
-                "-fx-background-image: url(" +
-                        "/Menu/Images/menuBG.jpg" +
-                        "); " +
-                        "-fx-background-size: cover,auto;" +
-                        "-fx-padding:10;" +
-                        "-fx-font-size: 16;" +
-                        "-fx-alignment: baseline-left;"
-        );
+        root.getStyleClass().add("background");
 
         GridPane.setConstraints(singleP, 0, 1);
         root.getChildren().addAll(backB, singleP);
 
         stage.setResizable(false);
-        return new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
+        return scene;
     }
 
     private Scene MultiPlayerScreen() {
@@ -437,32 +394,18 @@ public class MainView extends Application {
 
         backB = new Button();
         backB.setOnAction(event -> stage.setScene(StartScene()));
-        backB.setStyle("-fx-background-image: url(" +
-                "/Menu/Images/backBTN.png" +
-                "); " +
-                "-fx-background-size: cover, auto;"
-                + "-fx-background-radius: 5em; " +
-                "-fx-min-width: 50px; " +
-                "-fx-min-height: 50px; " +
-                "-fx-max-width: 50px; " +
-                "-fx-max-height: 50px;"
-        );
+        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.getStyleClass().add("button");
 
-        root.setStyle(
-                "-fx-background-image: url(" +
-                        "/Menu/Images/menuBG.jpg" +
-                        "); " +
-                        "-fx-background-size: cover,auto;" +
-                        "-fx-padding:10;" +
-                        "-fx-font-size: 16;" +
-                        "-fx-alignment: baseline-left;"
-        );
+        root.getStyleClass().add("background");
 
         GridPane.setConstraints(multiP, 0, 1);
         root.getChildren().addAll(backB, multiP);
 
         stage.setResizable(false);
-        return new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
+        return scene;
     }
 
     private Scene PracticeScreen() {
@@ -474,32 +417,18 @@ public class MainView extends Application {
 
         backB = new Button();
         backB.setOnAction(event -> stage.setScene(StartScene()));
-        backB.setStyle("-fx-background-image: url(" +
-                "/Menu/Images/backBTN.png" +
-                "); " +
-                "-fx-background-size: cover, auto;"
-                + "-fx-background-radius: 5em; " +
-                "-fx-min-width: 50px; " +
-                "-fx-min-height: 50px; " +
-                "-fx-max-width: 50px; " +
-                "-fx-max-height: 50px;"
-        );
+        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.getStyleClass().add("button");
 
-        root.setStyle(
-                "-fx-background-image: url(" +
-                        "/Menu/Images/menuBG.jpg" +
-                        "); " +
-                        "-fx-background-size: cover,auto;" +
-                        "-fx-padding:10;" +
-                        "-fx-font-size: 16;" +
-                        "-fx-alignment: baseline-left;"
-        );
+        root.getStyleClass().add("background");
 
         GridPane.setConstraints(practise, 0, 1);
         root.getChildren().addAll(backB, practise);
 
         stage.setResizable(false);
-        return new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
+        return scene;
     }
 
 }

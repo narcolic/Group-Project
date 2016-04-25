@@ -1,0 +1,31 @@
+.menu {
+    -fx-font-family: 'Comic Sans MS';
+    -fx-effect: dropshadow(gaussian, black, 0, 0, 0, 2);
+    -fx-font-weight: bold;
+    -fx-font-size: 30;
+    -fx-text-fill: white;
+}
+
+.button {
+    -fx-background-size: cover, auto;
+    -fx-background-radius: 8em;
+    -fx-min-width: 50px;
+    -fx-min-height: 50px;
+    -fx-background-color: linear-gradient(#61a2b1, #2A5058);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0.0, 0, 1);
+}
+
+.background {
+    -fx-background-image: url('/Menu/Images/menuBG.jpg');
+    -fx-background-size: cover, auto;
+    -fx-padding: 10 30 10 30;
+}
+
+.settings{
+    -fx-font-family: 'Comic Sans MS';
+    -fx-effect: dropshadow(gaussian, black, 0, 0, 0, 2);
+    -fx-font-weight: bold;
+    -fx-font-size: 30;
+    -fx-text-fill: white;
+    -fx-underline: true;
+}

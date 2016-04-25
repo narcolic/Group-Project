@@ -2,6 +2,7 @@ package Menu;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.awt.event.ActionListener;
@@ -33,6 +34,7 @@ public class MenuController {
                 javafx.application.Application.launch(MainView.class);
             }
         }.start();
+
 
 
         /*
