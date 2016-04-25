@@ -26,19 +26,18 @@ public class MainView extends Application {
     private Options optionsModel = new Options();
 
     private Stage stage;
-    private Button backB;
+    private Button backB; // go to previous scene
 
-    private AudioClip audio;
+    private AudioClip audio; // game sound
 
     @Override
     public void start(Stage primaryStage) {
 
         stage = primaryStage;
-        Scene scene = menuScene();
+        Scene scene = menuScene(); // intial scene set to menu scene
         stage.setTitle("Main Menu");
-
         //primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(scene); // set scene depending on the window displayed
         primaryStage.show();
 
         final Task task = new Task() {
@@ -53,23 +52,33 @@ public class MainView extends Application {
                 return null;
             }
         };
-        Thread thread = new Thread(task);
-        thread.start();
-
+        Thread thread = new Thread(task); // create new thread called task
+        thread.start(); // start thread
     }
 
+    /**
+     * Main menu presented to the user
+     * @return scene Main menu scene
+     */
     private Scene menuScene() {
 
         stage.setTitle("Quoridor");
+        stage.getIcons().add(new Image("/Menu/Images/quoridorIcon.jpg")); // application icon
 
+        /*
+         * Menu Option Buttons 
+         */
+        
+        // Start button
         Button startB = new Button();
         startB.setMaxWidth(Double.MAX_VALUE);
         startB.setOnAction(event -> stage.setScene(StartScene()));
         startB.setStyle("-fx-background-image: url('/Menu/Images/start.png')");
         startB.getStyleClass().add("button");
-        Label startBLabel = new Label("START");
+        Label startBLabel = new Label("Start");
         startBLabel.getStyleClass().add("menu");
 
+        // Options button
         Button optionsB = new Button();
         optionsB.setMaxWidth(Double.MAX_VALUE);
         optionsB.setOnAction(event -> stage.setScene(OptionsScene(optionsModel)));
@@ -78,6 +87,7 @@ public class MainView extends Application {
         Label optionsLabel = new Label("Options");
         optionsLabel.getStyleClass().add("menu");
 
+        // Help button
         Button helpB = new Button();
         helpB.setMaxWidth(Double.MAX_VALUE);
         helpB.setOnAction(event -> stage.setScene(HelpScene(helpModel)));
@@ -86,6 +96,7 @@ public class MainView extends Application {
         Label helpLabel = new Label("Help");
         helpLabel.getStyleClass().add("menu");
 
+        // Quit button
         Button quitB = new Button();
         quitB.setMaxWidth(Double.MAX_VALUE);
         quitB.setStyle("-fx-background-image: url('/Menu/Images/quit.png')");
@@ -94,6 +105,7 @@ public class MainView extends Application {
         quitLabel.getStyleClass().add("menu");
 
         quitB.setOnAction(event -> {
+        	// confirmation dialog before leaving game
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Quoridor");
             alert.setHeaderText("Quit Quoridor");
@@ -106,6 +118,7 @@ public class MainView extends Application {
             }
         });
 
+        // specify layouts for all components
         GridPane root = new GridPane();
         GridPane.setConstraints(startB, 0, 1);
         GridPane.setConstraints(startBLabel, 1, 1);
@@ -116,14 +129,8 @@ public class MainView extends Application {
         GridPane.setConstraints(quitB, 0, 4);
         GridPane.setConstraints(quitLabel, 1, 4);
 
-        root.getChildren().addAll(startB);
-        root.getChildren().add(startBLabel);
-        root.getChildren().add(optionsB);
-        root.getChildren().add(optionsLabel);
-        root.getChildren().add(helpB);
-        root.getChildren().add(helpLabel);
-        root.getChildren().add(quitB);
-        root.getChildren().add(quitLabel);
+        // add components to pane       
+        root.getChildren().addAll(startB,startBLabel,optionsB,optionsLabel,helpB,helpLabel,quitB,quitLabel);
         root.setAlignment(Pos.CENTER);
         root.setHgap(40);
         root.setVgap(50);
@@ -131,33 +138,50 @@ public class MainView extends Application {
         root.getStyleClass().add("background");
 
         stage.setResizable(false);
-        Scene scene = new Scene(root, 800, 600);
+        // display components in scene
+        Scene scene = new Scene(root, 800, 600); // optimal window size 800x600
+        // get external stylesheet
         scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
         return scene;
     }
 
+    /**
+     * Provides instructions on how to play the game
+     * @param help Help model
+     * @return scene Change current scene to help scene
+     */
     private Scene HelpScene(Help help) {
-
+    	
         stage.setTitle("Help");
+        
+        // load help image and text instructions
         help.fillTextHelpArray();
         help.fillImageLocArray();
-        Label textLabel = new Label();
+        Label textLabel = new Label(); // to display text help instructions
         GridPane root = new GridPane();
         VBox box = new VBox();
 
+        // used to display help image
         ImageView imageView = new ImageView(new Image(help.getCurrentImageLocation()));
 
-        textLabel.setText(help.getCurrentText());
+        // set text according to current help instruction
+        textLabel.setText(help.getCurrentText()); 
         textLabel.setMaxSize(550, 150);
         textLabel.setWrapText(true);
         textLabel.setStyle("-fx-background-color: #FFFFFF;");
 
+        /*
+         * Buttons 
+         */
+        
+        // Next button
         Button nextB = new Button();
         nextB.setMaxWidth(Double.MAX_VALUE);
         nextB.setStyle("-fx-background-image: url('/Menu/Images/nextBTN.png')");
         nextB.getStyleClass().add("button");
         nextB.setOnAction(event -> {
             if (help.isNextAvailable()) {
+            	// show next help image
                 help.nextSlide();
                 stage.setScene(HelpScene(helpModel));
             } else {
@@ -165,12 +189,14 @@ public class MainView extends Application {
             }
         });
 
+        // Previous button
         Button previousB = new Button();
         previousB.setMaxWidth(Double.MAX_VALUE);
         previousB.setStyle("-fx-background-image: url('/Menu/Images/previousBTN.png')");
         previousB.getStyleClass().add("button");
         previousB.setOnAction(event -> {
             if (help.isPreviousAvailable()) {
+            	// show previous help instruction
                 help.previousSlide();
                 stage.setScene(HelpScene(helpModel));
             } else {
@@ -178,11 +204,12 @@ public class MainView extends Application {
             }
         });
 
+        // Back button
         backB = new Button();
         backB.setMaxWidth(Double.MAX_VALUE);
         backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
         backB.getStyleClass().add("button");
-        backB.setOnAction(event -> stage.setScene(menuScene()));
+        backB.setOnAction(event -> stage.setScene(menuScene())); // back to main menu
 
         box.getChildren().add(imageView);
         box.setAlignment(Pos.CENTER);
@@ -193,6 +220,7 @@ public class MainView extends Application {
                 + "-fx-border-width: 2;"
                 + "-fx-border-color: black");
 
+        // set layout restrictions
         GridPane.setConstraints(box, 2, 1);
         GridPane.setConstraints(nextB, 3, 1);
         GridPane.setConstraints(previousB, 1, 1);
@@ -203,6 +231,7 @@ public class MainView extends Application {
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
 
+        // add background image
         root.getStyleClass().add("background");
 
         stage.setResizable(false); // do not allow window to be resized
@@ -211,9 +240,16 @@ public class MainView extends Application {
         return scene;
     }
 
+    /**
+     * Displays the user with sound options 
+     * @param option Options model
+     * @return scene Change current scene to options scene
+     */
     private Scene OptionsScene(Options option) {
 
         stage.setTitle("Options");
+        
+        // help displayed when user hovers over slider or mute checkbox
         final String SOUND_SLIDER_TOOLTIP = "Slide to increase sound volume.";
         final String MUTE_TOOLTIP = "Click to mute sound.";
         GridPane root;
@@ -222,6 +258,7 @@ public class MainView extends Application {
         Label soundTitle = new Label("Sound Settings:");
         soundTitle.getStyleClass().add("settings");
 
+        // slider used to control sound volume
         Slider soundSlider = new Slider(0, 100, option.getVolume());
         soundSlider.setShowTickLabels(true);
         soundSlider.setShowTickMarks(true);
@@ -232,6 +269,7 @@ public class MainView extends Application {
         soundSlider.setTooltip(new Tooltip(SOUND_SLIDER_TOOLTIP));
         soundSlider.setStyle("-fx-font-size: 16; -fx-text-fill: #FFFFFF; -fx-sroke: white;");
 
+        // checkbox for mute option
         CheckBox muteBox = new CheckBox();
         muteBox.setSelected(option.isMute());
         muteBox.setTooltip(new Tooltip(MUTE_TOOLTIP));
@@ -244,12 +282,14 @@ public class MainView extends Application {
         soundValue.setTextFill(Color.WHITE);
         muteLabel.setTextFill(Color.WHITE);
 
+        // Back button
         backB = new Button();
         //backB.setMaxWidth(Double.MAX_VALUE);
         backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
         backB.getStyleClass().add("button");
-        backB.setOnAction(event -> stage.setScene(menuScene()));
+        backB.setOnAction(event -> stage.setScene(menuScene())); // go back to main menu
 
+        // set component layouts
         GridPane.setRowIndex(backB,1);
         GridPane.setColumnSpan(soundTitle,2);
         GridPane.setRowIndex(soundTitle,2);
@@ -259,30 +299,27 @@ public class MainView extends Application {
         GridPane.setConstraints(muteLabel, 0, 4);
         GridPane.setConstraints(muteBox, 1, 4);
 
-        root.getChildren().add(soundTitle);
-        root.getChildren().add(soundVolumeLabel);
-        root.getChildren().add(soundSlider);
-        root.getChildren().add(soundValue);
-        root.getChildren().add(muteLabel);
-        root.getChildren().add(muteBox);
-        root.getChildren().add(backB);
+        // add components
+        root.getChildren().addAll(soundTitle,soundVolumeLabel,soundSlider,soundValue,muteLabel,muteBox,backB);
 
         soundSlider.valueProperty().addListener(observable -> {
+        	// display current value for volume
             soundValue.setText(String.format("%.1f", soundSlider.getValue()));
             option.setVolume(soundSlider.getValue());
-            audio.stop();
+            audio.stop(); // stop sounds
             audio.setVolume(option.getVolumePercent());
-            audio.play();
+            audio.play(); // play sound
         });
 
         muteBox.setOnAction((event -> {
             if (muteBox.isSelected()) {
+            	// stop sound
                 audio.stop();
                 option.changeMuteState();
             } else {
-                audio.stop();
+                audio.stop(); // stop sound
                 audio.setVolume(option.getVolumePercent());
-                audio.play();
+                audio.play(); // play sound
                 option.changeMuteState();
             }
         }));
@@ -298,20 +335,25 @@ public class MainView extends Application {
         return scene;
     }
 
+    /**
+     * User can select which game mode they would like to play in
+     * @return scene Change current scene to mode select screen
+     */
     private Scene StartScene() {
 
         stage.setTitle("Quoridor");
         GridPane root;
         root = new GridPane();
 
+        // Back button
         backB = new Button();
-        backB.setOnAction(event -> stage.setScene(menuScene()));
+        backB.setOnAction(event -> stage.setScene(menuScene())); // go back to main menu
         backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
         backB.getStyleClass().add("button");
 
         VBox singlePlayer = new VBox();
         VBox multiPlayer = new VBox();
-        VBox practise = new VBox();
+        VBox practice = new VBox();
 
         singlePlayer.setAlignment(Pos.CENTER_LEFT);
         singlePlayer.setStyle("-fx-background-image: url(/Menu/Images/1p.png);"
@@ -321,6 +363,7 @@ public class MainView extends Application {
                 + "-fx-border-width: 2;"
                 + "-fx-border-color: black");
         singlePlayer.setMinSize(250, 350);
+        // go to single player mode
         singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(SinglePlayerScreen()));
 
         multiPlayer.setAlignment(Pos.CENTER);
@@ -331,26 +374,30 @@ public class MainView extends Application {
                 + "-fx-border-width: 2;"
                 + "-fx-border-color: black");
         multiPlayer.setMinSize(250, 350);
+        // go to multiplayer mode
         multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(MultiPlayerScreen()));
 
-        practise.setAlignment(Pos.CENTER_RIGHT);
-        practise.setStyle("-fx-background-image: url(/Menu/Images/pc.png);"
+        practice.setAlignment(Pos.CENTER_RIGHT);
+        practice.setStyle("-fx-background-image: url(/Menu/Images/pc.png);"
                 + "-fx-background-repeat: no-repeat;"
                 + "-fx-background-position: center;"
                 + "-fx-background-color: lightgreen;"
                 + "-fx-border-width: 2;"
                 + "-fx-border-color: black");
-        practise.setMinSize(250, 350);
-        practise.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(PracticeScreen()));
+        practice.setMinSize(250, 350);
+        // go to practice mode
+        practice.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(PracticeScreen()));
 
+        // set component layouts
         GridPane.setRowIndex(backB,1);
         GridPane.setConstraints(singlePlayer, 0, 2);
         GridPane.setConstraints(multiPlayer, 1, 2);
-        GridPane.setConstraints(practise, 2, 2);
+        GridPane.setConstraints(practice, 2, 2);
 
         root.getStyleClass().add("background");
 
-        root.getChildren().addAll(singlePlayer, multiPlayer, practise, backB);
+        // add components
+        root.getChildren().addAll(singlePlayer, multiPlayer, practice, backB);
         root.setVgap(10);
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
@@ -361,6 +408,10 @@ public class MainView extends Application {
         return scene;
     }
 
+    /**
+     * Single player mode
+     * @return scene Change scene to single player scene
+     */
     private Scene SinglePlayerScreen() {
         GridPane root;
         root = new GridPane();
@@ -368,13 +419,15 @@ public class MainView extends Application {
         Label singleP = new Label("Single Player");
         singleP.setTextFill(Color.WHITE);
 
+        // Back button
         backB = new Button();
-        backB.setOnAction(event -> stage.setScene(StartScene()));
+        backB.setOnAction(event -> stage.setScene(StartScene())); // go back to mode select
         backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
         backB.getStyleClass().add("button");
 
         root.getStyleClass().add("background");
 
+        // set component layouts and add components 
         GridPane.setConstraints(singleP, 0, 1);
         root.getChildren().addAll(backB, singleP);
 
@@ -384,6 +437,10 @@ public class MainView extends Application {
         return scene;
     }
 
+    /**
+     * Multiplayer mode where multiple users can play
+     * @return scene Change current scene to multiplayer scene
+     */
     private Scene MultiPlayerScreen() {
         GridPane root;
         root = new GridPane();
@@ -391,13 +448,15 @@ public class MainView extends Application {
         Label multiP = new Label("Multi Player");
         multiP.setTextFill(Color.WHITE);
 
+        // Back button
         backB = new Button();
-        backB.setOnAction(event -> stage.setScene(StartScene()));
+        backB.setOnAction(event -> stage.setScene(StartScene())); // go back to mode select
         backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
         backB.getStyleClass().add("button");
 
         root.getStyleClass().add("background");
 
+     // set component layouts and add components 
         GridPane.setConstraints(multiP, 0, 1);
         root.getChildren().addAll(backB, multiP);
 
@@ -407,27 +466,32 @@ public class MainView extends Application {
         return scene;
     }
 
+    /**
+     * Practice mode where user can play with a computer
+     * @return scene Change current scene to practice scene
+     */
     private Scene PracticeScreen() {
         GridPane root;
         root = new GridPane();
 
-        Label practise = new Label("Practise Screen");
-        practise.setTextFill(Color.WHITE);
+        Label practice = new Label("Practice Screen");
+        practice.setTextFill(Color.WHITE);
 
+        // Back button
         backB = new Button();
-        backB.setOnAction(event -> stage.setScene(StartScene()));
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setOnAction(event -> stage.setScene(StartScene())); // go to mode select
+        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')"); 
         backB.getStyleClass().add("button");
 
         root.getStyleClass().add("background");
 
-        GridPane.setConstraints(practise, 0, 1);
-        root.getChildren().addAll(backB, practise);
+        // set component layouts and add components 
+        GridPane.setConstraints(practice, 0, 1);
+        root.getChildren().addAll(backB, practice);
 
         stage.setResizable(false);
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
         return scene;
     }
-
 }
