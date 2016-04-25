@@ -1,30 +1,44 @@
 package Menu;
 
+import java.math.BigDecimal;
+
 public class Options {
 
-    public double volume; //VolumeSlider value
-    public boolean mute;
-    private static double DEFAULT_VOLUME = 50.0; // Scale to 1-100 probably
+    double volume;
+    private double volumePercent;
+    boolean mute;
 
-    /**
-     * Constructor
-     */
     public Options() {
-        volume = DEFAULT_VOLUME;
-		mute=false;
+        volume = 50.0;
+        volumePercent = 0.5;
+        mute = false;
     }
 
+    void setVolume(double newVolume) {
 
-
-    public void setVolume(double newVolume){
-        this.volume=newVolume;
+        this.volume = new BigDecimal(newVolume)
+                .setScale(1, BigDecimal.ROUND_HALF_UP)
+                .doubleValue();
     }
 
-    public double getVolume(){
+    double getVolume() {
         return this.volume;
     }
 
-    public boolean isMute(){
+    boolean isMute() {
         return mute;
+    }
+
+    void changeMuteState() {
+        this.mute = !isMute();
+    }
+
+    private void setVolumePercent(double newVolume) {
+        this.volumePercent = newVolume / 100;
+    }
+
+    double getVolumePercent() {
+        setVolumePercent(volume);
+        return this.volumePercent;
     }
 }

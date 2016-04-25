@@ -1,6 +1,8 @@
 package Menu;
 
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -27,6 +29,8 @@ public class MainView extends Application {
     private Stage stage;
     private Button backB;
 
+    private AudioClip audio;
+
     @Override
     public void start(Stage primaryStage) {
         stage = primaryStage;
@@ -42,7 +46,7 @@ public class MainView extends Application {
             @Override
             protected Object call() throws Exception {
                 int s = INDEFINITE;
-                AudioClip audio = new AudioClip(getClass().getResource("/Menu/Sound/song.mp3").toExternalForm());
+                audio = new AudioClip(getClass().getResource("/Menu/Sound/song.mp3").toExternalForm());
                 audio.setVolume(0.5f);
                 audio.setCycleCount(s);
                 audio.play();
@@ -267,26 +271,49 @@ public class MainView extends Application {
         root.getChildren().add(muteBox);
         root.getChildren().add(backB);
 
-        root.setStyle(
-                "-fx-background-image: url(" +
-                        "/Menu/Images/menuBG.jpg" +
-                        "); " +
-                        "-fx-background-size: cover,auto;" +
-                        "-fx-padding:10;" +
-                        "-fx-font-size: 16;" +
-                        "-fx-alignment: baseline-left;"
+        root.setStyle("-fx-background-image: url(" +
+                "/Menu/Images/menuBG.jpg" +
+                "); " +
+                "-fx-background-size: cover,auto;" +
+                "-fx-padding:10;" +
+                "-fx-font-size: 16;" +
+                "-fx-alignment: baseline-left;"
         );
 
-        soundSlider.valueProperty().addListener((ov, old_val, new_val) -> {
-            soundValue.setText(String.format("%.2f", new_val));
+        soundSlider.valueProperty().addListener(observable -> {
+            soundValue.setText(String.format("%.1f", soundSlider.getValue()));
+            option.setVolume(soundSlider.getValue());
+            audio.stop();
+            audio.setVolume(option.getVolumePercent());
+            audio.play();
         });
+
+        muteBox.setOnAction((event -> {if (muteBox.isSelected()) {
+            audio.stop();
+            option.changeMuteState();
+        } else {
+            audio.stop();
+            audio.setVolume(option.getVolumePercent());
+            audio.play();
+            option.changeMuteState();
+        }}));
+/*        if (muteBox.isSelected()) {
+            audio.stop();
+        } else {
+            audio.stop();
+            audio.setVolume(option.getVolumePercent());
+            audio.play();
+        }*/
 
         root.setVgap(30);
         root.setHgap(70);
         root.setAlignment(Pos.CENTER);
 
         stage.setResizable(false);
-        return new Scene(root, 800, 600);
+        return new
+
+                Scene(root, 800, 600);
+
     }
 
     private Scene StartScene() {
