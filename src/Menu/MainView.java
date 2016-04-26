@@ -1,7 +1,6 @@
 package Menu;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -29,7 +28,6 @@ public class MainView extends Application {
 
     private Stage stage;
     private Button backB; // go to previous scene
-    private String selectedLanguage;
 
     private AudioClip audio; // game sound
 
