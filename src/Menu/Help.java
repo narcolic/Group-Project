@@ -1,7 +1,5 @@
 package Menu;
 
-import java.awt.*;
-
 public class Help {
 
     private String[] textHelp;
@@ -17,43 +15,35 @@ public class Help {
         slideNumber = 0;
     }
 
-    public String getCurrentText() {
+    String getCurrentText() {
         return this.textHelp[this.slideNumber];
     }
 
-    public String getCurrentImageLocation() {
+    String getCurrentImageLocation() {
         return this.imageLoc[this.slideNumber];
     }
 
-    public int getCurrentSlide() {
-        return this.slideNumber;
-    }
-
-    public void nextSlide() {
+    void nextSlide() {
         if (isNextAvailable()) {
             this.slideNumber++;
         }
     }
 
-    public boolean isNextAvailable() {
-        if (this.slideNumber < (textHelp.length-1))
-            return true;
-        else return false;
+    boolean isNextAvailable() {
+        return this.slideNumber < (textHelp.length - 1);
     }
 
-    public boolean isPreviousAvailable() {
-        if (slideNumber >= 1)
-            return true;
-        else return false;
+    boolean isPreviousAvailable() {
+        return slideNumber >= 1;
     }
 
-    public void previousSlide() {
+    void previousSlide() {
         if (isPreviousAvailable()) {
             this.slideNumber--;
         }
     }
 
-    public void fillTextHelpArray() {
+    void fillTextHelpArray() {
         textHelp = new String[]{"sadasdsadas1",
                 "asdasdasdsad2",
                 "asdasdasdad3",
@@ -61,7 +51,7 @@ public class Help {
                 "asdasdas5"};
     }
 
-    public void fillImageLocArray() {
+    void fillImageLocArray() {
         imageLoc = new String[]{"/Menu/Images/dog1.png",
                 "/Menu/Images/dog.png",
                 "/Menu/Images/dog1.png",

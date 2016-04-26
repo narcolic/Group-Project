@@ -1,9 +1,7 @@
-package Menu;
-
 public class Menu {
 
 	private String selection;
-	private Help helpMenu;
+	//private Menu.Help helpMenu;
 
 	/**
 	 * Constructor

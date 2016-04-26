@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 public class Options {
 
-    double volume;
+    private double volume;
     private double volumePercent;
-    boolean mute;
+    private boolean mute;
 
     public Options() {
         volume = 50.0;
