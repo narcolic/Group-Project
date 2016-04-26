@@ -68,10 +68,10 @@ public class MainView extends Application {
         stage.setTitle("Quoridor");
         stage.getIcons().add(new Image("/Menu/Images/quoridorIcon.jpg")); // application icon
 
-        GridPane innerGrid = new GridPane();
+        /*GridPane innerGrid = new GridPane();
         innerGrid.setAlignment(Pos.CENTER);
         ImageView img = new ImageView(new Image("/Menu/Images/QUORIDOR.png"));
-        innerGrid.add(img, 0, 0);
+        innerGrid.add(img, 0, 0);*/
 
         /*
          * Menu Option Buttons 
@@ -133,13 +133,15 @@ public class MainView extends Application {
         GridPane.setConstraints(quitLabel, 1, 4);
 
         // add components to pane
-        root.add(innerGrid, 0, 0, 2, 1);
+        //root.add(innerGrid, 0, 0, 2, 1);
         root.getChildren().addAll(startB, startBLabel, optionsB, optionsLabel, helpB, helpLabel, quitB, quitLabel);
         root.setAlignment(Pos.CENTER);
         root.setHgap(40);
         root.setVgap(40);
 
-        root.getStyleClass().add("background");
+        root.setStyle("-fx-background-image: url('/Menu/Images/mainMenuBG.png');\n" +
+                "    -fx-background-size: cover, auto;\n" +
+                "    -fx-padding: 10 50 10 30;");
 
         stage.setResizable(false);
         // display components in scene
