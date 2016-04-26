@@ -75,7 +75,7 @@ public class MainView extends Application {
         Button startB = new Button();
         startB.setMaxWidth(Double.MAX_VALUE);
         startB.setOnAction(event -> stage.setScene(StartScene()));
-        startB.setStyle("-fx-background-image: url('/Menu/Images/start.png')");
+        startB.setStyle("-fx-background-image: url('/Menu/Images/Icons/Start.png')");
         startB.getStyleClass().add("button");
         Label startBLabel = new Label((String) language.getCurrentLanguage().get("Start"));
         startBLabel.getStyleClass().add("menu");
@@ -85,7 +85,7 @@ public class MainView extends Application {
         Button optionsB = new Button();
         optionsB.setMaxWidth(Double.MAX_VALUE);
         optionsB.setOnAction(event -> stage.setScene(OptionsScene(optionsModel, languageModel)));
-        optionsB.setStyle("-fx-background-image: url('/Menu/Images/options.png')");
+        optionsB.setStyle("-fx-background-image: url('/Menu/Images/Icons/options.png')");
         optionsB.getStyleClass().add("button");
         Label optionsLabel = new Label((String) language.getCurrentLanguage().get("Options"));
         optionsLabel.getStyleClass().add("menu");
@@ -95,7 +95,7 @@ public class MainView extends Application {
         Button helpB = new Button();
         helpB.setMaxWidth(Double.MAX_VALUE);
         helpB.setOnAction(event -> stage.setScene(HelpScene(helpModel, languageModel)));
-        helpB.setStyle("-fx-background-image: url('/Menu/Images/help.png')");
+        helpB.setStyle("-fx-background-image: url('/Menu/Images/Icons/help.png')");
         helpB.getStyleClass().add("button");
         Label helpLabel = new Label((String) language.getCurrentLanguage().get("Help"));
         helpLabel.getStyleClass().add("menu");
@@ -104,7 +104,7 @@ public class MainView extends Application {
         // Quit button
         Button quitB = new Button();
         quitB.setMaxWidth(Double.MAX_VALUE);
-        quitB.setStyle("-fx-background-image: url('/Menu/Images/quit.png')");
+        quitB.setStyle("-fx-background-image: url('/Menu/Images/Icons/quit.png')");
         quitB.getStyleClass().add("button");
         Label quitLabel = new Label((String) language.getCurrentLanguage().get("Quit"));
         quitLabel.getStyleClass().add("menu");
@@ -131,7 +131,7 @@ public class MainView extends Application {
         root.setHgap(40);
         root.setVgap(40);
 
-        root.setStyle("-fx-background-image: url('/Menu/Images/Old/menuBackGround.jpg');\n" +
+        root.setStyle("-fx-background-image: url('/Menu/Images/menuBackGround.jpg');\n" +
                 "    -fx-background-size: cover, auto;\n" +
                 "    -fx-padding: 10 50 10 30;");
 
@@ -166,6 +166,9 @@ public class MainView extends Application {
 
         stage.setTitle("Help");
 
+        final String NEXT_SLIDE_TOOLTIP = "Next slide.";
+        final String PREVIOUS_SLIDE_TOOLTIP = "Previous slide.";
+
         // load help image and text instructions
         help.fillTextHelpArray();
         help.fillImageLocArray();
@@ -189,8 +192,9 @@ public class MainView extends Application {
         // Next button
         Button nextB = new Button();
         nextB.setMaxWidth(Double.MAX_VALUE);
-        nextB.setStyle("-fx-background-image: url('/Menu/Images/nextBTN.png')");
+        nextB.setStyle("-fx-background-image: url('/Menu/Images/Icons/nextBTN.png')");
         nextB.getStyleClass().add("button");
+        nextB.setTooltip(new Tooltip(NEXT_SLIDE_TOOLTIP));
         nextB.setOnAction(event -> {
             if (help.isNextAvailable()) {
                 // show next help image
@@ -204,8 +208,9 @@ public class MainView extends Application {
         // Previous button
         Button previousB = new Button();
         previousB.setMaxWidth(Double.MAX_VALUE);
-        previousB.setStyle("-fx-background-image: url('/Menu/Images/previousBTN.png')");
+        previousB.setStyle("-fx-background-image: url('/Menu/Images/Icons/previousBTN.png')");
         previousB.getStyleClass().add("button");
+        previousB.setTooltip(new Tooltip(PREVIOUS_SLIDE_TOOLTIP));
         previousB.setOnAction(event -> {
             if (help.isPreviousAvailable()) {
                 // show previous help instruction
@@ -219,12 +224,12 @@ public class MainView extends Application {
         // Back button
         backB = new Button();
         backB.setMaxWidth(Double.MAX_VALUE);
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
         backB.setOnAction(event -> stage.setScene(menuScene(languageModel))); // back to main menu
-        Label backBLabel = new Label((String) language.getCurrentLanguage().get("Back"));
+        /*Label backBLabel = new Label((String) language.getCurrentLanguage().get("Back"));
         backBLabel.getStyleClass().add("menu");
-        backBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(menuScene(languageModel)));
+        backBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(menuScene(languageModel)));*/
 
         box.getChildren().add(imageView);
         box.setAlignment(Pos.CENTER);
@@ -237,7 +242,7 @@ public class MainView extends Application {
 
         // set layout restrictions
         GridPane.setConstraints(backB, 0, 1);
-        GridPane.setConstraints(backBLabel, 1, 1);
+        //GridPane.setConstraints(backBLabel, 1, 1);
         GridPane.setColumnSpan(box, 2);
         GridPane.setConstraints(box, 1, 2);
         GridPane.setConstraints(nextB, 4, 2);
@@ -245,7 +250,7 @@ public class MainView extends Application {
         GridPane.setColumnSpan(textLabel, 2);
         GridPane.setConstraints(textLabel, 1, 3);
 
-        root.getChildren().addAll(box, nextB, previousB, textLabel, backB, backBLabel);
+        root.getChildren().addAll(box, nextB, previousB, textLabel, backB);
         root.setVgap(10); //sets a vertical gap
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
@@ -277,8 +282,8 @@ public class MainView extends Application {
         GridPane root;
         root = new GridPane();
 
-        ImageView soundIco = new ImageView(new Image("/Menu/Images/sound.png"));
-        ImageView languageIco = new ImageView(new Image("/Menu/Images/language.png"));
+        ImageView soundIco = new ImageView(new Image("/Menu/Images/Icons/sound.png"));
+        ImageView languageIco = new ImageView(new Image("/Menu/Images/Icons/language.png"));
 
 
         // slider used to control sound volume
@@ -302,12 +307,12 @@ public class MainView extends Application {
         langagueListBox.getItems().addAll(language.languageList);
         langagueListBox.setValue(language.getLanguage());
 
-        Label soundVolumeLabel = new Label("Sound Volume: ");
+        Label soundVolumeLabel = new Label("  Sound Volume:  ");
         Label soundTitleLabel = new Label((String) language.getCurrentLanguage().get("Sound Settings"));
-        Label languageTitleLabel = new Label((String) language.getCurrentLanguage().get("Sound Settings"));
+        Label languageTitleLabel = new Label((String) language.getCurrentLanguage().get("Language Settings"));
         Label soundValue = new Label(Double.toString(soundSlider.getValue()));
-        Label muteLabel = new Label("Mute Sound: ");
-        Label languageLabel = new Label("Language");
+        Label muteLabel = new Label("  Mute Sound:  ");
+        Label languageLabel = new Label("  Language:  ");
 
         languageLabel.setTextFill(Color.WHITE);
         soundValue.setTextFill(Color.WHITE);
@@ -323,18 +328,18 @@ public class MainView extends Application {
 
         // Back button
         backB = new Button();
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
         backB.setOnAction(event -> stage.setScene(menuScene(languageModel))); // go back to main menu
-        Label backBLabel = new Label((String) language.getCurrentLanguage().get("Back"));
+        /*Label backBLabel = new Label((String) language.getCurrentLanguage().get("Back"));
         backBLabel.getStyleClass().add("menu");
-        backBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(menuScene(languageModel)));
+        backBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(menuScene(languageModel)));*/
 
         // set component layouts
         GridPane.setConstraints(backB, 0, 1);
-        GridPane.setConstraints(backBLabel, 1, 1);
+        //GridPane.setConstraints(backBLabel, 1, 1);
         GridPane.setColumnSpan(soundTitleLabel, 2);
-        GridPane.setRowIndex(soundTitleLabel, 2);
+        GridPane.setConstraints(soundTitleLabel,0,2);
         GridPane.setConstraints(soundVolumeLabel, 0, 3);
         GridPane.setConstraints(soundSlider, 1, 3);
         GridPane.setConstraints(soundValue, 2, 3);
@@ -348,8 +353,7 @@ public class MainView extends Application {
         // add components
         root.getChildren().addAll(soundTitleLabel, soundVolumeLabel,
                 languageLabel, languageTitleLabel, langagueListBox,
-                soundSlider, soundValue, muteLabel, muteBox, backB,
-                backBLabel);
+                soundSlider, soundValue, muteLabel, muteBox, backB);
 
         soundSlider.valueProperty().addListener(observable -> {
             // display current value for volume
@@ -402,7 +406,7 @@ public class MainView extends Application {
         // Back button
         backB = new Button();
         backB.setOnAction(event -> stage.setScene(menuScene(languageModel))); // go back to main menu
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
 
         VBox singlePlayer = new VBox();
@@ -477,7 +481,7 @@ public class MainView extends Application {
         // Back button
         backB = new Button();
         backB.setOnAction(event -> stage.setScene(StartScene())); // go back to mode select
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
 
         root.getStyleClass().add("background");
@@ -507,7 +511,7 @@ public class MainView extends Application {
         // Back button
         backB = new Button();
         backB.setOnAction(event -> stage.setScene(StartScene())); // go back to mode select
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
 
         root.getStyleClass().add("background");
@@ -537,7 +541,7 @@ public class MainView extends Application {
         // Back button
         backB = new Button();
         backB.setOnAction(event -> stage.setScene(StartScene())); // go to mode select
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
 
         root.getStyleClass().add("background");

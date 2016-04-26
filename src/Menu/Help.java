@@ -19,7 +19,7 @@ public class Help {
 	 * Get the current text help instruction
 	 * @return textHelp The current text help instruction
 	 */
-	public String getCurrentText() {
+	String getCurrentText() {
 		return this.textHelp[this.slideNumber];
 	}
 
@@ -27,7 +27,7 @@ public class Help {
 	 * Get the current image help instruction
 	 * @return imageLoc The location of the image
 	 */
-	public String getCurrentImageLocation() {
+	String getCurrentImageLocation() {
 		return this.imageLoc[this.slideNumber];
 	}
 
@@ -80,10 +80,10 @@ public class Help {
 	 * Initialise the help image url's 
 	 */
 	void fillImageLocArray() {
-		imageLoc = new String[]{"/Menu/Images/dog1.png",
-				"/Menu/Images/dog.png",
-				"/Menu/Images/dog1.png",
-				"/Menu/Images/dog.png",
-				"/Menu/Images/dog1.png"};
+		imageLoc = new String[]{"/Menu/Images/Help/dog1.png",
+				"/Menu/Images/Help/dog.png",
+				"/Menu/Images/Help/dog1.png",
+				"/Menu/Images/Help/dog.png",
+				"/Menu/Images/Help/dog1.png"};
 	}
 }

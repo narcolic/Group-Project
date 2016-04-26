@@ -1,6 +1,7 @@
 package Menu;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 class Language {
 
@@ -9,12 +10,10 @@ class Language {
     private HashMap<String, String> english = new HashMap<>();
     private HashMap<String, String> french = new HashMap<>();
     private HashMap<String, String> german = new HashMap<>();
-    private int languageNo;
 
     Language() {
         languageList = new String[3];
         language = "English";
-        languageNo = 0;
         fillLanguageListArray();
         fillEnglishMap();
         fillGermanMap();
@@ -30,9 +29,9 @@ class Language {
     }
 
     HashMap getCurrentLanguage() {
-        if (languageNo == 0) {
+        if (Objects.equals(language, "English")) {
             return english;
-        } else if (languageNo == 1) {
+        } else if (Objects.equals(language, "French")) {
             return french;
         } else {
             return german;
@@ -46,8 +45,8 @@ class Language {
         english.put("Help", "Help");
         english.put("Quit", "Quit");
         english.put("Back", "Back");
-        english.put("Sound Settings", "Sound Settings: ");
-        english.put("Language Settings", "Language Settings: ");
+        english.put("Sound Settings", "Sound Settings:");
+        english.put("Language Settings", "Language Settings:");
     }
 
     private void fillFrenchMap() {
