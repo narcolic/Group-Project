@@ -117,21 +117,21 @@ public class MainView extends Application {
 
         // specify layouts for all components
         GridPane root = new GridPane();
-        GridPane.setConstraints(startB, 0, 1);
-        GridPane.setConstraints(startBLabel, 1, 1);
-        GridPane.setConstraints(optionsB, 0, 2);
-        GridPane.setConstraints(optionsLabel, 1, 2);
-        GridPane.setConstraints(helpB, 0, 3);
-        GridPane.setConstraints(helpLabel, 1, 3);
-        GridPane.setConstraints(quitB, 0, 4);
-        GridPane.setConstraints(quitLabel, 1, 4);
+        GridPane.setConstraints(startB, 0, 2);
+        GridPane.setConstraints(startBLabel, 1, 2);
+        GridPane.setConstraints(optionsB, 0, 3);
+        GridPane.setConstraints(optionsLabel, 1, 3);
+        GridPane.setConstraints(helpB, 0, 4);
+        GridPane.setConstraints(helpLabel, 1, 4);
+        GridPane.setConstraints(quitB, 0, 5);
+        GridPane.setConstraints(quitLabel, 1, 5);
 
         root.getChildren().addAll(startB, startBLabel, optionsB, optionsLabel, helpB, helpLabel, quitB, quitLabel);
         root.setAlignment(Pos.CENTER);
         root.setHgap(40);
         root.setVgap(40);
 
-        root.setStyle("-fx-background-image: url('/Menu/Images/Old/mainMenuBG.png');\n" +
+        root.setStyle("-fx-background-image: url('/Menu/Images/Old/menuBackGround.jpg');\n" +
                 "    -fx-background-size: cover, auto;\n" +
                 "    -fx-padding: 10 50 10 30;");
 
