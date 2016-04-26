@@ -1,6 +1,7 @@
 package Menu;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -28,6 +29,7 @@ public class MainView extends Application {
 
     private Stage stage;
     private Button backB; // go to previous scene
+    private String selectedLanguage;
 
     private AudioClip audio; // game sound
 
@@ -64,8 +66,6 @@ public class MainView extends Application {
      */
     private Scene menuScene(Language language) {
 
-        language.fillEnglishMap();
-        language.fillLanguageListArray();
         stage.setTitle("Quoridor");
         stage.getIcons().add(new Image("/Menu/Images/quoridorIcon.jpg")); // application icon
 
@@ -223,10 +223,13 @@ public class MainView extends Application {
         backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
         backB.getStyleClass().add("button");
         backB.setOnAction(event -> stage.setScene(menuScene(languageModel))); // back to main menu
+        Label backBLabel = new Label((String) language.getCurrentLanguage().get("Back"));
+        backBLabel.getStyleClass().add("menu");
+        backBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(menuScene(languageModel)));
 
         box.getChildren().add(imageView);
         box.setAlignment(Pos.CENTER);
-        box.setMinSize(300, 400);
+        box.setMinSize(250, 350);
 
         box.setFillWidth(true);
         box.setStyle("-fx-background-color: cadetblue;"
@@ -234,12 +237,16 @@ public class MainView extends Application {
                 + "-fx-border-color: black");
 
         // set layout restrictions
-        GridPane.setConstraints(box, 2, 1);
-        GridPane.setConstraints(nextB, 3, 1);
-        GridPane.setConstraints(previousB, 1, 1);
-        GridPane.setConstraints(textLabel, 2, 2);
+        GridPane.setConstraints(backB, 0, 1);
+        GridPane.setConstraints(backBLabel, 1, 1);
+        GridPane.setColumnSpan(box, 2);
+        GridPane.setConstraints(box, 1, 2);
+        GridPane.setConstraints(nextB, 4, 2);
+        GridPane.setConstraints(previousB, 0, 2);
+        GridPane.setColumnSpan(textLabel, 2);
+        GridPane.setConstraints(textLabel, 1, 3);
 
-        root.getChildren().addAll(box, nextB, previousB, textLabel, backB);
+        root.getChildren().addAll(box, nextB, previousB, textLabel, backB, backBLabel);
         root.setVgap(10); //sets a vertical gap
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
@@ -259,21 +266,20 @@ public class MainView extends Application {
      * @param option Options model
      * @return scene Change current scene to options scene
      */
-    private Scene OptionsScene(Options option, Language langauge) {
+    private Scene OptionsScene(Options option, Language language) {
 
         stage.setTitle("Options");
 
         // help displayed when user hovers over slider or mute checkbox
         final String SOUND_SLIDER_TOOLTIP = "Slide to increase sound volume.";
         final String MUTE_TOOLTIP = "Click to mute sound.";
+        final String LANGUAGE_TOOLTIP = "Select your languageS.";
+
         GridPane root;
         root = new GridPane();
 
-        ChoiceBox langagueListBox = new ChoiceBox();
-        langagueListBox.getItems().addAll(langauge.languageList);
-
-
-        ImageView img = new ImageView(new Image("/Menu/Images/sound.png"));
+        ImageView soundIco = new ImageView(new Image("/Menu/Images/sound.png"));
+        ImageView languageIco = new ImageView(new Image("/Menu/Images/language.png"));
 
 
         // slider used to control sound volume
@@ -292,9 +298,14 @@ public class MainView extends Application {
         muteBox.setSelected(option.isMute());
         muteBox.setTooltip(new Tooltip(MUTE_TOOLTIP));
 
+        ChoiceBox<String> langagueListBox = new ChoiceBox<>();
+        langagueListBox.setTooltip(new Tooltip(LANGUAGE_TOOLTIP));
+        langagueListBox.getItems().addAll(language.languageList);
+        langagueListBox.setValue(language.getLanguage());
+
         Label soundVolumeLabel = new Label("Sound Volume: ");
-        Label soundTitleLabel = new Label((String) langauge.getCurrentLanguage().get("Sound Settings"));
-        Label languageTitleLabel = new Label((String) langauge.getCurrentLanguage().get("Sound Settings"));
+        Label soundTitleLabel = new Label((String) language.getCurrentLanguage().get("Sound Settings"));
+        Label languageTitleLabel = new Label((String) language.getCurrentLanguage().get("Sound Settings"));
         Label soundValue = new Label(Double.toString(soundSlider.getValue()));
         Label muteLabel = new Label("Mute Sound: ");
         Label languageLabel = new Label("Language");
@@ -302,20 +313,27 @@ public class MainView extends Application {
         languageLabel.setTextFill(Color.WHITE);
         soundValue.setTextFill(Color.WHITE);
         muteLabel.setTextFill(Color.WHITE);
+        soundVolumeLabel.setTextFill(Color.WHITE);
+        soundVolumeLabel.getStyleClass().add("optionsLabel");
+        languageLabel.getStyleClass().add("optionsLabel");
+        muteLabel.getStyleClass().add("optionsLabel");
         soundTitleLabel.getStyleClass().add("settings");
         languageTitleLabel.getStyleClass().add("settings");
-        soundTitleLabel.setGraphic(img);
-        languageTitleLabel.setGraphic(img);
+        soundTitleLabel.setGraphic(soundIco);
+        languageTitleLabel.setGraphic(languageIco);
 
         // Back button
         backB = new Button();
-        //backB.setMaxWidth(Double.MAX_VALUE);
         backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
         backB.getStyleClass().add("button");
         backB.setOnAction(event -> stage.setScene(menuScene(languageModel))); // go back to main menu
+        Label backBLabel = new Label((String) language.getCurrentLanguage().get("Back"));
+        backBLabel.getStyleClass().add("menu");
+        backBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(menuScene(languageModel)));
 
         // set component layouts
-        GridPane.setRowIndex(backB, 1);
+        GridPane.setConstraints(backB, 0, 1);
+        GridPane.setConstraints(backBLabel, 1, 1);
         GridPane.setColumnSpan(soundTitleLabel, 2);
         GridPane.setRowIndex(soundTitleLabel, 2);
         GridPane.setConstraints(soundVolumeLabel, 0, 3);
@@ -324,14 +342,15 @@ public class MainView extends Application {
         GridPane.setConstraints(muteLabel, 0, 4);
         GridPane.setConstraints(muteBox, 1, 4);
         GridPane.setColumnSpan(languageTitleLabel, 2);
-        GridPane.setRowIndex(languageTitleLabel, 5);
-        GridPane.setConstraints(languageLabel, 0, 6);
-        GridPane.setConstraints(langagueListBox, 1, 6);
+        GridPane.setRowIndex(languageTitleLabel, 6);
+        GridPane.setConstraints(languageLabel, 0, 7);
+        GridPane.setConstraints(langagueListBox, 1, 7);
 
         // add components
         root.getChildren().addAll(soundTitleLabel, soundVolumeLabel,
                 languageLabel, languageTitleLabel, langagueListBox,
-                soundSlider, soundValue, muteLabel, muteBox, backB);
+                soundSlider, soundValue, muteLabel, muteBox, backB,
+                backBLabel);
 
         soundSlider.valueProperty().addListener(observable -> {
             // display current value for volume
@@ -354,6 +373,10 @@ public class MainView extends Application {
                 option.changeMuteState();
             }
         }));
+
+        langagueListBox.getSelectionModel().selectedIndexProperty().addListener(observable -> {
+            language.setLanguage(langagueListBox.getValue());
+        });
 
         root.setVgap(30);
         root.setHgap(60);

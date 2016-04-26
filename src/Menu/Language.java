@@ -2,53 +2,73 @@ package Menu;
 
 import java.util.HashMap;
 
-public class Language {
+class Language {
 
-    public String[] languageList;
+    String[] languageList;
     private String language;
-    private HashMap<String, String> english = new HashMap<String, String>();
-    private HashMap<String, String> french = new HashMap<String, String>();
+    private HashMap<String, String> english = new HashMap<>();
+    private HashMap<String, String> french = new HashMap<>();
+    private HashMap<String, String> german = new HashMap<>();
+    private int languageNo;
 
-    public Language() {
+    Language() {
         languageList = new String[3];
         language = "English";
+        languageNo = 0;
+        fillLanguageListArray();
+        fillEnglishMap();
+        fillGermanMap();
+        fillFrenchMap();
     }
 
-    public void setLanguage(String language) {
+    void setLanguage(String language) {
         this.language = language;
     }
 
-    public HashMap getCurrentLanguage() {
-        if (language.equals("English")){
+    String getLanguage() {
+        return this.language;
+    }
+
+    HashMap getCurrentLanguage() {
+        if (languageNo == 0) {
             return english;
-        }else{
+        } else if (languageNo == 1) {
             return french;
+        } else {
+            return german;
         }
 
     }
 
-    public void fillEnglishMap(){
-        english.put("Start", "Start1");
-        english.put("Options", "Options1");
-        english.put("Help", "Help1");
-        english.put("Quit", "Quit1");
-        english.put("Sound Settings", "Sound Settings1: ");
-        english.put("Language Settings", "Language Settings1: ");
+    private void fillEnglishMap() {
+        english.put("Start", "Start");
+        english.put("Options", "Options");
+        english.put("Help", "Help");
+        english.put("Quit", "Quit");
+        english.put("Back", "Back");
+        english.put("Sound Settings", "Sound Settings: ");
+        english.put("Language Settings", "Language Settings: ");
     }
 
-    public void fillFrenchMap(){
+    private void fillFrenchMap() {
         french.put("Start", "blastart1");
         french.put("Options", "blaOptions1");
         french.put("Help", "blaHelp1");
         french.put("Quit", "blaQuit1");
+        french.put("Back", "blaBack1");
         french.put("Language Settings", "blaLanguage Settings1: ");
     }
 
-    public void setCurrentLanguage(String language) {
-        this.language = language;
+    private void fillGermanMap() {
+        german.put("Start", "blastart3");
+        german.put("Options", "blaOptions3");
+        german.put("Help", "blaHelp3");
+        german.put("Quit", "blaQuit3");
+        german.put("Back", "blaBack3");
+        german.put("Language Settings", "blaLanguage Settings3: ");
     }
 
-    public void fillLanguageListArray() {
+    private void fillLanguageListArray() {
         languageList = new String[]{"English", "French", "German"};
     }
 }
