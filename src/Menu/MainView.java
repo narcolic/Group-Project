@@ -131,7 +131,7 @@ public class MainView extends Application {
         root.setHgap(40);
         root.setVgap(40);
 
-        root.setStyle("-fx-background-image: url('/Menu/Images/mainMenuBG.png');\n" +
+        root.setStyle("-fx-background-image: url('/Menu/Images/Old/mainMenuBG.png');\n" +
                 "    -fx-background-size: cover, auto;\n" +
                 "    -fx-padding: 10 50 10 30;");
 

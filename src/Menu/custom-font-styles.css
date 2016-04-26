@@ -16,7 +16,7 @@
 }
 
 .background {
-    -fx-background-image: url('/Menu/Images/menuBG.jpg');
+    -fx-background-image: url('/Menu/Images/Old/menuBG.jpg');
     -fx-background-size: cover, auto;
     -fx-padding: 10 30 10 30;
 }
