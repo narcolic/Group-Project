@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -66,6 +67,11 @@ public class MainView extends Application {
 
         stage.setTitle("Quoridor");
         stage.getIcons().add(new Image("/Menu/Images/quoridorIcon.jpg")); // application icon
+
+        GridPane innerGrid = new GridPane();
+        innerGrid.setAlignment(Pos.CENTER);
+        ImageView img = new ImageView(new Image("/Menu/Images/QUORIDOR.png"));
+        innerGrid.add(img, 0, 0);
 
         /*
          * Menu Option Buttons 
@@ -126,11 +132,12 @@ public class MainView extends Application {
         GridPane.setConstraints(quitB, 0, 4);
         GridPane.setConstraints(quitLabel, 1, 4);
 
-        // add components to pane       
+        // add components to pane
+        root.add(innerGrid, 0, 0, 2, 1);
         root.getChildren().addAll(startB, startBLabel, optionsB, optionsLabel, helpB, helpLabel, quitB, quitLabel);
         root.setAlignment(Pos.CENTER);
         root.setHgap(40);
-        root.setVgap(50);
+        root.setVgap(40);
 
         root.getStyleClass().add("background");
 
