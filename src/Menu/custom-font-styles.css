@@ -1,9 +1,9 @@
 .menu {
-    -fx-font-family: 'Comic Sans MS';
+    -fx-font-family: 'Arial';
     -fx-effect: dropshadow(gaussian, black, 0, 0, 0, 2);
     -fx-font-weight: bold;
     -fx-font-size: 30;
-    -fx-text-fill: white;
+    -fx-text-fill: #F0F0F0;
 }
 
 .button {
@@ -22,11 +22,11 @@
 }
 
 .settings{
-    -fx-font-family: 'Comic Sans MS';
+    -fx-font-family: 'Arial';
     -fx-effect: dropshadow(gaussian, black, 0, 0, 0, 2);
     -fx-font-weight: bold;
     -fx-font-size: 30;
-    -fx-text-fill: white;
+    -fx-text-fill: #F0F0F0;
     -fx-underline: true;
 }
 
