@@ -166,6 +166,7 @@ public class MainView extends Application {
     private Scene HelpScene(Help help, Language language) {
 
         stage.setTitle("Help");
+        help.setCurrentLanguage(language.getLanguage());
 
         final String NEXT_SLIDE_TOOLTIP = "Next slide.";
         final String PREVIOUS_SLIDE_TOOLTIP = "Previous slide.";
@@ -196,9 +197,7 @@ public class MainView extends Application {
         nextB.setStyle("-fx-background-image: url('/Menu/Images/Icons/nextBTN.png')");
         nextB.getStyleClass().add("button");
         nextB.setTooltip(new Tooltip(NEXT_SLIDE_TOOLTIP));
-        nextB.setOnAction(event -> {
-            nextButtonAction(help);
-        });
+        nextB.setOnAction(event -> nextButtonAction(help));
 
         // show next help instruction when the right arrow key is pressed
         nextB.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
@@ -213,9 +212,7 @@ public class MainView extends Application {
         previousB.setStyle("-fx-background-image: url('/Menu/Images/Icons/previousBTN.png')");
         previousB.getStyleClass().add("button");
         previousB.setTooltip(new Tooltip(PREVIOUS_SLIDE_TOOLTIP));
-        previousB.setOnAction(event -> {
-            previousButtonAction(help);
-        });
+        previousB.setOnAction(event -> previousButtonAction(help));
 
         // show previous help instruction when the left arrow key is pressed
         previousB.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
@@ -437,34 +434,22 @@ public class MainView extends Application {
         VBox practice = new VBox();
 
         singlePlayer.setAlignment(Pos.CENTER_LEFT);
-        singlePlayer.setStyle("-fx-background-image: url(/Menu/Images/1p.png);"
-                + "-fx-background-repeat: no-repeat;"
-                + "-fx-background-position: center;"
-                + "-fx-background-color: cadetblue;"
-                + "-fx-border-width: 2;"
-                + "-fx-border-color: black");
+        singlePlayer.setStyle("-fx-background-image: url(/Menu/Images/1p.png);" + "-fx-background-color: cadetblue;");
+        singlePlayer.getStyleClass().add("startMenuBox");
         singlePlayer.setMinSize(250, 350);
         // go to single player mode
         singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(SinglePlayerScreen()));
 
         multiPlayer.setAlignment(Pos.CENTER);
-        multiPlayer.setStyle("-fx-background-image: url(/Menu/Images/2p.png);"
-                + "-fx-background-repeat: no-repeat;"
-                + "-fx-background-position: center;"
-                + "-fx-background-color: indianred;"
-                + "-fx-border-width: 2;"
-                + "-fx-border-color: black");
+        multiPlayer.setStyle("-fx-background-image: url(/Menu/Images/2p.png);" + "-fx-background-color: indianred;");
+        multiPlayer.getStyleClass().add("startMenuBox");
         multiPlayer.setMinSize(250, 350);
         // go to multiplayer mode
         multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(MultiPlayerScreen()));
 
         practice.setAlignment(Pos.CENTER_RIGHT);
-        practice.setStyle("-fx-background-image: url(/Menu/Images/pc.png);"
-                + "-fx-background-repeat: no-repeat;"
-                + "-fx-background-position: center;"
-                + "-fx-background-color: lightgreen;"
-                + "-fx-border-width: 2;"
-                + "-fx-border-color: black");
+        practice.setStyle("-fx-background-image: url(/Menu/Images/pc.png);" + "-fx-background-color: lightgreen;");
+        practice.getStyleClass().add("startMenuBox");
         practice.setMinSize(250, 350);
         // go to practice mode
         practice.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(PracticeScreen()));
