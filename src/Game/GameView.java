@@ -29,7 +29,7 @@ public class GameView extends Application {
 	private Image defaultSquareImg;
 	private Image clickedSquareImg;
 	private Image noVerWallImg;
-	private Image verwallPlacedImg;
+	private Image verWallPlacedImg;
 	private Image noHorWallImg;
 	private Image horWallPlacedImg;
 	private Image noSquareFenceImg;
@@ -77,6 +77,7 @@ public class GameView extends Application {
 	//player information 
 	private ImageView pointer;
 	private ImageView[][] playerFences;
+	
 	
 
 	@Override
@@ -228,6 +229,64 @@ public class GameView extends Application {
 		}
 	}
 	
+	private void addFencesToBoard() {
+		Fence[] fences = Board.getInstance().getFencesArray();
+		for(Fence f : fences)
+		{
+			Position fencePos = f.getPosition();
+			int baseX = getBoardSquarePosition(fencePos.getX());
+			int baseY = getBoardSquarePosition(fencePos.getY());
+			int length = f.getLength();
+			if(f.getOrientation()) {
+				baseX--;
+				for(int i = 0; i < length * 2 - 1; i++)
+				{
+					ImageView image = boardComp[baseX][baseY + i];
+					if (i % 2 == 1) {
+						image.setImage(squareFencePlacedImg);
+					} else{
+						image.setImage(verWallPlacedImg);
+					}
+				}
+			} 
+			else 
+			{
+				baseY--;
+				for(int i = 0; i < length * 2 - 1; i++)
+				{
+					ImageView image = boardComp[baseX + i][baseY];
+					if (i % 2 == 1) {
+						image.setImage(squareFencePlacedImg);
+					} else{
+						image.setImage(horWallPlacedImg);
+					}
+				}
+			}
+		}
+	}
+	
+	private void clearFencesFromBoard() {
+		for (int x = 0; x < boardCompX; x++) {
+			for (int y = 0; y < boardCompY; y++) {
+				if (x % 2 == 1 || y % 2 == 1) {
+					if (x % 2 == 0) {
+						//boardComp[x][y].setImage(horWallPlacedImg);
+						boardComp[x][y].setImage(noHorWallImg);
+					}
+					else if (y % 2 == 0) {
+						//boardComp[x][y].setImage(verWallPlacedImg);
+						boardComp[x][y].setImage(noVerWallImg);
+					}
+					else {
+						//boardComp[x][y].setImage(squareFencePlacedImg);
+						boardComp[x][y].setImage(noSquareFenceImg);
+					}
+				}
+				
+			}
+		}
+	}
+	
 	private void setupMenu() {
 		optionMenu = new Menu("Options");
 		helpMenu = new Menu("Help");
@@ -255,11 +314,7 @@ public class GameView extends Application {
 		// fill boardComp with vertical fences
 		for (int x = 1; x < boardCompX; x = x + 2) {
 			for (int y = 0; y < boardCompY; y = y + 2) {
-				ImageView verFences = new ImageView();
-				verFences.setImage(noVerWallImg);
-				verFences.setOnMouseClicked(e -> {
-					verFences.setImage(verwallPlacedImg);
-				});
+				ImageView verFences = createVerticalFence(x, y);
 				boardComp[x][y] = verFences;
 			}
 		}
@@ -267,11 +322,7 @@ public class GameView extends Application {
 		for (int x = 0; x < boardCompX; x = x + 2) {
 			for (int y = 1; y < boardCompY; y = y + 2) {
 
-				ImageView fences = new ImageView();
-				fences.setImage(noHorWallImg);
-				fences.setOnMouseClicked(e -> {
-					fences.setImage(horWallPlacedImg);
-				});
+				ImageView fences = createHorizontalFence(x, y);
 				boardComp[x][y] = fences;
 			}
 		}
@@ -279,14 +330,37 @@ public class GameView extends Application {
 		for (int x = 1; x < boardCompX; x = x + 2) {
 			for (int y = 1; y < boardCompY; y = y + 2) {
 
-				ImageView fences = new ImageView();
-				fences.setImage(noSquareFenceImg);
-				fences.setOnMouseClicked(e -> {
-					fences.setImage(squareFencePlacedImg);
-				});
+				ImageView fences = createMidFence(x, y);
 				boardComp[x][y] = fences;
 			}
 		}
+	}
+
+	private ImageView createMidFence(int x, int y) {
+		ImageView fences = new ImageView();
+		fences.setImage(noSquareFenceImg);
+		fences.setOnMouseClicked(e -> {
+			eventFenceClick(x, y);
+		});
+		return fences;
+	}
+
+	private ImageView createHorizontalFence(int x, int y) {
+		ImageView fences = new ImageView();
+		fences.setImage(noHorWallImg);
+		fences.setOnMouseClicked(e -> {
+			eventFenceClick(x, y);
+		});
+		return fences;
+	}
+
+	private ImageView createVerticalFence(int x, int y) {
+		ImageView verFences = new ImageView();
+		verFences.setImage(noVerWallImg);
+		verFences.setOnMouseClicked(e -> {
+			eventFenceClick(x, y);
+		});
+		return verFences;
 	}
 
 	private ImageView createGameSquare() {
@@ -311,7 +385,7 @@ public class GameView extends Application {
 				"BoardComponents/c.png"));
 		noVerWallImg = new Image(getClass().getResourceAsStream(
 				"BoardComponents/noVerWall.png"));
-		verwallPlacedImg = new Image(getClass().getResourceAsStream(
+		verWallPlacedImg = new Image(getClass().getResourceAsStream(
 				"BoardComponents/VerwallPlaced.png"));
 		noHorWallImg = new Image(getClass().getResourceAsStream(
 				"BoardComponents/noHorWall.png"));
@@ -339,10 +413,20 @@ public class GameView extends Application {
 				"BoardComponents/fenceUsed.png"));
 	}
 
-	private int getBoardSquarePosition(int boardPos) {
+	/**
+	 * Converts the position from the model to the view
+	 * @param boardPos
+	 * @return
+	 */
+	private static int getBoardSquarePosition(int boardPos) {
 		return boardPos * 2;
 	}
-	private int getBoardModelPosition(int boardPos) {
+	/**
+	 * Converts the position from the view to the model
+	 * @param boardPos
+	 * @return
+	 */
+	private static int getBoardModelPosition(int boardPos) {
 		return boardPos / 2;
 	}
 	
@@ -353,18 +437,28 @@ public class GameView extends Application {
 		Board.getInstance().pawnMove(new Position(1,8));
 		updatePawnsOnBoard();
 		updatePlayerInfo();
+		//TODO: Put proper code in here
 	}
 	/**Called when the place vertical fence button is pressed*/
 	private void eventPlaceFenceVertical()
 	{
 		//TODO: Demo only, remove this
-		Board.getInstance().endTurn();
+		Board.getInstance().pawnPlaceFence(new Position(1,1), true);
+		updateFencesOnBoard();
 		updatePlayerInfo();
+		//TODO: Put proper code in here
 	}
 	/**Called when the remove fence button is pressed*/
 	private void eventRemoveFence()
 	{
-		
+		//TODO: Put proper code in here
+	}
+	
+	private void eventFenceClick(int x, int y)
+	{
+		//TODO: Demo only, remove this
+		System.out.println("Clicked at :" + x + "|" + y);
+		//TODO: Put proper code in here
 	}
 	
 	/**
@@ -389,7 +483,8 @@ public class GameView extends Application {
 	}
 	
 	/**
-	 * Updates the pawn's positions on the board
+	 * Updates the pawn's positions on the board.
+	 * Clears all pawns from the board, then re-adds them with their current positions.
 	 */
 	public void updatePawnsOnBoard()
 	{
@@ -397,7 +492,14 @@ public class GameView extends Application {
 		addPawnsToBoard();
 	}
 	
-	
+	/**
+	 * Updates the fence's positions on the board.
+	 */
+	public void updateFencesOnBoard()
+	{
+		clearFencesFromBoard();
+		addFencesToBoard();
+	}
 	
 	
 	

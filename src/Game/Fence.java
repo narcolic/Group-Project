@@ -90,6 +90,33 @@ public class Fence
 	}
 	
 	/**
+	 * Gets the position of the fence.
+	 * @return The position of the fence.
+	 */
+	public Position getPosition()
+	{
+		return this.pos;
+	}
+	
+	/**
+	 * Gets the value of the fence's length.
+	 * @return The length of the fence.
+	 */
+	public int getLength()
+	{
+		return this.length;
+	}
+	
+	/**
+	 * Gets the value of the fence's orientation.
+	 * @return True if the fence is vertical, false if horizontal
+	 */
+	public boolean getOrientation()
+	{
+		return isVertical;
+	}
+	
+	/**
 	 * Validates if a fence can be placed at this position, given a board boundary
 	 * @param fence
 	 * @param boardWidth
