@@ -220,7 +220,6 @@ public class MainView extends Application {
                 previousButtonAction(help);
             }
         });
-
         // Back button
         backB = new Button();
         backB.setMaxWidth(Double.MAX_VALUE);

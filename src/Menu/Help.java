@@ -2,7 +2,7 @@ package Menu;
 
 import java.util.HashMap;
 
-public class Help {
+class Help {
 
     private String[] englishHelp; // stores text help instructions
     private String[] frenchHelp; // stores text help instructions
@@ -15,7 +15,7 @@ public class Help {
     /**
      * Constructor
      */
-    public Help() {
+    Help() {
         englishHelp = new String[5];
         frenchHelp = new String[5];
         germanHelp = new String[5];

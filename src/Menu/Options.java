@@ -2,7 +2,7 @@ package Menu;
 
 import java.math.BigDecimal;
 
-public class Options {
+class Options {
 
     private double volume; // current volume
     private double volumePercent; // current volume percentage
@@ -11,7 +11,7 @@ public class Options {
     /**
      * Constructor
      */
-    public Options() {
+    Options() {
         volume = 50.0; // initial volume set at 50
         volumePercent = 0.5; // initial volume percentage
         mute = false; // initially volume is played
