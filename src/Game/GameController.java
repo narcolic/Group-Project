@@ -4,7 +4,6 @@ public class GameController {
     /**
      * Constructor
      *
-     * @param players
      */
     public GameController() 
     {

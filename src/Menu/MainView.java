@@ -1,6 +1,9 @@
 package Menu;
 
+import Game.GameController;
+import Game.GameView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -26,6 +29,7 @@ public class MainView extends Application {
     private Help helpModel = new Help();
     private Options optionsModel = new Options();
     private Language languageModel = new Language();
+    private GameController gameController;
 
     private Stage stage;
     private Button backB; // go to previous scene
@@ -403,7 +407,10 @@ public class MainView extends Application {
         singlePlayer.getStyleClass().add("p1MenuBox");
         singlePlayer.setMinSize(250, 350);
         // go to single player mode
-        singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(SinglePlayerScreen()));
+        singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            Platform.runLater(() -> new GameView().start(new Stage()));
+            stage.hide();
+        });
 
         multiPlayer.setAlignment(Pos.CENTER);
         multiPlayer.getStyleClass().add("p2MenuBox");
