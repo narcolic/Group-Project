@@ -19,9 +19,6 @@
     -fx-background-color: #81E6DD;
 }
 
-.label:hover {
-    -fx-text-fill: #81E6DD;
-}
 .background {
     -fx-background-image: url('/Menu/Images/Old/menuBG.jpg');
     -fx-background-size: cover, auto;
