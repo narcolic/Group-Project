@@ -1,12 +1,9 @@
 package Game;
 
-import Menu.MainView;
-
 public class GameController {
     /**
      * Constructor
      *
-     * @param players
      */
     public GameController() 
     {

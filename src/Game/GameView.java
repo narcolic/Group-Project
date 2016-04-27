@@ -1,10 +1,9 @@
 package Game;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -14,6 +13,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.application.Platform;
+
+import java.util.Optional;
+
 import Game.Board;
 import Game.Position;
 import Game.Fence;
@@ -302,7 +304,28 @@ public class GameView extends Application {
 			}
 		});
 		*/
+        Menu optionMenu = new Menu("Options");
+        Menu helpMenu = new Menu("Help");
+        Menu gameMenu = new Menu("Game");
+        MenuItem quitMenu = new MenuItem("Quit");
+        gameMenu.getItems().add(quitMenu);
+        menuBar = new MenuBar();
+        menuBar.getMenus().addAll(optionMenu, helpMenu, gameMenu);
+        quitMenu.setOnAction(event -> quitGameAction());
 	}
+
+    private void quitGameAction() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Quoridor");
+        alert.setHeaderText("Quit Quoridor");
+        alert.setContentText("Are you sure you want to quit Quoridor?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            // close Quoridor
+            Platform.exit();
+        }
+    }
 
 	private void setupBoardComp() {
 		for (int x = 0; x < boardCompX; x = x + 2) {

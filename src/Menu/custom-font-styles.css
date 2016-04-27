@@ -11,8 +11,17 @@
     -fx-background-radius: 8em;
     -fx-min-width: 50px;
     -fx-min-height: 50px;
-    -fx-background-color: linear-gradient(#61a2b1, #2A5058);
+    -fx-background-color: linear-gradient(#61A2B1, #2A5058);
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0.0, 0, 1);
+}
+
+.button:hover {
+    -fx-background-color: #81E6DD;
+
+}
+
+.menu:hover {
+    -fx-text-fill: #81E6DD;
 }
 
 .background {
@@ -35,9 +44,46 @@
     -fx-background-radius: 10pt;
 }
 
-.startmenuBox {
+.p1MenuBox {
+    -fx-background-image: url(/Menu/Images/1p.png);
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-border-width: 2;
     -fx-border-color: black;
+    -fx-background-radius: 10;
+    -fx-background-color: cadetblue;
 }
+
+.p2MenuBox {
+    -fx-background-image: url(/Menu/Images/2p.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-radius: 10;
+    -fx-background-color: indianred;
+}
+
+.pcMenuBox {
+    -fx-background-image: url(/Menu/Images/pc.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-radius: 10;
+    -fx-background-color: lightgreen;
+}
+
+.p1MenuBox:hover {
+    -fx-background-color:#81E6DD;
+}
+
+.p2MenuBox:hover {
+    -fx-background-color:#81E6DD;
+}
+
+.pcMenuBox:hover {
+    -fx-background-color:#81E6DD;
+}
+
+

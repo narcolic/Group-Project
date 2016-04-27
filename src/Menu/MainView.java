@@ -1,6 +1,8 @@
 package Menu;
 
+import Game.GameView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -144,19 +146,6 @@ public class MainView extends Application {
         return scene;
     }
 
-    private void quitButtonAction() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Quoridor");
-        alert.setHeaderText("Quit Quoridor");
-        alert.setContentText("Are you sure you want to quit Quoridor?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            // close Quoridor
-            System.exit(0);
-        }
-    }
-
     /**
      * Provides instructions on how to play the game
      *
@@ -261,26 +250,6 @@ public class MainView extends Application {
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
         return scene;
-    }
-
-    private void nextButtonAction(Help help) {
-        if (help.isNextAvailable()) {
-            // show next help image
-            help.nextSlide();
-            stage.setScene(HelpScene(helpModel, languageModel));
-        } else {
-            stage.setScene(HelpScene(helpModel, languageModel));
-        }
-    }
-
-    private void previousButtonAction(Help help) {
-        if (help.isPreviousAvailable()) {
-            // show previous help instruction
-            help.previousSlide();
-            stage.setScene(HelpScene(helpModel, languageModel));
-        } else {
-            stage.setScene(HelpScene(helpModel, languageModel));
-        }
     }
 
     /**
@@ -433,22 +402,22 @@ public class MainView extends Application {
         VBox practice = new VBox();
 
         singlePlayer.setAlignment(Pos.CENTER_LEFT);
-        singlePlayer.setStyle("-fx-background-image: url(/Menu/Images/1p.png);" + "-fx-background-color: cadetblue;");
-        singlePlayer.getStyleClass().add("startMenuBox");
+        singlePlayer.getStyleClass().add("p1MenuBox");
         singlePlayer.setMinSize(250, 350);
         // go to single player mode
-        singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(SinglePlayerScreen()));
+        singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            Platform.runLater(() -> new GameView().start(new Stage()));
+            stage.hide();
+        });
 
         multiPlayer.setAlignment(Pos.CENTER);
-        multiPlayer.setStyle("-fx-background-image: url(/Menu/Images/2p.png);" + "-fx-background-color: indianred;");
-        multiPlayer.getStyleClass().add("startMenuBox");
+        multiPlayer.getStyleClass().add("p2MenuBox");
         multiPlayer.setMinSize(250, 350);
         // go to multiplayer mode
         multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(MultiPlayerScreen()));
 
         practice.setAlignment(Pos.CENTER_RIGHT);
-        practice.setStyle("-fx-background-image: url(/Menu/Images/pc.png);" + "-fx-background-color: lightgreen;");
-        practice.getStyleClass().add("startMenuBox");
+        practice.getStyleClass().add("pcMenuBox");
         practice.setMinSize(250, 350);
         // go to practice mode
         practice.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(PracticeScreen()));
@@ -478,7 +447,7 @@ public class MainView extends Application {
      *
      * @return scene Change scene to single player scene
      */
-    private Scene SinglePlayerScreen() {
+    /*private Scene SinglePlayerScreen() {
         GridPane root;
         root = new GridPane();
 
@@ -501,7 +470,7 @@ public class MainView extends Application {
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
         return scene;
-    }
+    }*/
 
     /**
      * Multiplayer mode where multiple users can play
@@ -561,5 +530,38 @@ public class MainView extends Application {
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
         return scene;
+    }
+
+    private void quitButtonAction() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Quoridor");
+        alert.setHeaderText("Quit Quoridor");
+        alert.setContentText("Are you sure you want to quit Quoridor?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            // close Quoridor
+            System.exit(0);
+        }
+    }
+
+    private void nextButtonAction(Help help) {
+        if (help.isNextAvailable()) {
+            // show next help image
+            help.nextSlide();
+            stage.setScene(HelpScene(helpModel, languageModel));
+        } else {
+            stage.setScene(HelpScene(helpModel, languageModel));
+        }
+    }
+
+    private void previousButtonAction(Help help) {
+        if (help.isPreviousAvailable()) {
+            // show previous help instruction
+            help.previousSlide();
+            stage.setScene(HelpScene(helpModel, languageModel));
+        } else {
+            stage.setScene(HelpScene(helpModel, languageModel));
+        }
     }
 }
