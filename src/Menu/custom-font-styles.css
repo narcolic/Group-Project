@@ -17,11 +17,13 @@
 
 .button:hover {
     -fx-background-color: #81E6DD;
+
 }
 
-.label:hover {
+.menu:hover {
     -fx-text-fill: #81E6DD;
 }
+
 .background {
     -fx-background-image: url('/Menu/Images/Old/menuBG.jpg');
     -fx-background-size: cover, auto;
@@ -42,9 +44,46 @@
     -fx-background-radius: 10pt;
 }
 
-.startMenuBox {
+.p1MenuBox {
+    -fx-background-image: url(/Menu/Images/1p.png);
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-border-width: 2;
     -fx-border-color: black;
+    -fx-background-radius: 10;
+    -fx-background-color: cadetblue;
 }
+
+.p2MenuBox {
+    -fx-background-image: url(/Menu/Images/2p.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-radius: 10;
+    -fx-background-color: indianred;
+}
+
+.pcMenuBox {
+    -fx-background-image: url(/Menu/Images/pc.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-radius: 10;
+    -fx-background-color: lightgreen;
+}
+
+.p1MenuBox:hover {
+    -fx-background-color:#81E6DD;
+}
+
+.p2MenuBox:hover {
+    -fx-background-color:#81E6DD;
+}
+
+.pcMenuBox:hover {
+    -fx-background-color:#81E6DD;
+}
+
+

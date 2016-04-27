@@ -400,22 +400,19 @@ public class MainView extends Application {
         VBox practice = new VBox();
 
         singlePlayer.setAlignment(Pos.CENTER_LEFT);
-        singlePlayer.setStyle("-fx-background-image: url(/Menu/Images/1p.png);" + "-fx-background-color: cadetblue;");
-        singlePlayer.getStyleClass().add("startMenuBox");
+        singlePlayer.getStyleClass().add("p1MenuBox");
         singlePlayer.setMinSize(250, 350);
         // go to single player mode
         singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(SinglePlayerScreen()));
 
         multiPlayer.setAlignment(Pos.CENTER);
-        multiPlayer.setStyle("-fx-background-image: url(/Menu/Images/2p.png);" + "-fx-background-color: indianred;");
-        multiPlayer.getStyleClass().add("startMenuBox");
+        multiPlayer.getStyleClass().add("p2MenuBox");
         multiPlayer.setMinSize(250, 350);
         // go to multiplayer mode
         multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(MultiPlayerScreen()));
 
         practice.setAlignment(Pos.CENTER_RIGHT);
-        practice.setStyle("-fx-background-image: url(/Menu/Images/pc.png);" + "-fx-background-color: lightgreen;");
-        practice.getStyleClass().add("startMenuBox");
+        practice.getStyleClass().add("pcMenuBox");
         practice.setMinSize(250, 350);
         // go to practice mode
         practice.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(PracticeScreen()));

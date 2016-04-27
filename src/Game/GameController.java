@@ -1,7 +1,5 @@
 package Game;
 
-import Menu.MainView;
-
 public class GameController {
     /**
      * Constructor
