@@ -1,10 +1,13 @@
 package Game;
 
+import java.util.Optional;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -17,6 +20,7 @@ import javafx.application.Platform;
 import Game.Board;
 import Game.Position;
 import Game.Fence;
+import Menu.MainView;
 
 //import javafx.scene.control.Alert;
 
@@ -63,10 +67,12 @@ public class GameView extends Application {
 	private ImageView[] pawns;
 	private HBox[] players; 
 	
+	MainView mv = new MainView();
 	//menu bar and buttons
 	private Menu optionMenu;
 	private Menu helpMenu;
-	private Menu quitMenu;
+	private Menu gameMenu;
+	private MenuItem quitMenu;
 	private MenuBar menuBar;
 	
 	//fence buttons on left
@@ -231,20 +237,29 @@ public class GameView extends Application {
 	private void setupMenu() {
 		optionMenu = new Menu("Options");
 		helpMenu = new Menu("Help");
-		quitMenu = new Menu("Quit");
+		gameMenu = new Menu("Game");
+		quitMenu = new MenuItem("Quit");
+		gameMenu.getItems().add(quitMenu);
 		menuBar = new MenuBar();
-		menuBar.getMenus().addAll(optionMenu, helpMenu, quitMenu);
-		/*
-		quit.setOnAction(new EventHandler<ActionEvent>() {
+		menuBar.getMenus().addAll(optionMenu, helpMenu, gameMenu);
 
-			@Override
-			public void handle(ActionEvent e) {
-				Platform.exit();
-			}
+		quitMenu.setOnAction(event -> {
+			quitGameAction();
 		});
-		*/
 	}
 
+	private void quitGameAction() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Quoridor");
+        alert.setHeaderText("Quit Quoridor");
+        alert.setContentText("Are you sure you want to quit Quoridor?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            // close Quoridor
+        	Platform.exit();
+        }
+    }
 	private void setupBoardComp() {
 		for (int x = 0; x < boardCompX; x = x + 2) {
 			for (int y = 0; y < boardCompY; y = y + 2) {
@@ -396,11 +411,4 @@ public class GameView extends Application {
 		clearPawnsFromBoard();
 		addPawnsToBoard();
 	}
-	
-	
-	
-	
-	
-	
-
 }
