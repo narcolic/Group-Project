@@ -144,19 +144,6 @@ public class MainView extends Application {
         return scene;
     }
 
-    private void quitButtonAction() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Quoridor");
-        alert.setHeaderText("Quit Quoridor");
-        alert.setContentText("Are you sure you want to quit Quoridor?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            // close Quoridor
-            System.exit(0);
-        }
-    }
-
     /**
      * Provides instructions on how to play the game
      *
@@ -261,26 +248,6 @@ public class MainView extends Application {
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
         return scene;
-    }
-
-    private void nextButtonAction(Help help) {
-        if (help.isNextAvailable()) {
-            // show next help image
-            help.nextSlide();
-            stage.setScene(HelpScene(helpModel, languageModel));
-        } else {
-            stage.setScene(HelpScene(helpModel, languageModel));
-        }
-    }
-
-    private void previousButtonAction(Help help) {
-        if (help.isPreviousAvailable()) {
-            // show previous help instruction
-            help.previousSlide();
-            stage.setScene(HelpScene(helpModel, languageModel));
-        } else {
-            stage.setScene(HelpScene(helpModel, languageModel));
-        }
     }
 
     /**
@@ -561,5 +528,38 @@ public class MainView extends Application {
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
         return scene;
+    }
+
+    private void quitButtonAction() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Quoridor");
+        alert.setHeaderText("Quit Quoridor");
+        alert.setContentText("Are you sure you want to quit Quoridor?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            // close Quoridor
+            System.exit(0);
+        }
+    }
+
+    private void nextButtonAction(Help help) {
+        if (help.isNextAvailable()) {
+            // show next help image
+            help.nextSlide();
+            stage.setScene(HelpScene(helpModel, languageModel));
+        } else {
+            stage.setScene(HelpScene(helpModel, languageModel));
+        }
+    }
+
+    private void previousButtonAction(Help help) {
+        if (help.isPreviousAvailable()) {
+            // show previous help instruction
+            help.previousSlide();
+            stage.setScene(HelpScene(helpModel, languageModel));
+        } else {
+            stage.setScene(HelpScene(helpModel, languageModel));
+        }
     }
 }
