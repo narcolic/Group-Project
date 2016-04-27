@@ -11,10 +11,17 @@
     -fx-background-radius: 8em;
     -fx-min-width: 50px;
     -fx-min-height: 50px;
-    -fx-background-color: linear-gradient(#61a2b1, #2A5058);
+    -fx-background-color: linear-gradient(#61A2B1, #2A5058);
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0.0, 0, 1);
 }
 
+.button:hover {
+    -fx-background-color: #81E6DD;
+}
+
+.label:hover {
+    -fx-text-fill: #81E6DD;
+}
 .background {
     -fx-background-image: url('/Menu/Images/Old/menuBG.jpg');
     -fx-background-size: cover, auto;
