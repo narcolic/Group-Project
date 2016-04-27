@@ -1,6 +1,5 @@
 package Menu;
 
-import Game.GameController;
 import Game.GameView;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -448,7 +447,7 @@ public class MainView extends Application {
      *
      * @return scene Change scene to single player scene
      */
-    private Scene SinglePlayerScreen() {
+    /*private Scene SinglePlayerScreen() {
         GridPane root;
         root = new GridPane();
 
@@ -471,7 +470,7 @@ public class MainView extends Application {
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
         return scene;
-    }
+    }*/
 
     /**
      * Multiplayer mode where multiple users can play
