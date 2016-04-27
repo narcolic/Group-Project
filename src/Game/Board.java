@@ -65,11 +65,12 @@ public class Board {
 		//populate the pawns array and give them fences
 		for(int i = 0; i < pawns.length; i++)
 		{
-			pawns[i] = new Pawn(i, maxPawnFences());
+			pawns[i] = new Pawn(i, getMaxPawnFences());
 			if(challengeMode) pawns[i].setChallengePosition();
 		}
 		
 		pawnTurn = 0;
+		startTurn();
 	}
 	
 	/**
@@ -79,17 +80,42 @@ public class Board {
 	{
 		return pawnTurn;
 	}
+	/**
+	 * @return The id of the pawn the turn belongs to.
+	 */
+	public int getPreviousPawnTurn()
+	{
+		if(pawnTurn - 1 < 0)
+		{
+			return pawns.length - 1;
+		}
+		return pawnTurn - 1;
+	}
+	
+	/**
+	 * Begins the turn for the current pawn.
+	 */
+	public void startTurn()
+	{
+		getCurrentPawn().calculateAllValidPositions(
+				Board.width, 
+				Board.height, 
+				this.pawns, 
+				this.getFencesArray());
+	}
 	
 	/**
 	 * Ends the turn for the current pawn.
+	 * @return True if no interrupt by victory conditions
 	 */
-	public void endTurn()
+	public boolean endTurn()
 	{
 		incrementPlayerTurn();
 		//TODO: Check game for victory conditions
+		return true;
 	}
 	
-	public int maxPawnFences()
+	public int getMaxPawnFences()
 	{
 		return maxFences/pawns.length;
 	}
@@ -116,7 +142,13 @@ public class Board {
 	 */
 	public Fence[] getFencesArray()
 	{
-		return (Fence[]) getFences().toArray();
+		Object[] array = getFences().toArray();
+		Fence[] fences = new Fence[array.length];
+		for(int i = 0; i < fences.length; i++)
+		{
+			fences[i] = (Fence)array[i];
+		}
+		return fences;
 		
 	}
 	/**
@@ -131,7 +163,7 @@ public class Board {
 		}
 		return pawnPositions;
 	}
-	public int numberOfPawns()
+	public int getNumberOfPawns()
 	{
 		return pawns.length;
 	}
@@ -162,7 +194,10 @@ public class Board {
 		if(!p.positionIsValidMove(position)) return false;
 		
 		p.updateCurrentPosition(position);
-		this.endTurn();
+		if(this.endTurn())
+		{
+			this.startTurn();
+		}
 		return true;
 	}
 	
@@ -178,10 +213,13 @@ public class Board {
 		Fence fence = new Fence(position, isVertical);
 		if(!Fence.isPlaceable(fence, Board.width, Board.height, getFencesArray())) return false;
 		Pawn p = getCurrentPawn();
-		if(p.getFenceCount() >= this.maxPawnFences()) return false;
+		if(p.getFenceCount() >= this.getMaxPawnFences()) return false;
 		
 		p.addFence(fence);
-		this.endTurn();
+		if(this.endTurn())
+		{
+			this.startTurn();
+		}
 		return true;
 	}
 	
@@ -197,7 +235,10 @@ public class Board {
 		if(id == pawnTurn || id < 0) return false;
 		
 		pawns[id].removeFence(fenceObject);
-		this.endTurn();
+		if(this.endTurn())
+		{
+			this.startTurn();
+		}
 		return false;
 	}
 	
@@ -226,7 +267,15 @@ public class Board {
 	 */
 	public Pawn getCurrentPawn()
 	{
-		return pawns[pawnTurn];
+		return pawns[getPawnTurn()];
+	}
+	/**
+	 * Retrieves whichever pawn the previous turn belongs to.
+	 * @return Pawn currently having its turn.
+	 */
+	public Pawn getPreviousPawn()
+	{
+		return pawns[getPreviousPawnTurn()];
 	}
 	
 	/**

@@ -7,7 +7,7 @@ public class Quoridor {
 		// TODO Auto-generated method stub
 		MainView menuView = new MainView();
 		MenuController menuController = new MenuController();
-
+		
 	}
 
 }
