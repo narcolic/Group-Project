@@ -29,7 +29,6 @@ public class MainView extends Application {
     private Help helpModel = new Help();
     private Options optionsModel = new Options();
     private Language languageModel = new Language();
-    private GameController gameController;
 
     private Stage stage;
     private Button backB; // go to previous scene

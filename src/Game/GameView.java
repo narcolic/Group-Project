@@ -3,8 +3,6 @@ package Game;
 import java.util.Optional;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -17,12 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.application.Platform;
-import Game.Board;
-import Game.Position;
-import Game.Fence;
-import Menu.MainView;
-
-//import javafx.scene.control.Alert;
 
 public class GameView extends Application {
 	public static void main(String[] args) {
@@ -45,11 +37,7 @@ public class GameView extends Application {
 	private Image pointerImg;
 	private Image pointerEmptyImg;
 	private Image playerFenceAvlbImg;
-	private Image playerFenceUsedImg;
-	
-	/**Scene of the Gameview*/
-	private Scene GUI;
-	
+
 	/**Top level layout pane*/
 	private BorderPane layout;
 	/**Grid pane that stores the images in a 2D grid*/
@@ -65,14 +53,7 @@ public class GameView extends Application {
 	private ImageView[][] boardComp;
 	/**Array containing pawn graphic objects*/
 	private ImageView[] pawns;
-	private HBox[] players; 
-	
-	MainView mv = new MainView();
-	//menu bar and buttons
-	private Menu optionMenu;
-	private Menu helpMenu;
-	private Menu gameMenu;
-	private MenuItem quitMenu;
+	private HBox[] players;
 	private MenuBar menuBar;
 	
 	//fence buttons on left
@@ -83,7 +64,6 @@ public class GameView extends Application {
 	//player information 
 	private ImageView pointer;
 	private ImageView[][] playerFences;
-	
 
 	@Override
 	public void start(final Stage primaryStage) {
@@ -99,7 +79,8 @@ public class GameView extends Application {
 		// Centre, left and right panes
 		initialisePanes();
 		
-		GUI = new Scene(layout, 1280, 720);
+		/*Scene of the Gameview*/
+		Scene GUI = new Scene(layout, 1280, 720);
 		primaryStage.setTitle("Quoridor");
 		primaryStage.setScene(GUI);
 		layout.setLeft(left);
@@ -184,21 +165,15 @@ public class GameView extends Application {
 	private void setupButtons() {
 		buttonPlaceHor = new ImageView();
 		buttonPlaceHor.setImage(buttonPlaceHorImg);
-		buttonPlaceHor.setOnMouseClicked(e -> {
-			eventPlaceFenceHorizontal();
-		});
+		buttonPlaceHor.setOnMouseClicked(e -> eventPlaceFenceHorizontal());
 		
 		buttonPlaceVer = new ImageView();
 		buttonPlaceVer.setImage(buttonPlaceVerImg);
-		buttonPlaceVer.setOnMouseClicked(e -> {
-			eventPlaceFenceVertical();
-		});
+		buttonPlaceVer.setOnMouseClicked(e -> eventPlaceFenceVertical());
 		
 		buttonPlaceRem = new ImageView();
 		buttonPlaceRem.setImage(buttonPlaceRemImg);
-		buttonPlaceRem.setOnMouseClicked(e -> {
-			eventRemoveFence();
-		});
+		buttonPlaceRem.setOnMouseClicked(e -> eventRemoveFence());
 	}
 
 	/**
@@ -235,17 +210,15 @@ public class GameView extends Application {
 	}
 	
 	private void setupMenu() {
-		optionMenu = new Menu("Options");
-		helpMenu = new Menu("Help");
-		gameMenu = new Menu("Game");
-		quitMenu = new MenuItem("Quit");
+		Menu optionMenu = new Menu("Options");
+		Menu helpMenu = new Menu("Help");
+		Menu gameMenu = new Menu("Game");
+		MenuItem quitMenu = new MenuItem("Quit");
 		gameMenu.getItems().add(quitMenu);
 		menuBar = new MenuBar();
 		menuBar.getMenus().addAll(optionMenu, helpMenu, gameMenu);
 
-		quitMenu.setOnAction(event -> {
-			quitGameAction();
-		});
+		quitMenu.setOnAction(event -> quitGameAction());
 	}
 
 	private void quitGameAction() {
@@ -281,12 +254,9 @@ public class GameView extends Application {
 		// fill boardComp with horizontal fences
 		for (int x = 0; x < boardCompX; x = x + 2) {
 			for (int y = 1; y < boardCompY; y = y + 2) {
-
 				ImageView fences = new ImageView();
 				fences.setImage(noHorWallImg);
-				fences.setOnMouseClicked(e -> {
-					fences.setImage(horWallPlacedImg);
-				});
+				fences.setOnMouseClicked(e -> fences.setImage(horWallPlacedImg));
 				boardComp[x][y] = fences;
 			}
 		}
@@ -296,9 +266,7 @@ public class GameView extends Application {
 
 				ImageView fences = new ImageView();
 				fences.setImage(noSquareFenceImg);
-				fences.setOnMouseClicked(e -> {
-					fences.setImage(squareFencePlacedImg);
-				});
+				fences.setOnMouseClicked(e -> fences.setImage(squareFencePlacedImg));
 				boardComp[x][y] = fences;
 			}
 		}
@@ -307,9 +275,7 @@ public class GameView extends Application {
 	private ImageView createGameSquare() {
 		ImageView gameSquare = new ImageView();
 		gameSquare.setImage(defaultSquareImg);
-		gameSquare.setOnMouseClicked(e -> {
-			gameSquare.setImage(clickedSquareImg);
-		});
+		gameSquare.setOnMouseClicked(e -> gameSquare.setImage(clickedSquareImg));
 		return gameSquare;
 	}
 
@@ -350,7 +316,7 @@ public class GameView extends Application {
 				"BoardComponents/pointer_empty.png"));
 		playerFenceAvlbImg = new Image(getClass().getResourceAsStream(
 				"BoardComponents/fenceAvailable.png"));
-		playerFenceUsedImg = new Image(getClass().getResourceAsStream(
+		Image playerFenceUsedImg = new Image(getClass().getResourceAsStream(
 				"BoardComponents/fenceUsed.png"));
 	}
 
@@ -385,7 +351,7 @@ public class GameView extends Application {
 	/**
 	 * Updates the player info to match the model
 	 */
-	public void updatePlayerInfo()
+	private void updatePlayerInfo()
 	{
 		int currentPawnT = Board.getInstance().getPawnTurn();
 		int lastPawnT = Board.getInstance().getPreviousPawnTurn();
@@ -406,7 +372,7 @@ public class GameView extends Application {
 	/**
 	 * Updates the pawn's positions on the board
 	 */
-	public void updatePawnsOnBoard()
+	private void updatePawnsOnBoard()
 	{
 		clearPawnsFromBoard();
 		addPawnsToBoard();
