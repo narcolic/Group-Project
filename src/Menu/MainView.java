@@ -2,11 +2,14 @@ package Menu;
 
 import javafx.application.Application;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -14,7 +17,6 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
-
 
 import java.util.Optional;
 
@@ -205,6 +207,23 @@ public class MainView extends Application {
                 stage.setScene(HelpScene(helpModel, languageModel));
             }
         });
+        
+        // show next help instruction when the right arrow key is pressed
+        nextB.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
+
+        	@Override
+        	public void handle(KeyEvent keyEvent) {
+        		if(keyEvent.getCode() == KeyCode.RIGHT){
+        			if (help.isNextAvailable()) {
+        				// show next help image
+        				help.nextSlide();
+        				stage.setScene(HelpScene(helpModel, languageModel));
+        			} else {
+        				stage.setScene(HelpScene(helpModel, languageModel));
+        			}
+        		}
+        	}
+        });
 
         // Previous button
         Button previousB = new Button();
@@ -220,6 +239,23 @@ public class MainView extends Application {
             } else {
                 stage.setScene(HelpScene(helpModel, languageModel));
             }
+        });
+        
+        // show previous help instruction when the left arrow key is pressed
+        previousB.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
+
+        	@Override
+        	public void handle(KeyEvent keyEvent) {
+        		if(keyEvent.getCode() == KeyCode.LEFT){
+        			if (help.isPreviousAvailable()) {
+                        // show previous help instruction
+                        help.previousSlide();
+                        stage.setScene(HelpScene(helpModel, languageModel));
+                    } else {
+                        stage.setScene(HelpScene(helpModel, languageModel));
+                    }
+        		}
+        	}
         });
 
         // Back button
