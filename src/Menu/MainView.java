@@ -278,7 +278,7 @@ public class MainView extends Application {
         // help displayed when user hovers over slider or mute checkbox
         final String SOUND_SLIDER_TOOLTIP = "Slide to increase sound volume.";
         final String MUTE_TOOLTIP = "Click to mute sound.";
-        final String LANGUAGE_TOOLTIP = "Select your languageS.";
+        final String LANGUAGE_TOOLTIP = "Select your language.";
 
         GridPane root;
         root = new GridPane();
