@@ -7,6 +7,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -14,7 +16,6 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
-
 
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ public class MainView extends Application {
 
     private Help helpModel = new Help();
     private Options optionsModel = new Options();
+    private Language languageModel = new Language();
 
     private Stage stage;
     private Button backB; // go to previous scene
@@ -34,7 +36,7 @@ public class MainView extends Application {
     public void start(Stage primaryStage) {
 
         stage = primaryStage;
-        Scene scene = menuScene(); // intial scene set to menu scene
+        Scene scene = menuScene(languageModel); // initial scene set to menu scene
         stage.setTitle("Main Menu");
         //primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(scene); // set scene depending on the window displayed
@@ -58,9 +60,10 @@ public class MainView extends Application {
 
     /**
      * Main menu presented to the user
+     *
      * @return scene Main menu scene
      */
-    private Scene menuScene() {
+    private Scene menuScene(Language language) {
 
         stage.setTitle("Quoridor");
         stage.getIcons().add(new Image("/Menu/Images/quoridorIcon.jpg")); // application icon
@@ -68,74 +71,70 @@ public class MainView extends Application {
         /*
          * Menu Option Buttons 
          */
-        
+
         // Start button
         Button startB = new Button();
         startB.setMaxWidth(Double.MAX_VALUE);
         startB.setOnAction(event -> stage.setScene(StartScene()));
-        startB.setStyle("-fx-background-image: url('/Menu/Images/start.png')");
+        startB.setStyle("-fx-background-image: url('/Menu/Images/Icons/Start.png')");
         startB.getStyleClass().add("button");
-        Label startBLabel = new Label("Start");
+        Label startBLabel = new Label((String) language.getCurrentLanguage().get("Start"));
         startBLabel.getStyleClass().add("menu");
+        startBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(StartScene()));
 
         // Options button
         Button optionsB = new Button();
         optionsB.setMaxWidth(Double.MAX_VALUE);
-        optionsB.setOnAction(event -> stage.setScene(OptionsScene(optionsModel)));
-        optionsB.setStyle("-fx-background-image: url('/Menu/Images/options.png')");
+        optionsB.setOnAction(event -> stage.setScene(OptionsScene(optionsModel, languageModel)));
+        optionsB.setStyle("-fx-background-image: url('/Menu/Images/Icons/options.png')");
         optionsB.getStyleClass().add("button");
-        Label optionsLabel = new Label("Options");
+        Label optionsLabel = new Label((String) language.getCurrentLanguage().get("Options"));
         optionsLabel.getStyleClass().add("menu");
+        optionsLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(OptionsScene(optionsModel, languageModel)));
 
         // Help button
         Button helpB = new Button();
         helpB.setMaxWidth(Double.MAX_VALUE);
-        helpB.setOnAction(event -> stage.setScene(HelpScene(helpModel)));
-        helpB.setStyle("-fx-background-image: url('/Menu/Images/help.png')");
+        helpB.setOnAction(event -> stage.setScene(HelpScene(helpModel, languageModel)));
+        helpB.setStyle("-fx-background-image: url('/Menu/Images/Icons/help.png')");
         helpB.getStyleClass().add("button");
-        Label helpLabel = new Label("Help");
+        Label helpLabel = new Label((String) language.getCurrentLanguage().get("Help"));
         helpLabel.getStyleClass().add("menu");
+        helpLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(HelpScene(helpModel, languageModel)));
 
         // Quit button
         Button quitB = new Button();
         quitB.setMaxWidth(Double.MAX_VALUE);
-        quitB.setStyle("-fx-background-image: url('/Menu/Images/quit.png')");
+        quitB.setStyle("-fx-background-image: url('/Menu/Images/Icons/quit.png')");
         quitB.getStyleClass().add("button");
-        Label quitLabel = new Label("Quit");
+        Label quitLabel = new Label((String) language.getCurrentLanguage().get("Quit"));
         quitLabel.getStyleClass().add("menu");
+        quitLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> quitButtonAction());
 
         quitB.setOnAction(event -> {
-        	// confirmation dialog before leaving game
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Quoridor");
-            alert.setHeaderText("Quit Quoridor");
-            alert.setContentText("Are you sure you want to quit Quoridor?");
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                // close Quoridor
-                System.exit(0);
-            }
+            // confirmation dialog before leaving game
+            quitButtonAction();
         });
 
         // specify layouts for all components
         GridPane root = new GridPane();
-        GridPane.setConstraints(startB, 0, 1);
-        GridPane.setConstraints(startBLabel, 1, 1);
-        GridPane.setConstraints(optionsB, 0, 2);
-        GridPane.setConstraints(optionsLabel, 1, 2);
-        GridPane.setConstraints(helpB, 0, 3);
-        GridPane.setConstraints(helpLabel, 1, 3);
-        GridPane.setConstraints(quitB, 0, 4);
-        GridPane.setConstraints(quitLabel, 1, 4);
+        GridPane.setConstraints(startB, 0, 2);
+        GridPane.setConstraints(startBLabel, 1, 2);
+        GridPane.setConstraints(optionsB, 0, 3);
+        GridPane.setConstraints(optionsLabel, 1, 3);
+        GridPane.setConstraints(helpB, 0, 4);
+        GridPane.setConstraints(helpLabel, 1, 4);
+        GridPane.setConstraints(quitB, 0, 5);
+        GridPane.setConstraints(quitLabel, 1, 5);
 
-        // add components to pane       
-        root.getChildren().addAll(startB,startBLabel,optionsB,optionsLabel,helpB,helpLabel,quitB,quitLabel);
+        root.getChildren().addAll(startB, startBLabel, optionsB, optionsLabel, helpB, helpLabel, quitB, quitLabel);
         root.setAlignment(Pos.CENTER);
         root.setHgap(40);
-        root.setVgap(50);
+        root.setVgap(40);
 
-        root.getStyleClass().add("background");
+        root.setStyle("-fx-background-image: url('/Menu/Images/menuBackGround.jpg');\n" +
+                "    -fx-background-size: cover, auto;\n" +
+                "    -fx-padding: 10 50 10 30;");
 
         stage.setResizable(false);
         // display components in scene
@@ -145,15 +144,33 @@ public class MainView extends Application {
         return scene;
     }
 
+    private void quitButtonAction() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Quoridor");
+        alert.setHeaderText("Quit Quoridor");
+        alert.setContentText("Are you sure you want to quit Quoridor?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            // close Quoridor
+            System.exit(0);
+        }
+    }
+
     /**
      * Provides instructions on how to play the game
+     *
      * @param help Help model
      * @return scene Change current scene to help scene
      */
-    private Scene HelpScene(Help help) {
-    	
+    private Scene HelpScene(Help help, Language language) {
+
         stage.setTitle("Help");
-        
+        help.setCurrentLanguage(language.getLanguage());
+
+        final String NEXT_SLIDE_TOOLTIP = "Next slide.";
+        final String PREVIOUS_SLIDE_TOOLTIP = "Previous slide.";
+
         // load help image and text instructions
         help.fillTextHelpArray();
         help.fillImageLocArray();
@@ -165,7 +182,7 @@ public class MainView extends Application {
         ImageView imageView = new ImageView(new Image(help.getCurrentImageLocation()));
 
         // set text according to current help instruction
-        textLabel.setText(help.getCurrentText()); 
+        textLabel.setText(help.getCurrentText());
         textLabel.setMaxSize(550, 150);
         textLabel.setWrapText(true);
         textLabel.setStyle("-fx-background-color: #FFFFFF;");
@@ -173,47 +190,49 @@ public class MainView extends Application {
         /*
          * Buttons 
          */
-        
+
         // Next button
         Button nextB = new Button();
         nextB.setMaxWidth(Double.MAX_VALUE);
-        nextB.setStyle("-fx-background-image: url('/Menu/Images/nextBTN.png')");
+        nextB.setStyle("-fx-background-image: url('/Menu/Images/Icons/nextBTN.png')");
         nextB.getStyleClass().add("button");
-        nextB.setOnAction(event -> {
-            if (help.isNextAvailable()) {
-            	// show next help image
-                help.nextSlide();
-                stage.setScene(HelpScene(helpModel));
-            } else {
-                stage.setScene(HelpScene(helpModel));
+        nextB.setTooltip(new Tooltip(NEXT_SLIDE_TOOLTIP));
+        nextB.setOnAction(event -> nextButtonAction(help));
+
+        // show next help instruction when the right arrow key is pressed
+        nextB.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.RIGHT) {
+                nextButtonAction(help);
             }
         });
 
         // Previous button
         Button previousB = new Button();
         previousB.setMaxWidth(Double.MAX_VALUE);
-        previousB.setStyle("-fx-background-image: url('/Menu/Images/previousBTN.png')");
+        previousB.setStyle("-fx-background-image: url('/Menu/Images/Icons/previousBTN.png')");
         previousB.getStyleClass().add("button");
-        previousB.setOnAction(event -> {
-            if (help.isPreviousAvailable()) {
-            	// show previous help instruction
-                help.previousSlide();
-                stage.setScene(HelpScene(helpModel));
-            } else {
-                stage.setScene(HelpScene(helpModel));
+        previousB.setTooltip(new Tooltip(PREVIOUS_SLIDE_TOOLTIP));
+        previousB.setOnAction(event -> previousButtonAction(help));
+
+        // show previous help instruction when the left arrow key is pressed
+        previousB.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.LEFT) {
+                previousButtonAction(help);
             }
         });
-
         // Back button
         backB = new Button();
         backB.setMaxWidth(Double.MAX_VALUE);
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
-        backB.setOnAction(event -> stage.setScene(menuScene())); // back to main menu
+        backB.setOnAction(event -> stage.setScene(menuScene(languageModel))); // back to main menu
+        /*Label backBLabel = new Label((String) language.getCurrentLanguage().get("Back"));
+        backBLabel.getStyleClass().add("menu");
+        backBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(menuScene(languageModel)));*/
 
         box.getChildren().add(imageView);
         box.setAlignment(Pos.CENTER);
-        box.setMinSize(300, 400);
+        box.setMinSize(250, 350);
 
         box.setFillWidth(true);
         box.setStyle("-fx-background-color: cadetblue;"
@@ -221,10 +240,14 @@ public class MainView extends Application {
                 + "-fx-border-color: black");
 
         // set layout restrictions
-        GridPane.setConstraints(box, 2, 1);
-        GridPane.setConstraints(nextB, 3, 1);
-        GridPane.setConstraints(previousB, 1, 1);
-        GridPane.setConstraints(textLabel, 2, 2);
+        GridPane.setConstraints(backB, 0, 1);
+        //GridPane.setConstraints(backBLabel, 1, 1);
+        GridPane.setColumnSpan(box, 2);
+        GridPane.setConstraints(box, 1, 2);
+        GridPane.setConstraints(nextB, 4, 2);
+        GridPane.setConstraints(previousB, 0, 2);
+        GridPane.setColumnSpan(textLabel, 2);
+        GridPane.setConstraints(textLabel, 1, 3);
 
         root.getChildren().addAll(box, nextB, previousB, textLabel, backB);
         root.setVgap(10); //sets a vertical gap
@@ -240,23 +263,47 @@ public class MainView extends Application {
         return scene;
     }
 
+    private void nextButtonAction(Help help) {
+        if (help.isNextAvailable()) {
+            // show next help image
+            help.nextSlide();
+            stage.setScene(HelpScene(helpModel, languageModel));
+        } else {
+            stage.setScene(HelpScene(helpModel, languageModel));
+        }
+    }
+
+    private void previousButtonAction(Help help) {
+        if (help.isPreviousAvailable()) {
+            // show previous help instruction
+            help.previousSlide();
+            stage.setScene(HelpScene(helpModel, languageModel));
+        } else {
+            stage.setScene(HelpScene(helpModel, languageModel));
+        }
+    }
+
     /**
-     * Displays the user with sound options 
+     * Displays the user with sound options
+     *
      * @param option Options model
      * @return scene Change current scene to options scene
      */
-    private Scene OptionsScene(Options option) {
+    private Scene OptionsScene(Options option, Language language) {
 
         stage.setTitle("Options");
-        
+
         // help displayed when user hovers over slider or mute checkbox
         final String SOUND_SLIDER_TOOLTIP = "Slide to increase sound volume.";
         final String MUTE_TOOLTIP = "Click to mute sound.";
+        final String LANGUAGE_TOOLTIP = "Select your language.";
+
         GridPane root;
         root = new GridPane();
 
-        Label soundTitle = new Label("Sound Settings:");
-        soundTitle.getStyleClass().add("settings");
+        ImageView soundIco = new ImageView(new Image("/Menu/Images/Icons/sound.png"));
+        ImageView languageIco = new ImageView(new Image("/Menu/Images/Icons/language.png"));
+
 
         // slider used to control sound volume
         Slider soundSlider = new Slider(0, 100, option.getVolume());
@@ -274,36 +321,56 @@ public class MainView extends Application {
         muteBox.setSelected(option.isMute());
         muteBox.setTooltip(new Tooltip(MUTE_TOOLTIP));
 
-        Label soundVolumeLabel = new Label("Sound Volume: ");
-        Label soundValue = new Label(Double.toString(soundSlider.getValue()));
-        Label muteLabel = new Label("Mute Sound: ");
+        ChoiceBox<String> languageListBox = new ChoiceBox<>();
+        languageListBox.setTooltip(new Tooltip(LANGUAGE_TOOLTIP));
+        languageListBox.getItems().addAll(language.languageList);
+        languageListBox.setValue(language.getLanguage());
 
-        soundVolumeLabel.setTextFill(Color.WHITE);
+        Label soundVolumeLabel = new Label((String) language.getCurrentLanguage().get("Sound Volume"));
+        Label soundTitleLabel = new Label((String) language.getCurrentLanguage().get("Sound Settings"));
+        Label languageTitleLabel = new Label((String) language.getCurrentLanguage().get("Language Settings"));
+        Label soundValue = new Label(Double.toString(soundSlider.getValue()));
+        Label muteLabel = new Label((String) language.getCurrentLanguage().get("Mute Sound"));
+        Label languageLabel = new Label((String) language.getCurrentLanguage().get("Language"));
+
+        languageLabel.setTextFill(Color.WHITE);
         soundValue.setTextFill(Color.WHITE);
         muteLabel.setTextFill(Color.WHITE);
+        soundVolumeLabel.setTextFill(Color.WHITE);
+        soundVolumeLabel.getStyleClass().add("optionsLabel");
+        languageLabel.getStyleClass().add("optionsLabel");
+        muteLabel.getStyleClass().add("optionsLabel");
+        soundTitleLabel.getStyleClass().add("settings");
+        languageTitleLabel.getStyleClass().add("settings");
+        soundTitleLabel.setGraphic(soundIco);
+        languageTitleLabel.setGraphic(languageIco);
 
         // Back button
         backB = new Button();
-        //backB.setMaxWidth(Double.MAX_VALUE);
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
-        backB.setOnAction(event -> stage.setScene(menuScene())); // go back to main menu
+        backB.setOnAction(event -> stage.setScene(menuScene(languageModel))); // go back to main menu
+        /*Label backBLabel = new Label((String) language.getCurrentLanguage().get("Back"));
+        backBLabel.getStyleClass().add("menu");
+        backBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(menuScene(languageModel)));*/
 
         // set component layouts
-        GridPane.setRowIndex(backB,1);
-        GridPane.setColumnSpan(soundTitle,2);
-        GridPane.setRowIndex(soundTitle,2);
+        GridPane.setConstraints(backB, 0, 1);
+        //GridPane.setConstraints(backBLabel, 1, 1);
+        GridPane.setColumnSpan(soundTitleLabel, 2);
+        GridPane.setConstraints(soundTitleLabel, 0, 2);
         GridPane.setConstraints(soundVolumeLabel, 0, 3);
         GridPane.setConstraints(soundSlider, 1, 3);
         GridPane.setConstraints(soundValue, 2, 3);
         GridPane.setConstraints(muteLabel, 0, 4);
         GridPane.setConstraints(muteBox, 1, 4);
-
-        // add components
-        root.getChildren().addAll(soundTitle,soundVolumeLabel,soundSlider,soundValue,muteLabel,muteBox,backB);
+        GridPane.setColumnSpan(languageTitleLabel, 2);
+        GridPane.setRowIndex(languageTitleLabel, 6);
+        GridPane.setConstraints(languageLabel, 0, 7);
+        GridPane.setConstraints(languageListBox, 1, 7);
 
         soundSlider.valueProperty().addListener(observable -> {
-        	// display current value for volume
+            // display current value for volume
             soundValue.setText(String.format("%.1f", soundSlider.getValue()));
             option.setVolume(soundSlider.getValue());
             audio.stop(); // stop sounds
@@ -313,7 +380,7 @@ public class MainView extends Application {
 
         muteBox.setOnAction((event -> {
             if (muteBox.isSelected()) {
-            	// stop sound
+                // stop sound
                 audio.stop();
                 option.changeMuteState();
             } else {
@@ -323,6 +390,15 @@ public class MainView extends Application {
                 option.changeMuteState();
             }
         }));
+
+        languageListBox.valueProperty().addListener(observable -> {
+            language.setLanguage(languageListBox.getValue());
+        });
+
+        // add components
+        root.getChildren().addAll(soundTitleLabel, soundVolumeLabel,
+                languageLabel, languageTitleLabel, languageListBox,
+                soundSlider, soundValue, muteLabel, muteBox, backB);
 
         root.setVgap(30);
         root.setHgap(60);
@@ -337,6 +413,7 @@ public class MainView extends Application {
 
     /**
      * User can select which game mode they would like to play in
+     *
      * @return scene Change current scene to mode select screen
      */
     private Scene StartScene() {
@@ -347,8 +424,8 @@ public class MainView extends Application {
 
         // Back button
         backB = new Button();
-        backB.setOnAction(event -> stage.setScene(menuScene())); // go back to main menu
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setOnAction(event -> stage.setScene(menuScene(languageModel))); // go back to main menu
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
 
         VBox singlePlayer = new VBox();
@@ -356,40 +433,28 @@ public class MainView extends Application {
         VBox practice = new VBox();
 
         singlePlayer.setAlignment(Pos.CENTER_LEFT);
-        singlePlayer.setStyle("-fx-background-image: url(/Menu/Images/1p.png);"
-                + "-fx-background-repeat: no-repeat;"
-                + "-fx-background-position: center;"
-                + "-fx-background-color: cadetblue;"
-                + "-fx-border-width: 2;"
-                + "-fx-border-color: black");
+        singlePlayer.setStyle("-fx-background-image: url(/Menu/Images/1p.png);" + "-fx-background-color: cadetblue;");
+        singlePlayer.getStyleClass().add("startMenuBox");
         singlePlayer.setMinSize(250, 350);
         // go to single player mode
         singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(SinglePlayerScreen()));
 
         multiPlayer.setAlignment(Pos.CENTER);
-        multiPlayer.setStyle("-fx-background-image: url(/Menu/Images/2p.png);"
-                + "-fx-background-repeat: no-repeat;"
-                + "-fx-background-position: center;"
-                + "-fx-background-color: indianred;"
-                + "-fx-border-width: 2;"
-                + "-fx-border-color: black");
+        multiPlayer.setStyle("-fx-background-image: url(/Menu/Images/2p.png);" + "-fx-background-color: indianred;");
+        multiPlayer.getStyleClass().add("startMenuBox");
         multiPlayer.setMinSize(250, 350);
         // go to multiplayer mode
         multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(MultiPlayerScreen()));
 
         practice.setAlignment(Pos.CENTER_RIGHT);
-        practice.setStyle("-fx-background-image: url(/Menu/Images/pc.png);"
-                + "-fx-background-repeat: no-repeat;"
-                + "-fx-background-position: center;"
-                + "-fx-background-color: lightgreen;"
-                + "-fx-border-width: 2;"
-                + "-fx-border-color: black");
+        practice.setStyle("-fx-background-image: url(/Menu/Images/pc.png);" + "-fx-background-color: lightgreen;");
+        practice.getStyleClass().add("startMenuBox");
         practice.setMinSize(250, 350);
         // go to practice mode
         practice.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(PracticeScreen()));
 
         // set component layouts
-        GridPane.setRowIndex(backB,1);
+        GridPane.setRowIndex(backB, 1);
         GridPane.setConstraints(singlePlayer, 0, 2);
         GridPane.setConstraints(multiPlayer, 1, 2);
         GridPane.setConstraints(practice, 2, 2);
@@ -410,6 +475,7 @@ public class MainView extends Application {
 
     /**
      * Single player mode
+     *
      * @return scene Change scene to single player scene
      */
     private Scene SinglePlayerScreen() {
@@ -422,7 +488,7 @@ public class MainView extends Application {
         // Back button
         backB = new Button();
         backB.setOnAction(event -> stage.setScene(StartScene())); // go back to mode select
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
 
         root.getStyleClass().add("background");
@@ -439,6 +505,7 @@ public class MainView extends Application {
 
     /**
      * Multiplayer mode where multiple users can play
+     *
      * @return scene Change current scene to multiplayer scene
      */
     private Scene MultiPlayerScreen() {
@@ -451,12 +518,12 @@ public class MainView extends Application {
         // Back button
         backB = new Button();
         backB.setOnAction(event -> stage.setScene(StartScene())); // go back to mode select
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
 
         root.getStyleClass().add("background");
 
-     // set component layouts and add components 
+        // set component layouts and add components
         GridPane.setConstraints(multiP, 0, 1);
         root.getChildren().addAll(backB, multiP);
 
@@ -468,6 +535,7 @@ public class MainView extends Application {
 
     /**
      * Practice mode where user can play with a computer
+     *
      * @return scene Change current scene to practice scene
      */
     private Scene PracticeScreen() {
@@ -480,7 +548,7 @@ public class MainView extends Application {
         // Back button
         backB = new Button();
         backB.setOnAction(event -> stage.setScene(StartScene())); // go to mode select
-        backB.setStyle("-fx-background-image: url('/Menu/Images/backBTN.png')"); 
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
 
         root.getStyleClass().add("background");

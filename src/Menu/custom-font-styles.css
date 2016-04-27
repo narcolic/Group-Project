@@ -1,9 +1,9 @@
 .menu {
-    -fx-font-family: 'Comic Sans MS';
+    -fx-font-family: 'Arial';
     -fx-effect: dropshadow(gaussian, black, 0, 0, 0, 2);
     -fx-font-weight: bold;
     -fx-font-size: 30;
-    -fx-text-fill: white;
+    -fx-text-fill: #F0F0F0;
 }
 
 .button {
@@ -16,16 +16,28 @@
 }
 
 .background {
-    -fx-background-image: url('/Menu/Images/menuBG.jpg');
+    -fx-background-image: url('/Menu/Images/Old/menuBG.jpg');
     -fx-background-size: cover, auto;
     -fx-padding: 10 30 10 30;
 }
 
-.settings{
-    -fx-font-family: 'Comic Sans MS';
+.settings {
+    -fx-font-family: 'Arial';
     -fx-effect: dropshadow(gaussian, black, 0, 0, 0, 2);
     -fx-font-weight: bold;
     -fx-font-size: 30;
-    -fx-text-fill: white;
+    -fx-text-fill: #F0F0F0;
     -fx-underline: true;
+}
+
+.optionsLabel {
+    -fx-background-color: rgba(0, 100, 100, 0.5);;
+    -fx-background-radius: 10pt;
+}
+
+.startmenuBox {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 2;
+    -fx-border-color: black;
 }
