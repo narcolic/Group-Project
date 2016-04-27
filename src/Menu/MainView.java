@@ -2,7 +2,6 @@ package Menu;
 
 import javafx.application.Application;
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -21,7 +20,6 @@ import javafx.geometry.Pos;
 import java.util.Optional;
 
 import static javafx.scene.media.AudioClip.INDEFINITE;
-import static sun.misc.Version.println;
 
 public class MainView extends Application {
 
@@ -199,30 +197,14 @@ public class MainView extends Application {
         nextB.getStyleClass().add("button");
         nextB.setTooltip(new Tooltip(NEXT_SLIDE_TOOLTIP));
         nextB.setOnAction(event -> {
-            if (help.isNextAvailable()) {
-                // show next help image
-                help.nextSlide();
-                stage.setScene(HelpScene(helpModel, languageModel));
-            } else {
-                stage.setScene(HelpScene(helpModel, languageModel));
-            }
+            nextButtonAction(help);
         });
-        
-        // show next help instruction when the right arrow key is pressed
-        nextB.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
 
-        	@Override
-        	public void handle(KeyEvent keyEvent) {
-        		if(keyEvent.getCode() == KeyCode.RIGHT){
-        			if (help.isNextAvailable()) {
-        				// show next help image
-        				help.nextSlide();
-        				stage.setScene(HelpScene(helpModel, languageModel));
-        			} else {
-        				stage.setScene(HelpScene(helpModel, languageModel));
-        			}
-        		}
-        	}
+        // show next help instruction when the right arrow key is pressed
+        nextB.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.RIGHT) {
+                nextButtonAction(help);
+            }
         });
 
         // Previous button
@@ -232,30 +214,14 @@ public class MainView extends Application {
         previousB.getStyleClass().add("button");
         previousB.setTooltip(new Tooltip(PREVIOUS_SLIDE_TOOLTIP));
         previousB.setOnAction(event -> {
-            if (help.isPreviousAvailable()) {
-                // show previous help instruction
-                help.previousSlide();
-                stage.setScene(HelpScene(helpModel, languageModel));
-            } else {
-                stage.setScene(HelpScene(helpModel, languageModel));
-            }
+            previousButtonAction(help);
         });
-        
-        // show previous help instruction when the left arrow key is pressed
-        previousB.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
 
-        	@Override
-        	public void handle(KeyEvent keyEvent) {
-        		if(keyEvent.getCode() == KeyCode.LEFT){
-        			if (help.isPreviousAvailable()) {
-                        // show previous help instruction
-                        help.previousSlide();
-                        stage.setScene(HelpScene(helpModel, languageModel));
-                    } else {
-                        stage.setScene(HelpScene(helpModel, languageModel));
-                    }
-        		}
-        	}
+        // show previous help instruction when the left arrow key is pressed
+        previousB.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.LEFT) {
+                previousButtonAction(help);
+            }
         });
 
         // Back button
@@ -299,6 +265,26 @@ public class MainView extends Application {
         Scene scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
         return scene;
+    }
+
+    private void nextButtonAction(Help help) {
+        if (help.isNextAvailable()) {
+            // show next help image
+            help.nextSlide();
+            stage.setScene(HelpScene(helpModel, languageModel));
+        } else {
+            stage.setScene(HelpScene(helpModel, languageModel));
+        }
+    }
+
+    private void previousButtonAction(Help help) {
+        if (help.isPreviousAvailable()) {
+            // show previous help instruction
+            help.previousSlide();
+            stage.setScene(HelpScene(helpModel, languageModel));
+        } else {
+            stage.setScene(HelpScene(helpModel, languageModel));
+        }
     }
 
     /**
