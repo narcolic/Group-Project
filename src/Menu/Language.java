@@ -20,8 +20,8 @@ class Language {
         fillFrenchMap();
     }
 
-    void setLanguage(String language) {
-        this.language = language;
+    void setLanguage(String lang) {
+        this.language = lang;
     }
 
     String getLanguage() {
@@ -45,26 +45,37 @@ class Language {
         english.put("Help", "Help");
         english.put("Quit", "Quit");
         english.put("Back", "Back");
+        english.put("Sound Volume", "  Sound Volume:  ");
+        english.put("Mute Sound", "  Mute Sound:  ");
+        english.put("Language", "  Language:  ");
         english.put("Sound Settings", "Sound Settings:");
         english.put("Language Settings", "Language Settings:");
     }
 
     private void fillFrenchMap() {
-        french.put("Start", "blastart1");
-        french.put("Options", "blaOptions1");
-        french.put("Help", "blaHelp1");
-        french.put("Quit", "blaQuit1");
-        french.put("Back", "blaBack1");
-        french.put("Language Settings", "blaLanguage Settings1: ");
+        french.put("Start", "Entamer");
+        french.put("Options", "Paramètres");
+        french.put("Help", "Aidez-moi");
+        french.put("Quit", "Quitter");
+        french.put("Back", "Arrière");
+        french.put("Sound Volume", "  Volume Sonore:  ");
+        french.put("Mute Sound", "  Muet:  ");
+        french.put("Language", "  Langue:  ");
+        french.put("Sound Settings", "Paramètres du son:");
+        french.put("Language Settings", "Paramètres de langue: ");
     }
 
     private void fillGermanMap() {
-        german.put("Start", "blastart3");
-        german.put("Options", "blaOptions3");
-        german.put("Help", "blaHelp3");
-        german.put("Quit", "blaQuit3");
-        german.put("Back", "blaBack3");
-        german.put("Language Settings", "blaLanguage Settings3: ");
+        german.put("Start", "Anfang");
+        german.put("Options", "Optionen");
+        german.put("Help", "Hilfe");
+        german.put("Quit", "Ausgang");
+        german.put("Back", "Zurück");
+        german.put("Sound Volume", "  Lautstärke:  ");
+        german.put("Mute Sound", "  Stumm:  ");
+        german.put("Language", "  Sprache:  ");
+        german.put("Sound Settings", "Audioeinstellungen:");
+        german.put("Language Settings", "Spracheinstellungen: ");
     }
 
     private void fillLanguageListArray() {

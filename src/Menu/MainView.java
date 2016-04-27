@@ -19,6 +19,7 @@ import javafx.geometry.Pos;
 import java.util.Optional;
 
 import static javafx.scene.media.AudioClip.INDEFINITE;
+import static sun.misc.Version.println;
 
 public class MainView extends Application {
 
@@ -302,17 +303,17 @@ public class MainView extends Application {
         muteBox.setSelected(option.isMute());
         muteBox.setTooltip(new Tooltip(MUTE_TOOLTIP));
 
-        ChoiceBox<String> langagueListBox = new ChoiceBox<>();
-        langagueListBox.setTooltip(new Tooltip(LANGUAGE_TOOLTIP));
-        langagueListBox.getItems().addAll(language.languageList);
-        langagueListBox.setValue(language.getLanguage());
+        ChoiceBox<String> languageListBox = new ChoiceBox<>();
+        languageListBox.setTooltip(new Tooltip(LANGUAGE_TOOLTIP));
+        languageListBox.getItems().addAll(language.languageList);
+        languageListBox.setValue(language.getLanguage());
 
-        Label soundVolumeLabel = new Label("  Sound Volume:  ");
+        Label soundVolumeLabel = new Label((String) language.getCurrentLanguage().get("Sound Volume"));
         Label soundTitleLabel = new Label((String) language.getCurrentLanguage().get("Sound Settings"));
         Label languageTitleLabel = new Label((String) language.getCurrentLanguage().get("Language Settings"));
         Label soundValue = new Label(Double.toString(soundSlider.getValue()));
-        Label muteLabel = new Label("  Mute Sound:  ");
-        Label languageLabel = new Label("  Language:  ");
+        Label muteLabel = new Label((String) language.getCurrentLanguage().get("Mute Sound"));
+        Label languageLabel = new Label((String) language.getCurrentLanguage().get("Language"));
 
         languageLabel.setTextFill(Color.WHITE);
         soundValue.setTextFill(Color.WHITE);
@@ -339,7 +340,7 @@ public class MainView extends Application {
         GridPane.setConstraints(backB, 0, 1);
         //GridPane.setConstraints(backBLabel, 1, 1);
         GridPane.setColumnSpan(soundTitleLabel, 2);
-        GridPane.setConstraints(soundTitleLabel,0,2);
+        GridPane.setConstraints(soundTitleLabel, 0, 2);
         GridPane.setConstraints(soundVolumeLabel, 0, 3);
         GridPane.setConstraints(soundSlider, 1, 3);
         GridPane.setConstraints(soundValue, 2, 3);
@@ -348,12 +349,7 @@ public class MainView extends Application {
         GridPane.setColumnSpan(languageTitleLabel, 2);
         GridPane.setRowIndex(languageTitleLabel, 6);
         GridPane.setConstraints(languageLabel, 0, 7);
-        GridPane.setConstraints(langagueListBox, 1, 7);
-
-        // add components
-        root.getChildren().addAll(soundTitleLabel, soundVolumeLabel,
-                languageLabel, languageTitleLabel, langagueListBox,
-                soundSlider, soundValue, muteLabel, muteBox, backB);
+        GridPane.setConstraints(languageListBox, 1, 7);
 
         soundSlider.valueProperty().addListener(observable -> {
             // display current value for volume
@@ -377,9 +373,14 @@ public class MainView extends Application {
             }
         }));
 
-        langagueListBox.getSelectionModel().selectedIndexProperty().addListener(observable -> {
-            language.setLanguage(langagueListBox.getValue());
+        languageListBox.valueProperty().addListener(observable -> {
+            language.setLanguage(languageListBox.getValue());
         });
+
+        // add components
+        root.getChildren().addAll(soundTitleLabel, soundVolumeLabel,
+                languageLabel, languageTitleLabel, languageListBox,
+                soundSlider, soundValue, muteLabel, muteBox, backB);
 
         root.setVgap(30);
         root.setHgap(60);
