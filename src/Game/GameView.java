@@ -21,246 +21,244 @@ import javafx.application.Platform;
 
 import java.util.Optional;
 
-import Game.Board;
-import Game.Position;
-import Game.Fence;
-
-//import javafx.scene.control.Alert;
-
 public class GameView extends Application {
-	public static void main(String[] args) {
-		launch(args);
-	}
-	
-	//Images
-	private Image defaultSquareImg;
-	private Image highlightSquareImg;
-	private Image noVerWallImg;
-	private Image verWallPlacedImg;
-	private Image noHorWallImg;
-	private Image horWallPlacedImg;
-	private Image noSquareFenceImg;
-	private Image squareFencePlacedImg;
-	private Image pawnImg;
-	private Image buttonPlaceHorImg;
-	private Image buttonPlaceVerImg;
-	private Image buttonPlaceRemImg;
-	private Image buttonPlaceHorImgOn;
-	private Image buttonPlaceVerImgOn;
-	private Image buttonPlaceRemImgOn;
-	private Image pointerImg;
-	private Image pointerEmptyImg;
-	private Image playerFenceAvlbImg;
-	private Image playerFenceUsedImg;
-	
-	/**Scene of the Gameview*/
-	private Scene GUI;
-	
-	/**Top level layout pane*/
-	private BorderPane layout;
-	/**Grid pane that stores the images in a 2D grid*/
-	private GridPane board = new GridPane();
-	/**Left pane that stores the buttons*/
-	private VBox left = new VBox();
-	/**Right pane that stores the player and turn info*/
-	private VBox right = new VBox();
-	
-	private int boardCompX;
-	private int boardCompY;
-	/**2D array containing board grid*/
-	private ImageView[][] boardComp;
-	/**Array containing pawn graphic objects*/
-	private ImageView[] pawns;
-	private HBox[] players; 
-	
-	//menu bar and buttons
-	private Menu optionMenu;
-	private Menu helpMenu;
-	private Menu quitMenu;
-	private MenuBar menuBar;
-	
-	//fence buttons on left
-	private ImageView buttonPlaceHor;
-	private ImageView buttonPlaceVer;
-	private ImageView buttonPlaceRem;
-	private enum ButtonState {NONE, PLACE_HORIZONTAL, PLACE_VERTICAL, REMOVE_FENCE};
-	private ButtonState activeButton;
-	
-	//player information 
-	private ImageView pointer;
-	private ImageView[][] playerFences;
-	
-	
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-	@Override
-	public void start(final Stage primaryStage) {
-		// Set up the images ready to be used
-		setupImages();
-		
-		// Board, buttons and info player display
-		initialiseContent();
-		
-		// Centre, left and right panes
-		initialisePanes();
-		
-		GUI = new Scene(layout, 1280, 720);
-		primaryStage.setTitle("Quoridor");
-		primaryStage.setScene(GUI);
-		layout.setLeft(left);
-		layout.setCenter(board);
-		layout.setRight(right);
-		layout.setTop(menuBar);
-		primaryStage.show();
-	}
-	
-	private void setupImages() {
-		defaultSquareImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/a.png"));
-		highlightSquareImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/c.png"));
-		noVerWallImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/noVerWall.png"));
-		verWallPlacedImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/VerwallPlaced.png"));
-		noHorWallImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/noHorWall.png"));
-		horWallPlacedImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/horWallPlaced.png"));
-		noSquareFenceImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/squareFence.png"));
-		squareFencePlacedImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/squareFenceClicked.png"));
-		pawnImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/pawn.png"));
-		buttonPlaceHorImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/buttonPlaceFenceH.png"));
-		buttonPlaceVerImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/buttonPlaceFenceV.png"));
-		buttonPlaceRemImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/buttonPlaceFenceR.png"));
-		buttonPlaceHorImgOn = new Image(getClass().getResourceAsStream(
-				"BoardComponents/buttonPlaceFenceHActive.png"));
-		buttonPlaceVerImgOn = new Image(getClass().getResourceAsStream(
-				"BoardComponents/buttonPlaceFenceVActive.png"));
-		buttonPlaceRemImgOn = new Image(getClass().getResourceAsStream(
-				"BoardComponents/buttonPlaceFenceRActive.png"));
-		pointerImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/pointer.png"));
-		pointerEmptyImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/pointer_empty.png"));
-		playerFenceAvlbImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/fenceAvailable.png"));
-		playerFenceUsedImg = new Image(getClass().getResourceAsStream(
-				"BoardComponents/fenceUsed.png"));
-	}
+    //Images
+    private Image defaultSquareImg;
+    private Image highlightSquareImg;
+    private Image noVerWallImg;
+    private Image verWallPlacedImg;
+    private Image noHorWallImg;
+    private Image horWallPlacedImg;
+    private Image noSquareFenceImg;
+    private Image squareFencePlacedImg;
+    private Image pawnImg;
+    private Image buttonPlaceHorImg;
+    private Image buttonPlaceVerImg;
+    private Image buttonPlaceRemImg;
+    private Image buttonPlaceHorImgOn;
+    private Image buttonPlaceVerImgOn;
+    private Image buttonPlaceRemImgOn;
+    private Image pointerImg;
+    private Image pointerEmptyImg;
+    private Image playerFenceAvlbImg;
+    private Image playerFenceUsedImg;
 
-	private void initialiseContent() {
-		//TODO: Remove this when debug is done
-		try{ int test = Board.getInstance().getNumberOfPawns(); } catch (Exception e) {
-			Board.getInstance().setupBoard(true, false);
-		}
-		
-		// set up a 2D array to store all the components
-		boardCompX = Board.getInstance().getSizeX() * 2 - 1;
-		boardCompY = Board.getInstance().getSizeY() * 2 - 1;
-		boardComp = new ImageView
-				[boardCompX]
-				[boardCompY];
-		
-		// fill boardComp with the board squares
-		setupBoardComp();
+    /**
+     * Top level layout pane
+     */
+    private BorderPane layout;
+    /**
+     * Grid pane that stores the images in a 2D grid
+     */
+    private GridPane board = new GridPane();
+    /**
+     * Left pane that stores the buttons
+     */
+    private VBox left = new VBox();
+    /**
+     * Right pane that stores the player and turn info
+     */
+    private VBox right = new VBox();
 
-		// place initial pawn on the board
-		pawns = new ImageView[Board.getInstance().getNumberOfPawns()];
-		addPawnsToBoard();
-		
-		setupMenu(); // create menu options and add them to the bar
-		
-		setupButtons(); // display wall buttons
+    private int boardCompX;
+    private int boardCompY;
+    /**
+     * 2D array containing board grid
+     */
+    private ImageView[][] boardComp;
+    /**
+     * Array containing pawn graphic objects
+     */
+    private ImageView[] pawns;
+    private HBox[] players;
 
-		//pointer
-		pointer = new ImageView();
-		pointer.setImage(pointerImg);
-		//player information
-		players = new HBox[Board.getInstance().getNumberOfPawns()];
-		playerFences = new ImageView[players.length][Board.getInstance().getMaxPawnFences()];
-		setupPlayerHBoxes();
-		players[0].getChildren().set(0, pointer);
+    private MenuBar menuBar;
 
-		updateAll();
-	}
+    //fence buttons on left
+    private ImageView buttonPlaceHor;
+    private ImageView buttonPlaceVer;
+    private ImageView buttonPlaceRem;
 
-	private void initialisePanes() {
-		layout = new BorderPane();
-		board = new GridPane();
-		left = new VBox();
-		right = new VBox();
+    private enum ButtonState {NONE, PLACE_HORIZONTAL, PLACE_VERTICAL, REMOVE_FENCE}
 
-		//add to board pane
-		for (int x = 0; x < boardCompX; x++) {
-			for (int y = 0; y < boardCompY; y++) {
-				ImageView toAdd = boardComp[x][y]; //add boardComp images to the board pane
-				board.add(toAdd, x, y);
-			}
-		}
-		//add to left pane
-		left.getChildren().addAll(buttonPlaceHor, buttonPlaceVer, buttonPlaceRem);
-		//add to right pane
-		right.getChildren().addAll(players);
+    private ButtonState activeButton;
+
+    //player information
+    private ImageView pointer;
+    private ImageView[][] playerFences;
 
 
-		board.setStyle("-fx-padding:10;");
-		left.setStyle("-fx-padding:10;");
-		right.setAlignment(Pos.CENTER_RIGHT);
-		right.setStyle("-fx-padding:10;");
-	}
+    @Override
+    public void start(final Stage primaryStage) {
+        // Set up the images ready to be used
+        setupImages();
 
-	private void setupPlayerHBoxes() {
-		for(int i = 0; i < players.length; i++) {
-			Label playerID = new Label("P" + (i + 1));
-			Label playerFenceCount = new Label(Board.getInstance().getMaxPawnFences() + "");
-			
-			players[i] = new HBox();
-			players[i].getChildren().add(createEmptyPointer());
-			players[i].getChildren().add(playerID);
-			for(int j = 0; j < Board.getInstance().getMaxPawnFences(); j++)
-			{
-				playerFences[i][j] = new ImageView();
-				playerFences[i][j].setImage(playerFenceAvlbImg);
-				players[i].getChildren().add(playerFences[i][j]);
-			}
-			players[i].getChildren().add(playerFenceCount);
-		}
-	}
+        // Board, buttons and info player display
+        initialiseContent();
 
-	private void setupButtons() {
-		buttonPlaceHor = new ImageView();
-		buttonPlaceHor.setImage(buttonPlaceHorImg);
-		buttonPlaceHor.setOnMouseClicked(e -> {
-			eventPlaceFenceHorizontal();
-		});
-		
-		buttonPlaceVer = new ImageView();
-		buttonPlaceVer.setImage(buttonPlaceVerImg);
-		buttonPlaceVer.setOnMouseClicked(e -> {
-			eventPlaceFenceVertical();
-		});
-		
-		buttonPlaceRem = new ImageView();
-		buttonPlaceRem.setImage(buttonPlaceRemImg);
-		buttonPlaceRem.setOnMouseClicked(e -> {
-			eventRemoveFence();
-		});
-		
-		activeButton = ButtonState.NONE;
-	}
+        // Centre, left and right panes
+        initialisePanes();
 
-	private void setupMenu() {
-		optionMenu = new Menu("Options");
-		helpMenu = new Menu("Help");
-		quitMenu = new Menu("Quit");
-		menuBar = new MenuBar();
-		menuBar.getMenus().addAll(optionMenu, helpMenu, quitMenu);
+		/*Scene of the Gameview*/
+        Scene GUI = new Scene(layout, 1280, 720);
+        GUI.getStylesheets().add(getClass().getResource("custom-game-styles.css").toExternalForm());
+        primaryStage.setTitle("Quoridor");
+        primaryStage.setScene(GUI);
+        layout.setLeft(left);
+        layout.setCenter(board);
+        layout.setRight(right);
+        layout.setTop(menuBar);
+        primaryStage.show();
+    }
+
+    private void setupImages() {
+        defaultSquareImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/a.png"));
+        highlightSquareImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/c.png"));
+        noVerWallImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/noVerWall.png"));
+        verWallPlacedImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/VerwallPlaced.png"));
+        noHorWallImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/noHorWall.png"));
+        horWallPlacedImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/horWallPlaced.png"));
+        noSquareFenceImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/squareFence.png"));
+        squareFencePlacedImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/squareFenceClicked.png"));
+        pawnImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/pawn.png"));
+        buttonPlaceHorImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/buttonPlaceFenceH.png"));
+        buttonPlaceVerImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/buttonPlaceFenceV.png"));
+        buttonPlaceRemImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/buttonPlaceFenceR.png"));
+        buttonPlaceHorImgOn = new Image(getClass().getResourceAsStream(
+                "BoardComponents/buttonPlaceFenceHActive.png"));
+        buttonPlaceVerImgOn = new Image(getClass().getResourceAsStream(
+                "BoardComponents/buttonPlaceFenceVActive.png"));
+        buttonPlaceRemImgOn = new Image(getClass().getResourceAsStream(
+                "BoardComponents/buttonPlaceFenceRActive.png"));
+        pointerImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/pointer.png"));
+        pointerEmptyImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/pointer_empty.png"));
+        playerFenceAvlbImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/fenceAvailable.png"));
+        playerFenceUsedImg = new Image(getClass().getResourceAsStream(
+                "BoardComponents/fenceUsed.png"));
+    }
+
+    private void initialiseContent() {
+        //TODO: Remove this when debug is done
+        try {
+            int test = Board.getInstance().getNumberOfPawns();
+        } catch (Exception e) {
+            Board.getInstance().setupBoard(true, false);
+        }
+
+        // set up a 2D array to store all the components
+        boardCompX = Board.getInstance().getSizeX() * 2 - 1;
+        boardCompY = Board.getInstance().getSizeY() * 2 - 1;
+        boardComp = new ImageView
+                [boardCompX]
+                [boardCompY];
+
+        // fill boardComp with the board squares
+        setupBoardComp();
+
+        // place initial pawn on the board
+        pawns = new ImageView[Board.getInstance().getNumberOfPawns()];
+        addPawnsToBoard();
+
+        setupMenu(); // create menu options and add them to the bar
+
+        setupButtons(); // display wall buttons
+
+        //pointer
+        pointer = new ImageView();
+        pointer.setImage(pointerImg);
+        //player information
+        players = new HBox[Board.getInstance().getNumberOfPawns()];
+        playerFences = new ImageView[players.length][Board.getInstance().getMaxPawnFences()];
+        setupPlayerHBoxes();
+        players[0].getChildren().set(0, pointer);
+
+        updateAll();
+    }
+
+    private void initialisePanes() {
+        layout = new BorderPane();
+        board = new GridPane();
+        left = new VBox();
+        right = new VBox();
+
+        //add to board pane
+        for (int x = 0; x < boardCompX; x++) {
+            for (int y = 0; y < boardCompY; y++) {
+                ImageView toAdd = boardComp[x][y]; //add boardComp images to the board pane
+                board.add(toAdd, x, y);
+            }
+        }
+        //add to left pane
+        left.getChildren().addAll(buttonPlaceHor, buttonPlaceVer, buttonPlaceRem);
+        //add to right pane
+        right.getChildren().addAll(players);
+
+
+
+        board.getStyleClass().add("background");
+        left.getStyleClass().add("background");
+        right.setAlignment(Pos.CENTER_RIGHT);
+        right.getStyleClass().add("background");
+    }
+
+    private void setupPlayerHBoxes() {
+        for (int i = 0; i < players.length; i++) {
+            Label playerID = new Label("P" + (i + 1));
+            Label playerFenceCount = new Label(Board.getInstance().getMaxPawnFences() + "");
+
+            players[i] = new HBox();
+            players[i].getChildren().add(createEmptyPointer());
+            players[i].getChildren().add(playerID);
+            for (int j = 0; j < Board.getInstance().getMaxPawnFences(); j++) {
+                playerFences[i][j] = new ImageView();
+                playerFences[i][j].setImage(playerFenceAvlbImg);
+                players[i].getChildren().add(playerFences[i][j]);
+            }
+            players[i].getChildren().add(playerFenceCount);
+        }
+    }
+
+    private void setupButtons() {
+        buttonPlaceHor = new ImageView();
+        buttonPlaceHor.setImage(buttonPlaceHorImg);
+        buttonPlaceHor.setOnMouseClicked(e -> eventPlaceFenceHorizontal());
+
+        buttonPlaceVer = new ImageView();
+        buttonPlaceVer.setImage(buttonPlaceVerImg);
+        buttonPlaceVer.setOnMouseClicked(e -> eventPlaceFenceVertical());
+
+        buttonPlaceRem = new ImageView();
+        buttonPlaceRem.setImage(buttonPlaceRemImg);
+        buttonPlaceRem.setOnMouseClicked(e -> eventRemoveFence());
+
+        activeButton = ButtonState.NONE;
+    }
+
+    private void setupMenu() {
+        Menu optionMenu1 = new Menu("Options");
+        Menu helpMenu1 = new Menu("Help");
+        Menu quitMenu1 = new Menu("Quit");
+        menuBar = new MenuBar();
+        menuBar.getMenus().addAll(optionMenu1, helpMenu1, quitMenu1);
 		/*
 		quit.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -278,7 +276,7 @@ public class GameView extends Application {
         menuBar = new MenuBar();
         menuBar.getMenus().addAll(optionMenu, helpMenu, gameMenu);
         quitMenu.setOnAction(event -> quitGameAction());
-	}
+    }
 
     private void quitGameAction() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -293,394 +291,367 @@ public class GameView extends Application {
         }
     }
 
-	private void setupBoardComp() {
-		for (int x = 0; x < boardCompX; x = x + 2) {
-			for (int y = 0; y < boardCompY; y = y + 2) {
-				ImageView gameSquare = createGameSquare(x, y);
-				boardComp[x][y] = gameSquare;
-			}
-		}
-		// fill boardComp with vertical fences
-		for (int x = 1; x < boardCompX; x = x + 2) {
-			for (int y = 0; y < boardCompY; y = y + 2) {
-				ImageView verFences = createVerticalFence(x, y);
-				boardComp[x][y] = verFences;
-			}
-		}
-		// fill boardComp with horizontal fences
-		for (int x = 0; x < boardCompX; x = x + 2) {
-			for (int y = 1; y < boardCompY; y = y + 2) {
+    private void setupBoardComp() {
+        for (int x = 0; x < boardCompX; x = x + 2) {
+            for (int y = 0; y < boardCompY; y = y + 2) {
+                ImageView gameSquare = createGameSquare(x, y);
+                boardComp[x][y] = gameSquare;
+            }
+        }
+        // fill boardComp with vertical fences
+        for (int x = 1; x < boardCompX; x = x + 2) {
+            for (int y = 0; y < boardCompY; y = y + 2) {
+                ImageView verFences = createVerticalFence(x, y);
+                boardComp[x][y] = verFences;
+            }
+        }
+        // fill boardComp with horizontal fences
+        for (int x = 0; x < boardCompX; x = x + 2) {
+            for (int y = 1; y < boardCompY; y = y + 2) {
 
-				ImageView fences = createHorizontalFence(x, y);
-				boardComp[x][y] = fences;
-			}
-		}
-		// fill boardComp with square fences
-		for (int x = 1; x < boardCompX; x = x + 2) {
-			for (int y = 1; y < boardCompY; y = y + 2) {
+                ImageView fences = createHorizontalFence(x, y);
+                boardComp[x][y] = fences;
+            }
+        }
+        // fill boardComp with square fences
+        for (int x = 1; x < boardCompX; x = x + 2) {
+            for (int y = 1; y < boardCompY; y = y + 2) {
 
-				ImageView fences = createMidFence(x, y);
-				boardComp[x][y] = fences;
-			}
-		}
-	}
+                ImageView fences = createMidFence(x, y);
+                boardComp[x][y] = fences;
+            }
+        }
+    }
 
-	private ImageView createMidFence(int x, int y) {
-		ImageView fences = new ImageView();
-		fences.setImage(noSquareFenceImg);
-		fences.setOnMouseClicked(e -> {
-			eventFenceClick(x, y);
-		});
-		return fences;
-	}
+    private ImageView createMidFence(int x, int y) {
+        ImageView fences = new ImageView();
+        fences.setImage(noSquareFenceImg);
+        fences.setOnMouseClicked(e -> eventFenceClick(x, y));
+        return fences;
+    }
 
-	private ImageView createHorizontalFence(int x, int y) {
-		ImageView fences = new ImageView();
-		fences.setImage(noHorWallImg);
-		fences.setOnMouseClicked(e -> {
-			eventFenceClick(x, y);
-		});
-		return fences;
-	}
+    private ImageView createHorizontalFence(int x, int y) {
+        ImageView fences = new ImageView();
+        fences.setImage(noHorWallImg);
+        fences.setOnMouseClicked(e -> eventFenceClick(x, y));
+        return fences;
+    }
 
-	private ImageView createVerticalFence(int x, int y) {
-		ImageView verFences = new ImageView();
-		verFences.setImage(noVerWallImg);
-		verFences.setOnMouseClicked(e -> {
-			eventFenceClick(x, y);
-		});
-		return verFences;
-	}
+    private ImageView createVerticalFence(int x, int y) {
+        ImageView verFences = new ImageView();
+        verFences.setImage(noVerWallImg);
+        verFences.setOnMouseClicked(e -> eventFenceClick(x, y));
+        return verFences;
+    }
 
-	private ImageView createGameSquare(int x, int y) {
-		ImageView gameSquare = new ImageView();
-		gameSquare.setImage(defaultSquareImg);
-		gameSquare.setOnMouseClicked(e -> {
-			eventSquareClick(x, y);
-		});
-		return gameSquare;
-	}
+    private ImageView createGameSquare(int x, int y) {
+        ImageView gameSquare = new ImageView();
+        gameSquare.setImage(defaultSquareImg);
+        gameSquare.setOnMouseClicked(e -> eventSquareClick(x, y));
+        return gameSquare;
+    }
 
-	private ImageView createEmptyPointer() {
-		ImageView pointerEmpty = new ImageView();
-		pointerEmpty.setImage(pointerEmptyImg);
-		return pointerEmpty;
-	}
+    private ImageView createEmptyPointer() {
+        ImageView pointerEmpty = new ImageView();
+        pointerEmpty.setImage(pointerEmptyImg);
+        return pointerEmpty;
+    }
 
-	/**
-	 * Converts the position from the model to the view
-	 * @param boardPos
-	 * @return
-	 */
-	private static int getBoardSquarePosition(int boardPos) {
-		return boardPos * 2;
-	}
-	/**
-	 * Converts the position from the view to the model
-	 * @param boardPos
-	 * @return
-	 */
-	private static int getBoardModelPosition(int boardPos) {
-		return boardPos / 2;
-	}
-	
-	/**Called when the place horizontal fence button is pressed*/
-	private void eventPlaceFenceHorizontal()
-	{
-		if(activeButton != ButtonState.PLACE_HORIZONTAL) {
-			activeButton = ButtonState.PLACE_HORIZONTAL;
-		} else {
-			activeButton = ButtonState.NONE;
-		}
-		updateButtons();
-	}
-	/**Called when the place vertical fence button is pressed*/
-	private void eventPlaceFenceVertical()
-	{
-		if(activeButton != ButtonState.PLACE_VERTICAL) {
-			activeButton = ButtonState.PLACE_VERTICAL;
-		} else {
-			activeButton = ButtonState.NONE;
-		}
-		updateButtons();
-	}
-	/**Called when the remove fence button is pressed*/
-	private void eventRemoveFence()
-	{
-		if(activeButton != ButtonState.REMOVE_FENCE) {
-			activeButton = ButtonState.REMOVE_FENCE;
-		} else {
-			activeButton = ButtonState.NONE;
-		}
-		updateButtons();
-	}
-	
-	private void eventFenceClick(int x, int y)
-	{
-		int boardX = getBoardModelPosition(x);
-		int boardY = getBoardModelPosition(y);
-		
-		if (activeButton == ButtonState.PLACE_HORIZONTAL)
-		{
-			if(Board.getInstance().pawnPlaceFence(new Position(boardX, boardY + 1), false))
-			{
-				updateAll();
-			}
-		}
-		else if (activeButton == ButtonState.PLACE_VERTICAL)
-		{
-			if(Board.getInstance().pawnPlaceFence(new Position(boardX + 1, boardY), true))
-			{
-				updateAll();
-			}
-		}
-		else if (activeButton == ButtonState.REMOVE_FENCE)
-		{
+    /**
+     * Converts the position from the model to the view
+     *
+     * @param boardPos
+     * @return
+     */
+    private static int getBoardSquarePosition(int boardPos) {
+        return boardPos * 2;
+    }
+
+    /**
+     * Converts the position from the view to the model
+     *
+     * @param boardPos
+     * @return
+     */
+    private static int getBoardModelPosition(int boardPos) {
+        return boardPos / 2;
+    }
+
+    /**
+     * Called when the place horizontal fence button is pressed
+     */
+    private void eventPlaceFenceHorizontal() {
+        if (activeButton != ButtonState.PLACE_HORIZONTAL) {
+            activeButton = ButtonState.PLACE_HORIZONTAL;
+        } else {
+            activeButton = ButtonState.NONE;
+        }
+        updateButtons();
+    }
+
+    /**
+     * Called when the place vertical fence button is pressed
+     */
+    private void eventPlaceFenceVertical() {
+        if (activeButton != ButtonState.PLACE_VERTICAL) {
+            activeButton = ButtonState.PLACE_VERTICAL;
+        } else {
+            activeButton = ButtonState.NONE;
+        }
+        updateButtons();
+    }
+
+    /**
+     * Called when the remove fence button is pressed
+     */
+    private void eventRemoveFence() {
+        if (activeButton != ButtonState.REMOVE_FENCE) {
+            activeButton = ButtonState.REMOVE_FENCE;
+        } else {
+            activeButton = ButtonState.NONE;
+        }
+        updateButtons();
+    }
+
+    private void eventFenceClick(int x, int y) {
+        int boardX = getBoardModelPosition(x);
+        int boardY = getBoardModelPosition(y);
+
+        if (activeButton == ButtonState.PLACE_HORIZONTAL) {
+            if (Board.getInstance().pawnPlaceFence(new Position(boardX, boardY + 1), false)) {
+                updateAll();
+            }
+        } else if (activeButton == ButtonState.PLACE_VERTICAL) {
+            if (Board.getInstance().pawnPlaceFence(new Position(boardX + 1, boardY), true)) {
+                updateAll();
+            }
+        } else if (activeButton == ButtonState.REMOVE_FENCE) {
 			/*
 			if(Board.getInstance().pawnRemoveFence(new Fence()))
 			{
 				updateAll();
 			}
 			*/
-		}
-	}
-	
-	private void eventSquareClick(int x, int y)
-	{
-		int boardX = getBoardModelPosition(x);
-		int boardY = getBoardModelPosition(y);
+        }
+    }
 
-		if(Board.getInstance().pawnMove(new Position(boardX, boardY)))
-		{
-			updateAll();
-		}
-	}
-	
-	/**
-	 * Run all updates in approximate order of importance.
-	 */
-	private void updateAll() {
-		updatePawnsOnBoard();
-		updateFencesOnBoard();
-		updateBoardHighlights();
-		updatePlayerInfo();
-		activeButton = ButtonState.NONE;
-		updateButtons();
-	}
-	
-	/**
-	 * Updates the player info to match the model
-	 * Should run after the end of each turn
-	 */
-	public void updatePlayerInfo()
-	{
-		int currentPawnT = Board.getInstance().getPawnTurn();
-		int lastPawnT = Board.getInstance().getPreviousPawnTurn();
-		//Remove pointer from previous pawn
-		players[lastPawnT].getChildren().set(0, createEmptyPointer());
-		//Add pointer to current pawn
-		players[currentPawnT].getChildren().set(0, pointer);
-		
-		//update the fences and fenceCount of each player
-		int[] fenceCount = Board.getInstance().getPawnFenceCountArray();
-		for(int i = 0; i < players.length; i++) {
-			for(int j = 0; j < Board.getInstance().getMaxPawnFences(); j++) {
-				ImageView fence = playerFences[i][j];
-				if(j < Board.getInstance().getMaxPawnFences() - fenceCount[i]) {
-					fence.setImage(playerFenceAvlbImg);
-				} else {
-					fence.setImage(playerFenceUsedImg);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Updates the pawn's positions on the board.
-	 * Clears all pawns from the board, then re-adds them with their current positions.
-	 */
-	public void updatePawnsOnBoard()
-	{
-		clearPawnsFromBoard();
-		addPawnsToBoard();
-	}
-	
-	/**
-	 * Updates the fence's positions on the board.
-	 */
-	public void updateFencesOnBoard()
-	{
-		clearFencesFromBoard();
-		addFencesToBoard();
-	}
+    private void eventSquareClick(int x, int y) {
+        int boardX = getBoardModelPosition(x);
+        int boardY = getBoardModelPosition(y);
 
-	/**
-	 * Updates the valid moves of the current pawn as highlights on the board.
-	 */
-	public void updateBoardHighlights()
-	{
-		resetSquareImages();
-		highlightSquareImages();
-	}
-	
-	public void updateButtons()
-	{
-		buttonPlaceHor.setImage(buttonPlaceHorImg);
-		buttonPlaceVer.setImage(buttonPlaceVerImg);
-		buttonPlaceRem.setImage(buttonPlaceRemImg);
-		switch(activeButton)
-		{
-			case PLACE_HORIZONTAL:
-				buttonPlaceHor.setImage(buttonPlaceHorImgOn);
-				break;
-			case PLACE_VERTICAL:
-				buttonPlaceVer.setImage(buttonPlaceVerImgOn);
-				break;
-			case REMOVE_FENCE:
-				buttonPlaceRem.setImage(buttonPlaceRemImgOn);
-				break;
-		}
-	}
-	
+        if (Board.getInstance().pawnMove(new Position(boardX, boardY))) {
+            updateAll();
+        }
+    }
 
-	/**
-	 * Adds pawns to the board from positions provided by the Board instance
-	 */
-	private void addPawnsToBoard() {
-		Position[] pawnPositions = Board.getInstance().getPawnPositionsArray();
-		for (int i = 0; i < pawnPositions.length; i++) {
-			pawns[i] = new ImageView();
-			pawns[i].setImage(pawnImg);
-			
-			Blend tint = new Blend(BlendMode.MULTIPLY,
-					new ColorInput(0, 0, pawns[i].getImage().getWidth(), pawns[i].getImage().getHeight(),
-							getPawnColour(i)), null);
-			pawns[i].setEffect(tint);
-			
-			boardComp[getBoardSquarePosition(pawnPositions[i].getX())]
-					[getBoardSquarePosition(pawnPositions[i].getY())] = pawns[i];
-			board.add(pawns[i], 
-					getBoardSquarePosition(pawnPositions[i].getX()), 
-							getBoardSquarePosition(pawnPositions[i].getY()));
-		}
-	}
+    /**
+     * Run all updates in approximate order of importance.
+     */
+    private void updateAll() {
+        updatePawnsOnBoard();
+        updateFencesOnBoard();
+        updateBoardHighlights();
+        updatePlayerInfo();
+        activeButton = ButtonState.NONE;
+        updateButtons();
+    }
 
-	private Paint getPawnColour(int i) {
+    /**
+     * Updates the player info to match the model
+     * Should run after the end of each turn
+     */
+    private void updatePlayerInfo() {
+        int currentPawnT = Board.getInstance().getPawnTurn();
+        int lastPawnT = Board.getInstance().getPreviousPawnTurn();
+        //Remove pointer from previous pawn
+        players[lastPawnT].getChildren().set(0, createEmptyPointer());
+        //Add pointer to current pawn
+        players[currentPawnT].getChildren().set(0, pointer);
+
+        //update the fences and fenceCount of each player
+        int[] fenceCount = Board.getInstance().getPawnFenceCountArray();
+        for (int i = 0; i < players.length; i++) {
+            for (int j = 0; j < Board.getInstance().getMaxPawnFences(); j++) {
+                ImageView fence = playerFences[i][j];
+                if (j < Board.getInstance().getMaxPawnFences() - fenceCount[i]) {
+                    fence.setImage(playerFenceAvlbImg);
+                } else {
+                    fence.setImage(playerFenceUsedImg);
+                }
+            }
+        }
+    }
+
+    /**
+     * Updates the pawn's positions on the board.
+     * Clears all pawns from the board, then re-adds them with their current positions.
+     */
+    private void updatePawnsOnBoard() {
+        clearPawnsFromBoard();
+        addPawnsToBoard();
+    }
+
+    /**
+     * Updates the fence's positions on the board.
+     */
+    private void updateFencesOnBoard() {
+        clearFencesFromBoard();
+        addFencesToBoard();
+    }
+
+    /**
+     * Updates the valid moves of the current pawn as highlights on the board.
+     */
+    private void updateBoardHighlights() {
+        resetSquareImages();
+        highlightSquareImages();
+    }
+
+    private void updateButtons() {
+        buttonPlaceHor.setImage(buttonPlaceHorImg);
+        buttonPlaceVer.setImage(buttonPlaceVerImg);
+        buttonPlaceRem.setImage(buttonPlaceRemImg);
+        switch (activeButton) {
+            case PLACE_HORIZONTAL:
+                buttonPlaceHor.setImage(buttonPlaceHorImgOn);
+                break;
+            case PLACE_VERTICAL:
+                buttonPlaceVer.setImage(buttonPlaceVerImgOn);
+                break;
+            case REMOVE_FENCE:
+                buttonPlaceRem.setImage(buttonPlaceRemImgOn);
+                break;
+        }
+    }
+
+
+    /**
+     * Adds pawns to the board from positions provided by the Board instance
+     */
+    private void addPawnsToBoard() {
+        Position[] pawnPositions = Board.getInstance().getPawnPositionsArray();
+        for (int i = 0; i < pawnPositions.length; i++) {
+            pawns[i] = new ImageView();
+            pawns[i].setImage(pawnImg);
+
+            Blend tint = new Blend(BlendMode.MULTIPLY,
+                    new ColorInput(0, 0, pawns[i].getImage().getWidth(), pawns[i].getImage().getHeight(),
+                            getPawnColour(i)), null);
+            pawns[i].setEffect(tint);
+
+            boardComp[getBoardSquarePosition(pawnPositions[i].getX())]
+                    [getBoardSquarePosition(pawnPositions[i].getY())] = pawns[i];
+            board.add(pawns[i],
+                    getBoardSquarePosition(pawnPositions[i].getX()),
+                    getBoardSquarePosition(pawnPositions[i].getY()));
+        }
+    }
+
+    private Paint getPawnColour(int i) {
         switch (i) {
             case 0:
-        		return Color.RED;
+                return Color.RED;
             case 1:
-        		return Color.ROYALBLUE;
+                return Color.ROYALBLUE;
             case 2:
-        		return Color.GREEN;
+                return Color.GREEN;
             case 3:
-        		return Color.GOLD;
+                return Color.GOLD;
         }
         return Color.WHITE;
-	}
+    }
 
-	/**
-	 * Removes all pawn images from the board and replaces them with empty tiles
-	 */
-	private void clearPawnsFromBoard() {
-		for (int x = 0; x < boardCompX; x = x + 2) {
-			for (int y = 0; y < boardCompY; y = y + 2) {
-				if(boardComp[x][y].getImage() == pawnImg)
-				{
-					ImageView gameSquare = createGameSquare(x, y);
-					boardComp[x][y] = gameSquare;
-					board.add(gameSquare, x, y);
-				}
-			}
-		}
-	}
-	
-	private void addFencesToBoard() {
-		Fence[] fences = Board.getInstance().getFencesArray();
-		for(Fence f : fences)
-		{
-			Position fencePos = f.getPosition();
-			int baseX = getBoardSquarePosition(fencePos.getX());
-			int baseY = getBoardSquarePosition(fencePos.getY());
-			int length = f.getLength();
-			if(f.getOrientation()) {
-				baseX--;
-				for(int i = 0; i < length * 2 - 1; i++)
-				{
-					ImageView image = boardComp[baseX][baseY + i];
-					if (i % 2 == 1) {
-						image.setImage(squareFencePlacedImg);
-					} else{
-						image.setImage(verWallPlacedImg);
-					}
-					Blend tint = new Blend(BlendMode.MULTIPLY,
-							new ColorInput(0, 0, image.getImage().getWidth(), image.getImage().getHeight(),
-									getPawnColour(Board.getInstance().getFenceOwnerID(f))), null);
-					image.setEffect(tint);
-				}
-			} 
-			else 
-			{
-				baseY--;
-				for(int i = 0; i < length * 2 - 1; i++)
-				{
-					ImageView image = boardComp[baseX + i][baseY];
-					if (i % 2 == 1) {
-						image.setImage(squareFencePlacedImg);
-					} else{
-						image.setImage(horWallPlacedImg);
-					}
-					Blend tint = new Blend(BlendMode.MULTIPLY,
-							new ColorInput(0, 0, image.getImage().getWidth(), image.getImage().getHeight(),
-									getPawnColour(Board.getInstance().getFenceOwnerID(f))), null);
-					image.setEffect(tint);
-				}
-			}
-		}
-	}
-	
-	private void clearFencesFromBoard() {
-		for (int x = 0; x < boardCompX; x++) {
-			for (int y = 0; y < boardCompY; y++) {
-				if (x % 2 == 1 || y % 2 == 1) {
-					if (x % 2 == 0) {
-						//boardComp[x][y].setImage(horWallPlacedImg);
-						boardComp[x][y].setImage(noHorWallImg);
-					}
-					else if (y % 2 == 0) {
-						//boardComp[x][y].setImage(verWallPlacedImg);
-						boardComp[x][y].setImage(noVerWallImg);
-					}
-					else {
-						//boardComp[x][y].setImage(squareFencePlacedImg);
-						boardComp[x][y].setImage(noSquareFenceImg);
-					}
-				}
-				
-			}
-		}
-	}
-	 
-	private void resetSquareImages()
-	{
-		for (int x = 0; x < boardCompX; x = x + 2) {
-			for (int y = 0; y < boardCompY; y = y + 2) {
-				if(boardComp[x][y].getImage() != pawnImg)
-				{
-					boardComp[x][y].setImage(defaultSquareImg);
-				}
-			}
-		}
-	}
+    /**
+     * Removes all pawn images from the board and replaces them with empty tiles
+     */
+    private void clearPawnsFromBoard() {
+        for (int x = 0; x < boardCompX; x = x + 2) {
+            for (int y = 0; y < boardCompY; y = y + 2) {
+                if (boardComp[x][y].getImage() == pawnImg) {
+                    ImageView gameSquare = createGameSquare(x, y);
+                    boardComp[x][y] = gameSquare;
+                    board.add(gameSquare, x, y);
+                }
+            }
+        }
+    }
 
-	private void highlightSquareImages()
-	{
-		Position[] highlights = Board.getInstance().getValidPositionArray();
-		for(Position square: highlights) {
-			boardComp[getBoardSquarePosition(square.getX())]
-					[getBoardSquarePosition(square.getY())]
-					.setImage(highlightSquareImg);
-		}
-	}
-	
+    private void addFencesToBoard() {
+        Fence[] fences = Board.getInstance().getFencesArray();
+        for (Fence f : fences) {
+            Position fencePos = f.getPosition();
+            int baseX = getBoardSquarePosition(fencePos.getX());
+            int baseY = getBoardSquarePosition(fencePos.getY());
+            int length = f.getLength();
+            if (f.getOrientation()) {
+                baseX--;
+                for (int i = 0; i < length * 2 - 1; i++) {
+                    ImageView image = boardComp[baseX][baseY + i];
+                    if (i % 2 == 1) {
+                        image.setImage(squareFencePlacedImg);
+                    } else {
+                        image.setImage(verWallPlacedImg);
+                    }
+                    Blend tint = new Blend(BlendMode.MULTIPLY,
+                            new ColorInput(0, 0, image.getImage().getWidth(), image.getImage().getHeight(),
+                                    getPawnColour(Board.getInstance().getFenceOwnerID(f))), null);
+                    image.setEffect(tint);
+                }
+            } else {
+                baseY--;
+                for (int i = 0; i < length * 2 - 1; i++) {
+                    ImageView image = boardComp[baseX + i][baseY];
+                    if (i % 2 == 1) {
+                        image.setImage(squareFencePlacedImg);
+                    } else {
+                        image.setImage(horWallPlacedImg);
+                    }
+                    Blend tint = new Blend(BlendMode.MULTIPLY,
+                            new ColorInput(0, 0, image.getImage().getWidth(), image.getImage().getHeight(),
+                                    getPawnColour(Board.getInstance().getFenceOwnerID(f))), null);
+                    image.setEffect(tint);
+                }
+            }
+        }
+    }
+
+    private void clearFencesFromBoard() {
+        for (int x = 0; x < boardCompX; x++) {
+            for (int y = 0; y < boardCompY; y++) {
+                if (x % 2 == 1 || y % 2 == 1) {
+                    if (x % 2 == 0) {
+                        //boardComp[x][y].setImage(horWallPlacedImg);
+                        boardComp[x][y].setImage(noHorWallImg);
+                    } else if (y % 2 == 0) {
+                        //boardComp[x][y].setImage(verWallPlacedImg);
+                        boardComp[x][y].setImage(noVerWallImg);
+                    } else {
+                        //boardComp[x][y].setImage(squareFencePlacedImg);
+                        boardComp[x][y].setImage(noSquareFenceImg);
+                    }
+                }
+
+            }
+        }
+    }
+
+    private void resetSquareImages() {
+        for (int x = 0; x < boardCompX; x = x + 2) {
+            for (int y = 0; y < boardCompY; y = y + 2) {
+                if (boardComp[x][y].getImage() != pawnImg) {
+                    boardComp[x][y].setImage(defaultSquareImg);
+                }
+            }
+        }
+    }
+
+    private void highlightSquareImages() {
+        Position[] highlights = Board.getInstance().getValidPositionArray();
+        for (Position square : highlights) {
+            boardComp[getBoardSquarePosition(square.getX())]
+                    [getBoardSquarePosition(square.getY())]
+                    .setImage(highlightSquareImg);
+        }
+    }
+
 }
