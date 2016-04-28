@@ -71,6 +71,7 @@ class Language {
         english.put("Language", "  Language:  ");
         english.put("Sound Settings", "Sound Settings:");
         english.put("Language Settings", "Language Settings:");
+        english.put("Enable Challenge", "  Enable Challenge Mode:  ");
     }
 
     /**
@@ -78,15 +79,16 @@ class Language {
      */
     private void fillFrenchMap() {
         french.put("Start", "Entamer");
-        french.put("Options", "Paramètres");
+        french.put("Options", "Parametres");
         french.put("Help", "Aidez-moi");
         french.put("Quit", "Quitter");
-        french.put("Back", "Arrière");
+        french.put("Back", "Arriere");
         french.put("Sound Volume", "  Volume Sonore:  ");
         french.put("Mute Sound", "  Muet:  ");
         french.put("Language", "  Langue:  ");
-        french.put("Sound Settings", "Paramètres du son:");
-        french.put("Language Settings", "Paramètres de langue: ");
+        french.put("Sound Settings", "Parametres du son:");
+        french.put("Language Settings", "Parametres de langue: ");
+        french.put("Enable Challenge", "  Activer le mode D�fi:  ");
     }
 
     /**
@@ -97,12 +99,13 @@ class Language {
         german.put("Options", "Optionen");
         german.put("Help", "Hilfe");
         german.put("Quit", "Ausgang");
-        german.put("Back", "Zurück");
+        german.put("Back", "Zuruck");
         german.put("Sound Volume", "  Lautstärke:  ");
         german.put("Mute Sound", "  Stumm:  ");
         german.put("Language", "  Sprache:  ");
         german.put("Sound Settings", "Audioeinstellungen:");
         german.put("Language Settings", "Spracheinstellungen: ");
+        german.put("Enable Challenge", "  Aktivieren Challenge-Modus:  ");
     }
 
     /**

@@ -78,12 +78,12 @@ public class MainView extends Application {
         // Start button
         Button startB = new Button();
         startB.setMaxWidth(Double.MAX_VALUE);
-        startB.setOnAction(event -> stage.setScene(StartScene()));
+        startB.setOnAction(event -> stage.setScene(StartScene(languageModel)));
         startB.setStyle("-fx-background-image: url('/Menu/Images/Icons/Start.png')");
         startB.getStyleClass().add("button");
         Label startBLabel = new Label((String) language.getCurrentLanguage().get("Start"));
         startBLabel.getStyleClass().add("menu");
-        startBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(StartScene()));
+        startBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(StartScene(languageModel)));
 
         // Options button
         Button optionsB = new Button();
@@ -386,7 +386,7 @@ public class MainView extends Application {
      *
      * @return scene Change current scene to mode select screen
      */
-    private Scene StartScene() {
+    private Scene StartScene(Language language) {
 
         stage.setTitle("Quoridor");
         GridPane root;
@@ -401,13 +401,18 @@ public class MainView extends Application {
         VBox singlePlayer = new VBox();
         VBox multiPlayer = new VBox();
         VBox practice = new VBox();
+        
+        CheckBox challengeBox = new CheckBox();
+        Label challengeLabel = new Label((String) language.getCurrentLanguage().get("Enable Challenge"));
+        challengeLabel.setTextFill(Color.WHITE);
+        challengeLabel.getStyleClass().add("optionsLabel");
 
         singlePlayer.setAlignment(Pos.CENTER_LEFT);
         singlePlayer.getStyleClass().add("p1MenuBox");
         singlePlayer.setMinSize(250, 350);
         // go to single player mode
         singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-    		Board.getInstance().setupBoard(false, false);
+    		Board.getInstance().setupBoard(false, challengeBox.isSelected());
             Platform.runLater(() -> new GameView().start(new Stage()));
             stage.hide();
         });
@@ -416,24 +421,34 @@ public class MainView extends Application {
         multiPlayer.getStyleClass().add("p2MenuBox");
         multiPlayer.setMinSize(250, 350);
         // go to multiplayer mode
-        multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(MultiPlayerScreen()));
+        multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+    		Board.getInstance().setupBoard(true, challengeBox.isSelected());
+            Platform.runLater(() -> new GameView().start(new Stage()));
+            stage.hide();
+        });
 
         practice.setAlignment(Pos.CENTER_RIGHT);
         practice.getStyleClass().add("pcMenuBox");
         practice.setMinSize(250, 350);
         // go to practice mode
-        practice.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(PracticeScreen()));
+        practice.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+    		Board.getInstance().setupBoard(false, challengeBox.isSelected());
+            Platform.runLater(() -> new GameView().start(new Stage()));
+            stage.hide();
+        });
 
         // set component layouts
         GridPane.setRowIndex(backB, 1);
         GridPane.setConstraints(singlePlayer, 0, 2);
         GridPane.setConstraints(multiPlayer, 1, 2);
         GridPane.setConstraints(practice, 2, 2);
+        GridPane.setConstraints(challengeLabel, 0, 3);
+        GridPane.setConstraints(challengeBox, 1, 3);
 
         root.getStyleClass().add("background");
 
         // add components
-        root.getChildren().addAll(singlePlayer, multiPlayer, practice, backB);
+        root.getChildren().addAll(singlePlayer, multiPlayer, practice, backB, challengeLabel, challengeBox);
         root.setVgap(10);
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);
@@ -488,7 +503,7 @@ public class MainView extends Application {
 
         // Back button
         backB = new Button();
-        backB.setOnAction(event -> stage.setScene(StartScene())); // go back to mode select
+        backB.setOnAction(event -> stage.setScene(StartScene(languageModel))); // go back to mode select
         backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
 
@@ -518,7 +533,7 @@ public class MainView extends Application {
 
         // Back button
         backB = new Button();
-        backB.setOnAction(event -> stage.setScene(StartScene())); // go to mode select
+        backB.setOnAction(event -> stage.setScene(StartScene(languageModel))); // go to mode select
         backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
 
