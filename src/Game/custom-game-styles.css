@@ -3,3 +3,11 @@
     -fx-background-size: cover, auto;
     -fx-padding: 10;
 }
+
+.playerID{
+    -fx-font-family: 'Arial';
+    -fx-effect: dropshadow(gaussian, black, 0, 0, 0, 2);
+    -fx-font-weight: bold;
+    -fx-font-size: 15;
+    -fx-text-fill: #F0F0F0;
+}

@@ -9,10 +9,7 @@ import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
@@ -74,7 +71,7 @@ public class GameView extends Application {
      * Array containing pawn graphic objects
      */
     private ImageView[] pawns;
-    private HBox[] players;
+    private TilePane[] players;
 
     private MenuBar menuBar;
 
@@ -186,7 +183,7 @@ public class GameView extends Application {
         pointer = new ImageView();
         pointer.setImage(pointerImg);
         //player information
-        players = new HBox[Board.getInstance().getNumberOfPawns()];
+        players = new TilePane[Board.getInstance().getNumberOfPawns()];
         playerFences = new ImageView[players.length][Board.getInstance().getMaxPawnFences()];
         setupPlayerHBoxes();
         players[0].getChildren().set(0, pointer);
@@ -222,12 +219,16 @@ public class GameView extends Application {
 
     private void setupPlayerHBoxes() {
         for (int i = 0; i < players.length; i++) {
-            Label playerID = new Label("P" + (i + 1));
+            Label playerID = new Label("Player " + (i + 1));
+            playerID.getStyleClass().add("playerID");
             Label playerFenceCount = new Label(Board.getInstance().getMaxPawnFences() + "");
+            playerFenceCount.getStyleClass().add("playerID");
 
-            players[i] = new HBox();
+            players[i] = new TilePane();
+            //players[i].setSpacing(40);
             players[i].getChildren().add(createEmptyPointer());
             players[i].getChildren().add(playerID);
+
             for (int j = 0; j < Board.getInstance().getMaxPawnFences(); j++) {
                 playerFences[i][j] = new ImageView();
                 playerFences[i][j].setImage(playerFenceAvlbImg);
