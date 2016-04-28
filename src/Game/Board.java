@@ -1,9 +1,5 @@
 package Game;
 
-import Game.Fence;
-import Game.Pawn;
-
-import java.awt.Color;
 import java.util.ArrayList;
 
 
@@ -39,7 +35,7 @@ public class Board {
 	 * Returns the final X size of the board.
 	 * @return
 	 */
-	public int getSizeX(){
+	int getSizeX(){
 		return width;
 	}
 	
@@ -47,7 +43,7 @@ public class Board {
 	 * Returns the final Y size of the board.
 	 * @return
 	 */
-	public int getSizeY(){
+	int getSizeY(){
 		return height;
 	}
 
@@ -66,7 +62,7 @@ public class Board {
 		//populate the pawns array and give them fences
 		for(int i = 0; i < pawns.length; i++)
 		{
-			pawns[i] = new Pawn(i, getMaxPawnFences());
+			pawns[i] = new Pawn(i);
 			if(challengeMode) pawns[i].setChallengePosition();
 		}
 		
@@ -78,14 +74,14 @@ public class Board {
 	/**
 	 * @return The id of the pawn the turn belongs to.
 	 */
-	public int getPawnTurn()
+	int getPawnTurn()
 	{
 		return pawnTurn;
 	}
 	/**
 	 * @return The id of the pawn the turn belongs to.
 	 */
-	public int getPreviousPawnTurn()
+	int getPreviousPawnTurn()
 	{
 		if(pawnTurn - 1 < 0)
 		{
@@ -97,7 +93,7 @@ public class Board {
 	/**
 	 * Begins the turn for the current pawn.
 	 */
-	public void startTurn()
+	private void startTurn()
 	{
 		getCurrentPawn().calculateAllValidPositions(
 				Board.width, 
@@ -110,14 +106,14 @@ public class Board {
 	 * Ends the turn for the current pawn.
 	 * @return True if no interrupt by victory conditions
 	 */
-	public boolean endTurn()
+	private boolean endTurn()
 	{
 		incrementPlayerTurn();
 		//TODO: Check game for victory conditions
 		return true;
 	}
 	
-	public int getMaxPawnFences()
+	int getMaxPawnFences()
 	{
 		return maxFences/pawns.length;
 	}
@@ -128,9 +124,9 @@ public class Board {
 	 * Gets a list of all fences from all pawns.
 	 * @return Complete ArrayList of fences on the board.
 	 */
-	public ArrayList<Fence> getFences()
+	private ArrayList<Fence> getFences()
 	{
-		ArrayList<Fence> allFences = new ArrayList<Fence>();
+		ArrayList<Fence> allFences = new ArrayList<>();
 		for(Pawn p : pawns)
 		{
 			allFences.addAll(p.getFences());
@@ -142,7 +138,7 @@ public class Board {
 	 * Gets a list of all fences from all pawns, and converts it to an read-only array.
 	 * @return Complete Fence[] array of fences on the board.
 	 */
-	public Fence[] getFencesArray()
+	Fence[] getFencesArray()
 	{
 		Object[] array = getFences().toArray();
 		Fence[] fences = new Fence[array.length];
@@ -156,7 +152,7 @@ public class Board {
 	/**
 	 * @return Position of all pawns in order of pawn id.
 	 */
-	public Position[] getPawnPositionsArray()
+	Position[] getPawnPositionsArray()
 	{
 		Position[] pawnPositions = new Position[pawns.length];
 		for(int i = 0; i < pawns.length; i++)
@@ -168,7 +164,7 @@ public class Board {
 	/**
 	 * @return Number of fences available to pawns as an array in order of pawn id.
 	 */
-	public int[] getPawnFenceCountArray()
+	int[] getPawnFenceCountArray()
 	{
 		int[] fenceCount = new int[pawns.length];
 		for(int i = 0; i < pawns.length; i++)
@@ -177,7 +173,7 @@ public class Board {
 		}
 		return fenceCount;
 	}
-	public int getNumberOfPawns()
+	int getNumberOfPawns()
 	{
 		return pawns.length;
 	}
@@ -185,7 +181,7 @@ public class Board {
 	/**
 	 * @return The valid positions of the current Pawn
 	 */
-	public Position[] getValidPositionArray()
+	Position[] getValidPositionArray()
 	{
 		Pawn p = this.getCurrentPawn();
 		Object[] array = p.getValidMoves().toArray();
@@ -209,7 +205,7 @@ public class Board {
 	 * @param position
 	 * @return True if the action was successful.
 	 */
-	public boolean pawnMove(Position position)
+	boolean pawnMove(Position position)
 	{
 		Pawn p = getCurrentPawn();
 		if(!p.positionIsValidMove(position)) return false;
@@ -229,7 +225,7 @@ public class Board {
 	 * @param isVertical
 	 * @return True if the action was successful.
 	 */
-	public boolean pawnPlaceFence(Position position, boolean isVertical)
+	boolean pawnPlaceFence(Position position, boolean isVertical)
 	{
 		Fence fence = new Fence(position, isVertical);
 		if(!Fence.isPlaceable(fence, Board.width, Board.height, getFencesArray())) return false;
@@ -269,7 +265,7 @@ public class Board {
 	 * @param fenceObject
 	 * @return The Pawn the fence is stored in, or -1 if there is no match.
 	 */
-	public int getFenceOwnerID(Fence fenceObject)
+	int getFenceOwnerID(Fence fenceObject)
 	{
 		for(Pawn p : pawns)
 		{
@@ -288,19 +284,11 @@ public class Board {
 	 * Retrieves whichever pawn the turn belongs to.
 	 * @return Pawn currently having its turn.
 	 */
-	public Pawn getCurrentPawn()
+	private Pawn getCurrentPawn()
 	{
 		return pawns[getPawnTurn()];
 	}
-	/**
-	 * Retrieves whichever pawn the previous turn belongs to.
-	 * @return Pawn currently having its turn.
-	 */
-	public Pawn getPreviousPawn()
-	{
-		return pawns[getPreviousPawnTurn()];
-	}
-	
+
 	/**
 	 * Cyclically increment the player turn between 0 and the pawn length-1
 	 */

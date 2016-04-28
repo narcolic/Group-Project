@@ -1,10 +1,8 @@
 package Game;
 
-import java.util.ArrayList;
-
 public class Fence 
 {
-	final int FENCE_LENGTH = 2;
+	private final int FENCE_LENGTH = 2;
 	
 	/**Origin of fence, from top left*/ 
 	private Position pos;
@@ -19,7 +17,7 @@ public class Fence
 	{
 		Fence[] allFences = new Fence[10];
 		int size = 4;
-		boolean result = false;
+		boolean result;
 		allFences[0] = new Fence(new Position(0,1), false, 2);
 		
 		result = noFenceCollision(new Position(1,0), Orientation.Direction.SOUTH, allFences);
@@ -55,7 +53,7 @@ public class Fence
 	/**
 	 * Standard Constructor
 	 */
-	public Fence(Position pos, boolean isVertical, int length)
+	Fence(Position pos, boolean isVertical, int length)
 	{
 		this.pos = pos;
 		this.isVertical = isVertical;
@@ -64,7 +62,7 @@ public class Fence
 	/**
 	 * Constructor using default fence length (2)
 	 */
-	public Fence(Position pos, boolean isVertical)
+	Fence(Position pos, boolean isVertical)
 	{
 		this.pos = pos;
 		this.isVertical = isVertical;
@@ -73,7 +71,7 @@ public class Fence
 	/**
 	 * Constructor building its own position
 	 */
-	public Fence(int X, int Y, boolean isVertical, int length)
+	private Fence(int X, int Y, boolean isVertical, int length)
 	{
 		this.pos = new Position(X,Y);
 		this.isVertical = isVertical;
@@ -93,7 +91,7 @@ public class Fence
 	 * Gets the position of the fence.
 	 * @return The position of the fence.
 	 */
-	public Position getPosition()
+	Position getPosition()
 	{
 		return this.pos;
 	}
@@ -102,7 +100,7 @@ public class Fence
 	 * Gets the value of the fence's length.
 	 * @return The length of the fence.
 	 */
-	public int getLength()
+	int getLength()
 	{
 		return this.length;
 	}
@@ -111,7 +109,7 @@ public class Fence
 	 * Gets the value of the fence's orientation.
 	 * @return True if the fence is vertical, false if horizontal
 	 */
-	public boolean getOrientation()
+	boolean getOrientation()
 	{
 		return isVertical;
 	}
@@ -211,7 +209,7 @@ public class Fence
 	 * @param allFences
 	 * @return True if there is no collision
 	 */
-	public static boolean noFenceCollision(Position pos, Orientation.Direction direction, Fence[] allFences)
+	static boolean noFenceCollision(Position pos, Orientation.Direction direction, Fence[] allFences)
 	{
 		for(Fence fence : allFences)
 		{
@@ -258,10 +256,8 @@ public class Fence
 	 * @param allFences
 	 * @return True if the fence meets all conditions.
 	 */
-	public static boolean isPlaceable(Fence fence, int boardWidth, int boardHeight, Fence[] allFences)
+	static boolean isPlaceable(Fence fence, int boardWidth, int boardHeight, Fence[] allFences)
 	{
-		if(!Fence.validateBoundary(fence, boardWidth, boardHeight)) return false;
-		if(!Fence.validateIntersections(fence, allFences)) return false;
-		return true;
+		return Fence.validateBoundary(fence, boardWidth, boardHeight) && Fence.validateIntersections(fence, allFences);
 	}
 }

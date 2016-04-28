@@ -15,7 +15,6 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.application.Platform;
-import Menu.*;
 
 import java.util.Optional;
 
@@ -224,9 +223,6 @@ public class GameView extends Application {
             Label playerID = new Label("Player " + (i + 1));
             playerID.getStyleClass().add("playerID");
             playerID.setTextFill(getPawnColour(i));
-            Label playerFenceCount = new Label(Board.getInstance().getMaxPawnFences() + "");
-            playerFenceCount.getStyleClass().add("playerID");
-            playerFenceCount.setTextFill(Color.WHITE);
 
             players[i] = new TilePane();
             players[i].getChildren().add(createEmptyPointer());
@@ -237,8 +233,7 @@ public class GameView extends Application {
                 playerFences[i][j].setImage(playerFenceAvlbImg);
                 players[i].getChildren().add(playerFences[i][j]);
             }
-            players[i].getChildren().add(playerFenceCount);
-            players[i].setMinHeight(200);
+            players[i].setMinHeight(150);
         }
     }
 
@@ -267,17 +262,6 @@ public class GameView extends Application {
         menuBar = new MenuBar();
         menuBar.getMenus().addAll(optionMenu, helpMenu, gameMenu);
 
-		/*
-		quit.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				Platform.exit();
-			}
-		});
-		*/
-        optionMenu.setOnAction(event -> {
-        });
         quitMenu.setOnAction(event -> quitGameAction());
     }
 
