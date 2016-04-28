@@ -12,10 +12,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.application.Platform;
-import Menu.*;
 
 import java.util.Optional;
 
@@ -118,24 +119,25 @@ public class GameView extends Application {
         layout.setCenter(board);
         layout.setRight(right);
         layout.setTop(menuBar);
+        primaryStage.getIcons().add(new Image("/Menu/Images/quoridorIcon.jpg")); 
         primaryStage.show();
     }
 
     private void setupImages() {
         defaultSquareImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/a.png"));
+                "BoardComponents/square.png"));
         highlightSquareImg = new Image(getClass().getResourceAsStream(
                 "BoardComponents/c.png"));
         noVerWallImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/noVerWall.png"));
+                "BoardComponents/noVerWall2.png"));
         verWallPlacedImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/VerwallPlaced.png"));
+                "BoardComponents/VerwallPlaced2.png"));
         noHorWallImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/noHorWall.png"));
+                "BoardComponents/noHorWall2.png"));
         horWallPlacedImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/horWallPlaced.png"));
+                "BoardComponents/horWallPlaced2.png"));
         noSquareFenceImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/squareFence.png"));
+                "BoardComponents/squareFence2.png"));
         squareFencePlacedImg = new Image(getClass().getResourceAsStream(
                 "BoardComponents/squareFenceClicked.png"));
         pawnImg = new Image(getClass().getResourceAsStream(
@@ -229,9 +231,6 @@ public class GameView extends Application {
             Label playerID = new Label("Player " + (i + 1));
             playerID.getStyleClass().add("playerID");
             playerID.setTextFill(getPawnColour(i));
-            Label playerFenceCount = new Label(Board.getInstance().getMaxPawnFences() + "");
-            playerFenceCount.getStyleClass().add("playerID");
-            playerFenceCount.setTextFill(Color.WHITE);
 
             players[i] = new TilePane();
             players[i].getChildren().add(createEmptyPointer());
@@ -242,8 +241,7 @@ public class GameView extends Application {
                 playerFences[i][j].setImage(playerFenceAvlbImg);
                 players[i].getChildren().add(playerFences[i][j]);
             }
-            players[i].getChildren().add(playerFenceCount);
-            players[i].setMinHeight(200);
+            players[i].setMinHeight(150);
         }
     }
 
@@ -272,17 +270,6 @@ public class GameView extends Application {
         menuBar = new MenuBar();
         menuBar.getMenus().addAll(optionMenu, helpMenu, gameMenu);
 
-		/*
-		quit.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent e) {
-				Platform.exit();
-			}
-		});
-		*/
-        optionMenu.setOnAction(event -> {
-        });
         quitMenu.setOnAction(event -> quitGameAction());
     }
 
@@ -679,4 +666,12 @@ public class GameView extends Application {
         }
     }
 
+    private void playerWon(){
+        if (Board.getInstance().getCurrentPawn().isOnGoalTile()){
+            final Popup popup = new Popup();
+            popup.setX(300);
+            popup.setY(200);
+            popup.getContent().addAll(new Circle(25, 25, 50, Color.AQUAMARINE));
+        }
+    }
 }

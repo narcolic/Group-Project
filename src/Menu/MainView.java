@@ -149,6 +149,84 @@ public class MainView extends Application {
     }
 
     /**
+     * User can select which game mode they would like to play in
+     *
+     * @return scene Change current scene to mode select screen
+     */
+    private Scene StartScene(Language language) {
+
+        stage.setTitle("Quoridor");
+        GridPane root;
+        root = new GridPane();
+
+        // Back button
+        backB = new Button();
+        backB.setOnAction(event -> stage.setScene(menuScene(languageModel))); // go back to main menu
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
+        backB.getStyleClass().add("button");
+
+        VBox singlePlayer = new VBox();
+        VBox multiPlayer = new VBox();
+        VBox practice = new VBox();
+
+        CheckBox challengeBox = new CheckBox();
+        Label challengeLabel = new Label((String) language.getCurrentLanguage().get("Enable Challenge"));
+        challengeLabel.setTextFill(Color.WHITE);
+        challengeLabel.getStyleClass().add("optionsLabel");
+
+        singlePlayer.setAlignment(Pos.CENTER_LEFT);
+        singlePlayer.getStyleClass().add("p1MenuBox");
+        singlePlayer.setMinSize(250, 350);
+        // go to single player mode
+        singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            Board.getInstance().setupBoard(false, challengeBox.isSelected());
+            Platform.runLater(() -> new GameView().start(new Stage()));
+            stage.hide();
+        });
+
+        multiPlayer.setAlignment(Pos.CENTER);
+        multiPlayer.getStyleClass().add("p2MenuBox");
+        multiPlayer.setMinSize(250, 350);
+        // go to multiplayer mode
+        multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            Board.getInstance().setupBoard(true, challengeBox.isSelected());
+            Platform.runLater(() -> new GameView().start(new Stage()));
+            stage.hide();
+        });
+
+        practice.setAlignment(Pos.CENTER_RIGHT);
+        practice.getStyleClass().add("pcMenuBox");
+        practice.setMinSize(250, 350);
+        // go to practice mode
+        practice.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            Board.getInstance().setupBoard(false, challengeBox.isSelected());
+            Platform.runLater(() -> new GameView().start(new Stage()));
+            stage.hide();
+        });
+
+        // set component layouts
+        GridPane.setRowIndex(backB, 1);
+        GridPane.setConstraints(singlePlayer, 0, 2);
+        GridPane.setConstraints(multiPlayer, 1, 2);
+        GridPane.setConstraints(practice, 2, 2);
+        GridPane.setConstraints(challengeLabel, 0, 3);
+        GridPane.setConstraints(challengeBox, 1, 3);
+
+        root.getStyleClass().add("background");
+
+        // add components
+        root.getChildren().addAll(singlePlayer, multiPlayer, practice, backB, challengeLabel, challengeBox);
+        root.setVgap(10);
+        root.setHgap(10);
+        root.setAlignment(Pos.CENTER);
+
+        stage.setResizable(false);
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
+        return scene;
+    }
+
+    /**
      * Provides instructions on how to play the game
      *
      * @param help Help model
@@ -375,174 +453,6 @@ public class MainView extends Application {
         root.setHgap(60);
         root.setAlignment(Pos.TOP_LEFT);
         root.getStyleClass().add("background");
-
-        stage.setResizable(false);
-        Scene scene = new Scene(root, 800, 600);
-        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
-        return scene;
-    }
-
-    /**
-     * User can select which game mode they would like to play in
-     *
-     * @return scene Change current scene to mode select screen
-     */
-    private Scene StartScene(Language language) {
-
-        stage.setTitle("Quoridor");
-        GridPane root;
-        root = new GridPane();
-
-        // Back button
-        backB = new Button();
-        backB.setOnAction(event -> stage.setScene(menuScene(languageModel))); // go back to main menu
-        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
-        backB.getStyleClass().add("button");
-
-        VBox singlePlayer = new VBox();
-        VBox multiPlayer = new VBox();
-        VBox practice = new VBox();
-        
-        CheckBox challengeBox = new CheckBox();
-        Label challengeLabel = new Label((String) language.getCurrentLanguage().get("Enable Challenge"));
-        challengeLabel.setTextFill(Color.WHITE);
-        challengeLabel.getStyleClass().add("optionsLabel");
-
-        singlePlayer.setAlignment(Pos.CENTER_LEFT);
-        singlePlayer.getStyleClass().add("p1MenuBox");
-        singlePlayer.setMinSize(250, 350);
-        // go to single player mode
-        singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-    		Board.getInstance().setupBoard(false, challengeBox.isSelected());
-            Platform.runLater(() -> new GameView().start(new Stage()));
-            stage.hide();
-        });
-
-        multiPlayer.setAlignment(Pos.CENTER);
-        multiPlayer.getStyleClass().add("p2MenuBox");
-        multiPlayer.setMinSize(250, 350);
-        // go to multiplayer mode
-        multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-    		Board.getInstance().setupBoard(true, challengeBox.isSelected());
-            Platform.runLater(() -> new GameView().start(new Stage()));
-            stage.hide();
-        });
-
-        practice.setAlignment(Pos.CENTER_RIGHT);
-        practice.getStyleClass().add("pcMenuBox");
-        practice.setMinSize(250, 350);
-        // go to practice mode
-        practice.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-    		Board.getInstance().setupBoard(false, challengeBox.isSelected());
-            Platform.runLater(() -> new GameView().start(new Stage()));
-            stage.hide();
-        });
-
-        // set component layouts
-        GridPane.setRowIndex(backB, 1);
-        GridPane.setConstraints(singlePlayer, 0, 2);
-        GridPane.setConstraints(multiPlayer, 1, 2);
-        GridPane.setConstraints(practice, 2, 2);
-        GridPane.setConstraints(challengeLabel, 0, 3);
-        GridPane.setConstraints(challengeBox, 1, 3);
-
-        root.getStyleClass().add("background");
-
-        // add components
-        root.getChildren().addAll(singlePlayer, multiPlayer, practice, backB, challengeLabel, challengeBox);
-        root.setVgap(10);
-        root.setHgap(10);
-        root.setAlignment(Pos.CENTER);
-
-        stage.setResizable(false);
-        Scene scene = new Scene(root, 800, 600);
-        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
-        return scene;
-    }
-
-    /**
-     * Single player mode
-     *
-     * @return scene Change scene to single player scene
-     */
-    /*private Scene SinglePlayerScreen() {
-        GridPane root;
-        root = new GridPane();
-
-        Label singleP = new Label("Single Player");
-        singleP.setTextFill(Color.WHITE);
-
-        // Back button
-        backB = new Button();
-        backB.setOnAction(event -> stage.setScene(StartScene())); // go back to mode select
-        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
-        backB.getStyleClass().add("button");
-
-        root.getStyleClass().add("background");
-
-        // set component layouts and add components 
-        GridPane.setConstraints(singleP, 0, 1);
-        root.getChildren().addAll(backB, singleP);
-
-        stage.setResizable(false);
-        Scene scene = new Scene(root, 800, 600);
-        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
-        return scene;
-    }*/
-
-    /**
-     * Multiplayer mode where multiple users can play
-     *
-     * @return scene Change current scene to multiplayer scene
-     */
-    private Scene MultiPlayerScreen() {
-        GridPane root;
-        root = new GridPane();
-
-        Label multiP = new Label("Multi Player");
-        multiP.setTextFill(Color.WHITE);
-
-        // Back button
-        backB = new Button();
-        backB.setOnAction(event -> stage.setScene(StartScene(languageModel))); // go back to mode select
-        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
-        backB.getStyleClass().add("button");
-
-        root.getStyleClass().add("background");
-
-        // set component layouts and add components
-        GridPane.setConstraints(multiP, 0, 1);
-        root.getChildren().addAll(backB, multiP);
-
-        stage.setResizable(false);
-        Scene scene = new Scene(root, 800, 600);
-        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
-        return scene;
-    }
-
-    /**
-     * Practice mode where user can play with a computer
-     *
-     * @return scene Change current scene to practice scene
-     */
-    private Scene PracticeScreen() {
-        GridPane root;
-        root = new GridPane();
-
-        Label practice = new Label("Practice Screen");
-        practice.setTextFill(Color.WHITE);
-
-        // Back button
-        backB = new Button();
-        backB.setOnAction(event -> stage.setScene(StartScene(languageModel))); // go to mode select
-        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
-        backB.getStyleClass().add("button");
-
-        root.getStyleClass().add("background");
-
-        // set component layouts and add components 
-        GridPane.setConstraints(practice, 0, 1);
-        root.getChildren().addAll(backB, practice);
 
         stage.setResizable(false);
         Scene scene = new Scene(root, 800, 600);

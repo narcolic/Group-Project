@@ -1,6 +1,6 @@
 package Game;
 
-public class Position {
+class Position {
 
 	private int x; // x position
 	private int y; // y position
@@ -8,7 +8,7 @@ public class Position {
 	/**
 	 * Constructor
 	 */
-	public Position(){
+	Position(){
 		setX(0); // set initial x value
 		setY(0); // set initial y value
 	}
@@ -19,7 +19,7 @@ public class Position {
 	 * @param x Value for x position
 	 * @param y Value for y position
 	 */
-	public Position(int x, int y){
+	Position(int x, int y){
 		setXY(x,y);
 	}
 	
@@ -29,7 +29,7 @@ public class Position {
 	 * @param addX Value to add to x position
 	 * @param addY Value to add to y position
 	 */
-	public Position(Position pos, int addX, int addY)
+	Position(Position pos, int addX, int addY)
 	{
 		setX(pos.getX() + addX);
 		setY(pos.getY() + addY);
@@ -39,7 +39,7 @@ public class Position {
 	 * Get value of X
 	 * @return x  The current x value
 	 */
-	public int getX(){
+	int getX(){
 		return this.x;
 	}
 	
@@ -47,7 +47,7 @@ public class Position {
 	 * Set position x
 	 * @param x New x position
 	 */
-	public void setX(int x){
+	private void setX(int x){
 		this.x = x;
 	}
 	
@@ -55,7 +55,7 @@ public class Position {
 	 * Get position y
 	 * @return y The current y value
 	 */
-	public int getY(){
+	int getY(){
 		return this.y;
 	}
 	
@@ -63,7 +63,7 @@ public class Position {
 	 * Set position y
 	 * @param y New y position
 	 */
-	public void setY(int y){
+	private void setY(int y){
 		this.y = y;
 	}
 	
@@ -72,7 +72,7 @@ public class Position {
 	 * @param x Value for x
 	 * @param y Value for y
 	 */
-	public void setXY(int x, int y)
+	void setXY(int x, int y)
 	{
 		setX(x);
 		setY(y);
@@ -83,7 +83,7 @@ public class Position {
 	 * @param pos Position to be compared
 	 * @return true If position being compared matches the x and y position
 	 */
-	public boolean equals(Position pos)
+	boolean equals(Position pos)
 	{
 		return (this.x == pos.x && this.y == pos.y);
 	}
