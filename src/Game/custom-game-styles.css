@@ -9,5 +9,8 @@
     -fx-effect: dropshadow(gaussian, black, 0, 0, 0, 2);
     -fx-font-weight: bold;
     -fx-font-size: 18;
-    -fx-text-fill: #F0F0F0;
+}
+
+.leftbutton{
+    -fx-background-radius: 10;
 }

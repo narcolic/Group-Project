@@ -205,6 +205,7 @@ public class GameView extends Application {
             }
         }
         //add to left pane
+        left.setSpacing(20);
         left.getChildren().addAll(buttonPlaceHor, buttonPlaceVer, buttonPlaceRem);
         //add to right pane
         right.getChildren().addAll(players);
@@ -221,8 +222,10 @@ public class GameView extends Application {
         for (int i = 0; i < players.length; i++) {
             Label playerID = new Label("Player " + (i + 1));
             playerID.getStyleClass().add("playerID");
+            playerID.setTextFill(getPawnColour(i));
             Label playerFenceCount = new Label(Board.getInstance().getMaxPawnFences() + "");
             playerFenceCount.getStyleClass().add("playerID");
+            playerFenceCount.setTextFill(Color.WHITE);
 
             players[i] = new TilePane();
             players[i].getChildren().add(createEmptyPointer());
