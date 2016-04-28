@@ -285,7 +285,7 @@ public class Pawn {
         return position;
     }
 
-    public boolean isOnGoalTile() {
+    boolean isOnGoalTile() {
         boolean goal = false;
         int i = 0;
         switch (pawnID) {

@@ -284,7 +284,7 @@ public class Board {
 	 * Retrieves whichever pawn the turn belongs to.
 	 * @return Pawn currently having its turn.
 	 */
-	private Pawn getCurrentPawn()
+	Pawn getCurrentPawn()
 	{
 		return pawns[getPawnTurn()];
 	}
