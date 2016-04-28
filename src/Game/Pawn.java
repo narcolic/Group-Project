@@ -8,6 +8,7 @@ public class Pawn {
     private int pawnID;
     private Position position;
     private ArrayList<Position> validMoves;
+    private ArrayList<Position> goalTiles;
     private ArrayList<Fence> myFences;
 
 
@@ -75,8 +76,10 @@ public class Pawn {
     Pawn(int newID) {
         pawnID = newID;
         position = new Position();
+        goalTiles = new ArrayList<Position>();
         myFences = new ArrayList<>();
         setDefaultPosition();
+        setDefaultGoal();
     }
 
     /**
@@ -140,6 +143,32 @@ public class Pawn {
                 break;
         }
     }
+    
+    public void setDefaultGoal()
+    {
+        switch (pawnID) {
+        case 0:
+            for(int i = 0; i < 9; i++) {
+            	goalTiles.add(new Position(i, 0));
+            }
+            break;
+        case 1:
+            for(int i = 0; i < 9; i++) {
+            	goalTiles.add(new Position(i, 8));
+            }
+            break;
+        case 2:
+            for(int i = 0; i < 9; i++) {
+            	goalTiles.add(new Position(8, i));
+            }
+            break;
+        case 3:
+            for(int i = 0; i < 9; i++) {
+            	goalTiles.add(new Position(0, i));
+            }
+            break;
+        }
+    }
 
     void setChallengePosition() {
         switch (pawnID) {
@@ -155,6 +184,24 @@ public class Pawn {
             case 3:
                 this.position.setXY(8, 8);
                 break;
+        }
+    }
+    
+    public void setChallengeGoal()
+    {
+        switch (pawnID) {
+        case 0:
+        	goalTiles.add(new Position(8, 0));
+            break;
+        case 1:
+        	goalTiles.add(new Position(0, 8));
+            break;
+        case 2:
+        	goalTiles.add(new Position(8, 8));
+            break;
+        case 3:
+        	goalTiles.add(new Position(0, 0));
+            break;
         }
     }
 
@@ -285,44 +332,14 @@ public class Pawn {
         return position;
     }
 
-    boolean isOnGoalTile() {
-        boolean goal = false;
-        int i = 0;
-        switch (pawnID) {
-            case 0:
-                do {
-                    if (this.position.getX() == i && this.position.getY() == 0) {
-                        goal = true;
-                    }
-                    i++;
-                } while (!goal || i <= 8);
-                break;
-            case 1:
-                do {
-                    if (this.position.getX() == i && this.position.getY() == 8) {
-                        goal = true;
-                    }
-                    i++;
-                } while (!goal || i <= 8);
-                break;
-            case 2:
-                do {
-                    if (this.position.getX() == 8 && this.position.getY() == i) {
-                        goal = true;
-                    }
-                    i++;
-                } while (!goal || i <= 8);
-                break;
-            case 3:
-                do {
-                    if (this.position.getX() == 0 && this.position.getY() == i) {
-                        goal = true;
-                    }
-                    i++;
-                } while (!goal || i <= 8);
-                break;
-        }
-        return goal;
+    /**
+     * @return True if the pawn is on a Goal Tile
+     */
+    public boolean isOnGoalTile() {
+    	for(Position goal : goalTiles) {
+    		if (position.equals(goal)) return true;
+    	}
+        return false;
     }
 
 }

@@ -45,6 +45,8 @@ public class GameView extends Application {
     private Image pointerEmptyImg;
     private Image playerFenceAvlbImg;
     private Image playerFenceUsedImg;
+    
+    private boolean ignoreMouse;
 
     /**
      * Top level layout pane
@@ -98,7 +100,7 @@ public class GameView extends Application {
         try {
             int test = Board.getInstance().getNumberOfPawns();
         } catch (Exception e) {
-            Board.getInstance().setupBoard(false, true);
+            Board.getInstance().setupBoard(false, false);
         }
     	
         // Set up the images ready to be used
@@ -121,6 +123,8 @@ public class GameView extends Application {
         layout.setTop(menuBar);
         primaryStage.getIcons().add(new Image("/Menu/Images/quoridorIcon.jpg")); 
         primaryStage.show();
+        
+        ignoreMouse = false;
     }
 
     private void setupImages() {
@@ -376,6 +380,8 @@ public class GameView extends Application {
      * Called when the place horizontal fence button is pressed
      */
     private void eventPlaceFenceHorizontal() {
+    	if(ignoreMouse) return;
+    	
         if (activeButton != ButtonState.PLACE_HORIZONTAL) {
             activeButton = ButtonState.PLACE_HORIZONTAL;
         } else {
@@ -388,6 +394,8 @@ public class GameView extends Application {
      * Called when the place vertical fence button is pressed
      */
     private void eventPlaceFenceVertical() {
+    	if(ignoreMouse) return;
+    	
         if (activeButton != ButtonState.PLACE_VERTICAL) {
             activeButton = ButtonState.PLACE_VERTICAL;
         } else {
@@ -400,6 +408,8 @@ public class GameView extends Application {
      * Called when the remove fence button is pressed
      */
     private void eventRemoveFence() {
+    	if(ignoreMouse) return;
+    	
         if (activeButton != ButtonState.REMOVE_FENCE) {
             activeButton = ButtonState.REMOVE_FENCE;
         } else {
@@ -411,6 +421,7 @@ public class GameView extends Application {
     
     
     private void eventFenceClick(int x, int y) {
+    	if(ignoreMouse) return;
         int boardX = getBoardModelPosition(x);
         int boardY = getBoardModelPosition(y);
 
@@ -431,6 +442,8 @@ public class GameView extends Application {
     }
 
     private void eventSquareClick(int x, int y) {
+    	if(ignoreMouse) return;
+    	
         int boardX = getBoardModelPosition(x);
         int boardY = getBoardModelPosition(y);
 
@@ -451,6 +464,8 @@ public class GameView extends Application {
         updatePlayerInfo();
         activeButton = ButtonState.NONE;
         updateButtons();
+        
+        checkPlayerWon();
     }
 
     /**
@@ -666,12 +681,16 @@ public class GameView extends Application {
         }
     }
 
-    private void playerWon(){
+    private void checkPlayerWon(){
         if (Board.getInstance().getCurrentPawn().isOnGoalTile()){
+        	ignoreMouse = true;
+        	
             final Popup popup = new Popup();
             popup.setX(300);
             popup.setY(200);
             popup.getContent().addAll(new Circle(25, 25, 50, Color.AQUAMARINE));
+            
+            System.out.println("Player " + Board.getInstance().getPawnTurn() + " wins!");
         }
     }
 }

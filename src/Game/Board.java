@@ -63,7 +63,11 @@ public class Board {
 		for(int i = 0; i < pawns.length; i++)
 		{
 			pawns[i] = new Pawn(i);
-			if(challengeMode) pawns[i].setChallengePosition();
+			if(challengeMode) 
+			{
+				pawns[i].setChallengePosition();
+				pawns[i].setChallengeGoal();
+			}
 		}
 		
 		canRemoveFences = challengeMode;
@@ -108,8 +112,7 @@ public class Board {
 	 */
 	private boolean endTurn()
 	{
-		incrementPlayerTurn();
-		//TODO: Check game for victory conditions
+		if (!getCurrentPawn().isOnGoalTile()) incrementPlayerTurn();
 		return true;
 	}
 	
