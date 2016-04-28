@@ -225,7 +225,6 @@ public class GameView extends Application {
             playerFenceCount.getStyleClass().add("playerID");
 
             players[i] = new TilePane();
-            //players[i].setSpacing(40);
             players[i].getChildren().add(createEmptyPointer());
             players[i].getChildren().add(playerID);
 
