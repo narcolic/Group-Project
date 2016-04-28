@@ -45,8 +45,10 @@ public class GameView extends Application {
     private Image pointerEmptyImg;
     private Image playerFenceAvlbImg;
     private Image playerFenceUsedImg;
-    
+
     private boolean ignoreMouse;
+
+    private Stage stage;
 
     /**
      * Top level layout pane
@@ -96,13 +98,14 @@ public class GameView extends Application {
     @Override
     public void start(final Stage primaryStage) {
 
+        this.stage = primaryStage;
         //TODO: Remove this when debug is done
         try {
             int test = Board.getInstance().getNumberOfPawns();
         } catch (Exception e) {
             Board.getInstance().setupBoard(false, false);
         }
-    	
+
         // Set up the images ready to be used
         setupImages();
 
@@ -115,15 +118,15 @@ public class GameView extends Application {
 		/*Scene of the Gameview*/
         Scene GUI = new Scene(layout, 1280, 720);
         GUI.getStylesheets().add(getClass().getResource("custom-game-styles.css").toExternalForm());
-        primaryStage.setTitle("Quoridor");
-        primaryStage.setScene(GUI);
+        stage.setTitle("Quoridor");
+        stage.setScene(GUI);
         layout.setLeft(left);
         layout.setCenter(board);
         layout.setRight(right);
         layout.setTop(menuBar);
-        primaryStage.getIcons().add(new Image("/Menu/Images/quoridorIcon.jpg")); 
-        primaryStage.show();
-        
+        stage.getIcons().add(new Image("/Menu/Images/quoridorIcon.jpg"));
+        stage.show();
+
         ignoreMouse = false;
     }
 
@@ -217,11 +220,10 @@ public class GameView extends Application {
         left.setSpacing(20);
         left.getChildren().addAll(buttonPlaceHor, buttonPlaceVer);
         if (Board.getInstance().isChallengeMode()) {
-        	left.getChildren().addAll(buttonPlaceRem);
+            left.getChildren().addAll(buttonPlaceRem);
         }
         //add to right pane
         right.getChildren().addAll(players);
-
 
 
         board.getStyleClass().add("background");
@@ -380,8 +382,8 @@ public class GameView extends Application {
      * Called when the place horizontal fence button is pressed
      */
     private void eventPlaceFenceHorizontal() {
-    	if(ignoreMouse) return;
-    	
+        if (ignoreMouse) return;
+
         if (activeButton != ButtonState.PLACE_HORIZONTAL) {
             activeButton = ButtonState.PLACE_HORIZONTAL;
         } else {
@@ -394,8 +396,8 @@ public class GameView extends Application {
      * Called when the place vertical fence button is pressed
      */
     private void eventPlaceFenceVertical() {
-    	if(ignoreMouse) return;
-    	
+        if (ignoreMouse) return;
+
         if (activeButton != ButtonState.PLACE_VERTICAL) {
             activeButton = ButtonState.PLACE_VERTICAL;
         } else {
@@ -408,8 +410,8 @@ public class GameView extends Application {
      * Called when the remove fence button is pressed
      */
     private void eventRemoveFence() {
-    	if(ignoreMouse) return;
-    	
+        if (ignoreMouse) return;
+
         if (activeButton != ButtonState.REMOVE_FENCE) {
             activeButton = ButtonState.REMOVE_FENCE;
         } else {
@@ -418,10 +420,9 @@ public class GameView extends Application {
         updateButtons();
     }
 
-    
-    
+
     private void eventFenceClick(int x, int y) {
-    	if(ignoreMouse) return;
+        if (ignoreMouse) return;
         int boardX = getBoardModelPosition(x);
         int boardY = getBoardModelPosition(y);
 
@@ -434,16 +435,15 @@ public class GameView extends Application {
                 updateAll();
             }
         } else if (activeButton == ButtonState.REMOVE_FENCE) {
-        	if(Board.getInstance().pawnRemoveFence(boardX, boardY, determineFenceOrientation(x, y)))
-			{
-				updateAll();
-			}
+            if (Board.getInstance().pawnRemoveFence(boardX, boardY, determineFenceOrientation(x, y))) {
+                updateAll();
+            }
         }
     }
 
     private void eventSquareClick(int x, int y) {
-    	if(ignoreMouse) return;
-    	
+        if (ignoreMouse) return;
+
         int boardX = getBoardModelPosition(x);
         int boardY = getBoardModelPosition(y);
 
@@ -452,8 +452,7 @@ public class GameView extends Application {
         }
     }
 
-    
-    
+
     /**
      * Run all updates in approximate order of importance.
      */
@@ -464,7 +463,7 @@ public class GameView extends Application {
         updatePlayerInfo();
         activeButton = ButtonState.NONE;
         updateButtons();
-        
+
         checkPlayerWon();
     }
 
@@ -541,12 +540,11 @@ public class GameView extends Application {
      * @param y The board y Position
      * @return 0 for Horizontal, 1 for Vertical, 2 for Square (unknown)
      */
-    private int determineFenceOrientation(int x, int y)
-    {
-    	if(x % 2 == 0) return 0; //Only horizontal parts of a fence lie on this position
-    	if(y % 2 == 0) return 1; //Only vertical parts of a fence lie on this position
-    	//Past this point, player has clicked on a square part of the fence.
-    	return 2;
+    private int determineFenceOrientation(int x, int y) {
+        if (x % 2 == 0) return 0; //Only horizontal parts of a fence lie on this position
+        if (y % 2 == 0) return 1; //Only vertical parts of a fence lie on this position
+        //Past this point, player has clicked on a square part of the fence.
+        return 2;
     }
 
     /**
@@ -681,16 +679,31 @@ public class GameView extends Application {
         }
     }
 
-    private void checkPlayerWon(){
-        if (Board.getInstance().getCurrentPawn().isOnGoalTile()){
-        	ignoreMouse = true;
-        	
-            final Popup popup = new Popup();
-            popup.setX(300);
-            popup.setY(200);
-            popup.getContent().addAll(new Circle(25, 25, 50, Color.AQUAMARINE));
-            
-            System.out.println("Player " + Board.getInstance().getPawnTurn() + " wins!");
+    private void checkPlayerWon() {
+        if (Board.getInstance().getCurrentPawn().isOnGoalTile()) {
+            ignoreMouse = true;
+
+            Button backB = new Button();
+            backB.setMaxWidth(Double.MAX_VALUE);
+            backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
+            backB.getStyleClass().add("button");
+            backB.setOnAction(event -> stage.hide());
+            final Label label = new Label("Player " + (Board.getInstance().getPawnTurn()+1) + " wins!");
+            label.setStyle("-fx-text-fill: goldenrod; -fx-font-style: italic; -fx-font-weight: bold; -fx-padding: 0 0 20 0;");
+
+            StackPane glass = new StackPane();
+            StackPane.setAlignment(backB,Pos.TOP_LEFT);
+            StackPane.setAlignment(label, Pos.CENTER);
+            glass.getChildren().addAll(label, backB);
+            glass.setStyle("-fx-background-color: rgba(0, 100, 100, 0.5); -fx-background-radius: 10;");
+
+
+            final StackPane layout = new StackPane();
+            layout.getChildren().addAll(glass);
+            layout.setStyle("-fx-background-color: silver; -fx-font-size: 20; -fx-padding: 10;");
+
+            stage.setScene(new Scene(layout, 800, 600));
+            stage.show();
         }
     }
 }
