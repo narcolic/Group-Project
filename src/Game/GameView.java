@@ -234,6 +234,7 @@ public class GameView extends Application {
                 players[i].getChildren().add(playerFences[i][j]);
             }
             players[i].getChildren().add(playerFenceCount);
+            players[i].setMinHeight(200);
         }
     }
 
