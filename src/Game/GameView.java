@@ -111,24 +111,25 @@ public class GameView extends Application {
         layout.setCenter(board);
         layout.setRight(right);
         layout.setTop(menuBar);
+        primaryStage.getIcons().add(new Image("/Menu/Images/quoridorIcon.jpg")); 
         primaryStage.show();
     }
 
     private void setupImages() {
         defaultSquareImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/a.png"));
+                "BoardComponents/square.png"));
         highlightSquareImg = new Image(getClass().getResourceAsStream(
                 "BoardComponents/c.png"));
         noVerWallImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/noVerWall.png"));
+                "BoardComponents/noVerWall2.png"));
         verWallPlacedImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/VerwallPlaced.png"));
+                "BoardComponents/VerwallPlaced2.png"));
         noHorWallImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/noHorWall.png"));
+                "BoardComponents/noHorWall2.png"));
         horWallPlacedImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/horWallPlaced.png"));
+                "BoardComponents/horWallPlaced2.png"));
         noSquareFenceImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/squareFence.png"));
+                "BoardComponents/squareFence2.png"));
         squareFencePlacedImg = new Image(getClass().getResourceAsStream(
                 "BoardComponents/squareFenceClicked.png"));
         pawnImg = new Image(getClass().getResourceAsStream(
