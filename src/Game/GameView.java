@@ -15,6 +15,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.application.Platform;
+import Menu.*;
 
 import java.util.Optional;
 
@@ -258,11 +259,14 @@ public class GameView extends Application {
     }
 
     private void setupMenu() {
-        Menu optionMenu1 = new Menu("Options");
-        Menu helpMenu1 = new Menu("Help");
-        Menu quitMenu1 = new Menu("Quit");
+        Menu optionMenu = new Menu("Options");
+        Menu helpMenu = new Menu("Help");
+        Menu gameMenu = new Menu("Game");
+        MenuItem quitMenu = new MenuItem("Quit");
+        gameMenu.getItems().add(quitMenu);
         menuBar = new MenuBar();
-        menuBar.getMenus().addAll(optionMenu1, helpMenu1, quitMenu1);
+        menuBar.getMenus().addAll(optionMenu, helpMenu, gameMenu);
+
 		/*
 		quit.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -272,13 +276,8 @@ public class GameView extends Application {
 			}
 		});
 		*/
-        Menu optionMenu = new Menu("Options");
-        Menu helpMenu = new Menu("Help");
-        Menu gameMenu = new Menu("Game");
-        MenuItem quitMenu = new MenuItem("Quit");
-        gameMenu.getItems().add(quitMenu);
-        menuBar = new MenuBar();
-        menuBar.getMenus().addAll(optionMenu, helpMenu, gameMenu);
+        optionMenu.setOnAction(event -> {
+        });
         quitMenu.setOnAction(event -> quitGameAction());
     }
 

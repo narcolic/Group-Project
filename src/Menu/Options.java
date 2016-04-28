@@ -2,7 +2,7 @@ package Menu;
 
 import java.math.BigDecimal;
 
-class Options {
+public class Options {
 
     private double volume; // current volume
     private double volumePercent; // current volume percentage
@@ -67,4 +67,5 @@ class Options {
         setVolumePercent(volume);
         return this.volumePercent;
     }
+
 }
