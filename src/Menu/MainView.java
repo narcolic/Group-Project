@@ -158,8 +158,8 @@ public class MainView extends Application {
         stage.setTitle("Help");
         help.setCurrentLanguage(language.getLanguage());
 
-        final String NEXT_SLIDE_TOOLTIP = "Next slide.";
-        final String PREVIOUS_SLIDE_TOOLTIP = "Previous slide.";
+        final String NEXT_SLIDE_TOOLTIP = "Next instructions,"+"\n"+"RIGHT Arrow Key";
+        final String PREVIOUS_SLIDE_TOOLTIP = "Previous instructions,"+"\n"+"LEFT Arrow Key";
 
         // load help image and text instructions
         help.fillTextHelpArray();
