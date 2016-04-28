@@ -2,6 +2,8 @@ package Game;
 
 import java.util.ArrayList;
 
+import Game.Orientation.Direction;
+
 
 public class Board {
 	
@@ -240,6 +242,7 @@ public class Board {
 		if(p.getFenceCount() >= this.getMaxPawnFences()) return false;
 		
 		//TODO: cannot stop any player from reaching their goal tile/s!
+		if(!validateFencePathBlock(fence, getFencesArray())) return false;
 		
 		p.addFence(fence);
 		if(this.endTurn())
@@ -320,6 +323,93 @@ public class Board {
 			}
 		}
 		return -1;
+	}
+	
+	/**
+	 * TODO: Not working yet
+	 * Checks each pawn to see if they can get to their respective goals through Dijkstra's algorithm
+	 * @return True if the fence does not block
+	 */
+	public boolean validateFencePathBlock(Fence fence, Fence[] allFences)
+	{
+		Fence[] fences = new Fence[allFences.length + 1];
+		for(int i = 0; i < allFences.length; i++) {
+			fences[i] = allFences[i];
+		}
+		fences[fences.length - 1] = fence;
+		
+		for(Pawn p : pawns)
+		{
+			boolean foundGoal = false;
+			boolean exploring = true;
+			int[][] pathMap = new int[width][height];
+			pathMap[p.getPosition().getX()][p.getPosition().getY()] = 1;
+			
+			//recurse until can't expand further
+			while (exploring) {
+				exploring = false;
+				for(int y = 0; y < height; y++) {
+					for(int x = 0; x < width; x++) {
+						Position pos = new Position(x, y);
+						//boolean expandWest = false;
+						boolean expandEast = false;
+						//boolean expandNorth = false;
+						boolean expandSouth = false;
+						
+						if (x + 1 < width) expandEast = pathMap[x + 1][y] > 0 
+								&& Fence.noFenceCollision(pos, Direction.EAST, fences);
+						if (y + 1 < height) expandSouth = pathMap[x][y + 1] > 0 
+								&& Fence.noFenceCollision(pos, Direction.SOUTH, fences);
+						/*
+						expandWest = pathMap[Math.max(x - 1, 0)][y] > 0 
+								&& Fence.noFenceCollision(pos, Direction.WEST, fences);
+						expandNorth = pathMap[x][Math.max(y - 1, 0)] > 0 
+								&& Fence.noFenceCollision(pos, Direction.NORTH, fences);
+						*/
+						if(p.isOnGoalTile(new Position (x, y)) && pathMap[x][y] > 0)
+						{
+							//show pathfinding in code
+							System.out.println("Pawn " + p.getPawnID());
+							for(int b = 0; b < height; b++) {
+								System.out.print("    | ");
+								for(int a = 0; a < width; a++) {
+									System.out.print(" " + pathMap[a][b] + " ");
+								}
+								System.out.println(" | ");
+							}
+							
+							foundGoal = true;
+							exploring = false;
+							break;
+						}
+						else
+						{
+							if(expandEast || expandSouth)
+							{
+								if(pathMap[x][y] == 0) 
+								{
+									pathMap[x][y] = 1;
+								} else {
+									pathMap[x][y]++;
+									if (expandEast && pathMap[x + 1][y] == 0) { 
+										pathMap[x + 1][y] += 1; }
+									if (expandSouth && pathMap[x][y + 1] == 0) {
+										pathMap[x][y + 1] += 1; }
+								}
+								exploring = true;
+							}
+						}
+						
+						if (pathMap[x][y] > width * height + 1) return false; //break infinite loops
+					}
+					if (foundGoal) break;
+				}
+			}
+			
+			if (!foundGoal) return false;
+		}
+		
+		return true;
 	}
 	
 	/**

@@ -336,8 +336,16 @@ public class Pawn {
      * @return True if the pawn is on a Goal Tile
      */
     public boolean isOnGoalTile() {
+        return isOnGoalTile(position);
+    }
+    
+    /**
+     * @param pos
+     * @return True if position is on a goalTile
+     */
+    public boolean isOnGoalTile(Position pos) {
     	for(Position goal : goalTiles) {
-    		if (position.equals(goal)) return true;
+    		if (pos.equals(goal)) return true;
     	}
         return false;
     }
