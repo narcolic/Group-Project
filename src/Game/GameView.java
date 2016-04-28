@@ -125,19 +125,19 @@ public class GameView extends Application {
 
     private void setupImages() {
         defaultSquareImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/square.png"));
+                "BoardComponents/a.png"));
         highlightSquareImg = new Image(getClass().getResourceAsStream(
                 "BoardComponents/c.png"));
         noVerWallImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/noVerWall2.png"));
+                "BoardComponents/noVerWall.png"));
         verWallPlacedImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/VerwallPlaced2.png"));
+                "BoardComponents/VerwallPlaced.png"));
         noHorWallImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/noHorWall2.png"));
+                "BoardComponents/noHorWall.png"));
         horWallPlacedImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/horWallPlaced2.png"));
+                "BoardComponents/horWallPlaced.png"));
         noSquareFenceImg = new Image(getClass().getResourceAsStream(
-                "BoardComponents/squareFence2.png"));
+                "BoardComponents/squareFence.png"));
         squareFencePlacedImg = new Image(getClass().getResourceAsStream(
                 "BoardComponents/squareFenceClicked.png"));
         pawnImg = new Image(getClass().getResourceAsStream(
