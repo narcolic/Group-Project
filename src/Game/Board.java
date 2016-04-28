@@ -197,6 +197,10 @@ public class Board {
 		return validPositions;
 	}
 	
+	public boolean isChallengeMode() {
+		return this.canRemoveFences;
+	}
+	
 	/*
 	 * FOLLOWING ARE A LIST OF ACTIONS AVAILABLE TO THE PLAYERS. 
 	 * WHEN ANY OF THEM ARE CALLED, THE ACTION IS EXECUTED (IF POSSIBLE)
@@ -236,6 +240,8 @@ public class Board {
 		Pawn p = getCurrentPawn();
 		if(p.getFenceCount() >= this.getMaxPawnFences()) return false;
 		
+		//TODO: cannot stop any player from reaching their goal tile/s!
+		
 		p.addFence(fence);
 		if(this.endTurn())
 		{
@@ -264,7 +270,40 @@ public class Board {
 		}
 		return true;
 	}
+
+	/**
+	 * Player Action (Ends the turn if called and returns true)
+	 * Attempts to find a fence at the position clicked and run pawnRemoveFence on that.
+	 * @param boardX x Position of fence
+	 * @param boardY y Position of fence
+	 * @param determineFenceOrientation Number between 0-2 indicating if the direction is Hor, Ver or Cross
+	 * @return True if the action was successful.
+	 */
+	public boolean pawnRemoveFence(int boardX, int boardY, int determineFenceOrientation) {
+		Fence fence = getFenceAtPos(boardX, boardY, determineFenceOrientation);
+		if(fence == null) return false;
+		return pawnRemoveFence(fence);
+	}
 	
+	public Fence getFenceAtPos(int x, int y, int knownOrientation) {
+		if(knownOrientation < 2)
+		{
+			boolean vertical = (knownOrientation == 1);
+			if(vertical) { x += 1; } else { y += 1; }
+			for (Fence fence : getFences())
+			{
+				if (Fence.fenceAtLocation(fence, x, y, vertical)) {
+					return fence;
+				}
+			}
+		}
+		else
+		{
+			return Fence.fenceAtLocationByMiddle(getFencesArray(), x, y);
+		}
+		return null;
+	}
+
 	/**
 	 * @param fenceObject
 	 * @return The Pawn the fence is stored in, or -1 if there is no match.

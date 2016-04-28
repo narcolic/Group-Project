@@ -92,6 +92,14 @@ public class GameView extends Application {
 
     @Override
     public void start(final Stage primaryStage) {
+
+        //TODO: Remove this when debug is done
+        try {
+            int test = Board.getInstance().getNumberOfPawns();
+        } catch (Exception e) {
+            Board.getInstance().setupBoard(false, true);
+        }
+    	
         // Set up the images ready to be used
         setupImages();
 
@@ -155,12 +163,6 @@ public class GameView extends Application {
     }
 
     private void initialiseContent() {
-        //TODO: Remove this when debug is done
-        try {
-            int test = Board.getInstance().getNumberOfPawns();
-        } catch (Exception e) {
-            Board.getInstance().setupBoard(true, false);
-        }
 
         // set up a 2D array to store all the components
         boardCompX = Board.getInstance().getSizeX() * 2 - 1;
@@ -207,7 +209,10 @@ public class GameView extends Application {
         }
         //add to left pane
         left.setSpacing(20);
-        left.getChildren().addAll(buttonPlaceHor, buttonPlaceVer, buttonPlaceRem);
+        left.getChildren().addAll(buttonPlaceHor, buttonPlaceVer);
+        if (Board.getInstance().isChallengeMode()) {
+        	left.getChildren().addAll(buttonPlaceRem);
+        }
         //add to right pane
         right.getChildren().addAll(players);
 
@@ -416,6 +421,8 @@ public class GameView extends Application {
         updateButtons();
     }
 
+    
+    
     private void eventFenceClick(int x, int y) {
         int boardX = getBoardModelPosition(x);
         int boardY = getBoardModelPosition(y);
@@ -429,12 +436,10 @@ public class GameView extends Application {
                 updateAll();
             }
         } else if (activeButton == ButtonState.REMOVE_FENCE) {
-			/*
-			if(Board.getInstance().pawnRemoveFence(new Fence()))
+        	if(Board.getInstance().pawnRemoveFence(boardX, boardY, determineFenceOrientation(x, y)))
 			{
 				updateAll();
 			}
-			*/
         }
     }
 
@@ -447,6 +452,8 @@ public class GameView extends Application {
         }
     }
 
+    
+    
     /**
      * Run all updates in approximate order of importance.
      */
@@ -527,6 +534,18 @@ public class GameView extends Application {
         }
     }
 
+    /**
+     * @param x The board x Position
+     * @param y The board y Position
+     * @return 0 for Horizontal, 1 for Vertical, 2 for Square (unknown)
+     */
+    private int determineFenceOrientation(int x, int y)
+    {
+    	if(x % 2 == 0) return 0; //Only horizontal parts of a fence lie on this position
+    	if(y % 2 == 0) return 1; //Only vertical parts of a fence lie on this position
+    	//Past this point, player has clicked on a square part of the fence.
+    	return 2;
+    }
 
     /**
      * Adds pawns to the board from positions provided by the Board instance
@@ -625,12 +644,15 @@ public class GameView extends Application {
                     if (x % 2 == 0) {
                         //boardComp[x][y].setImage(horWallPlacedImg);
                         boardComp[x][y].setImage(noHorWallImg);
+                        boardComp[x][y].setEffect(null);
                     } else if (y % 2 == 0) {
                         //boardComp[x][y].setImage(verWallPlacedImg);
                         boardComp[x][y].setImage(noVerWallImg);
+                        boardComp[x][y].setEffect(null);
                     } else {
                         //boardComp[x][y].setImage(squareFencePlacedImg);
                         boardComp[x][y].setImage(noSquareFenceImg);
+                        boardComp[x][y].setEffect(null);
                     }
                 }
 

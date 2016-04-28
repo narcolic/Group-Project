@@ -264,4 +264,47 @@ public class Fence
 		if(!Fence.validateIntersections(fence, allFences)) return false;
 		return true;
 	}
+	
+	public static boolean fenceAtLocation(Fence fence, int x, int y, boolean vertical)
+	{
+		if (fence.getOrientation() != vertical) return false;
+		if (!vertical) { //horizontal fence
+			if(y != fence.getPosition().getY()) return false; //ignore fences not on axis
+			if(x < fence.pos.getX()) return false; //too far to the left
+			if(x >= fence.pos.getX() + fence.length) return false; //too far right
+		}
+		else {			//vertical fence
+			if(x != fence.getPosition().getX()) return false; //ignore fences not on axis
+			if(y < fence.pos.getY()) return false; //too far up
+			if(y >= fence.pos.getY() + fence.length) return false; //too far down
+		}
+		return true;
+	}
+	
+	/**
+	 * Checks to see if there is a singular fence that has a middle in this position
+	 * @param fence
+	 * @param x
+	 * @param y
+	 * @return The fence if available, null otherwise
+	 */
+	public static Fence fenceAtLocationByMiddle(Fence[] allFences, int x, int y) {
+		x++; y++; //deal with offset
+		for(Fence fence : allFences) {
+			if(!fence.isVertical) {
+				if (y != fence.getPosition().getY()) continue; //ignore fences not on axis
+				if (fence.pos.getX() > x - 1) continue;
+				if (fence.pos.getX() + fence.length < x) continue;
+				
+				return fence;
+			} else {
+				if(x != fence.getPosition().getX()) continue; //ignore fences not on axis
+				if (fence.pos.getY() > y - 1) continue;
+				if (fence.pos.getY() + fence.length < y) continue;
+				
+				return fence;
+			}
+		}
+		return null;
+	}
 }
