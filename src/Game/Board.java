@@ -3,6 +3,7 @@ package Game;
 import Game.Fence;
 import Game.Pawn;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 
@@ -69,6 +70,7 @@ public class Board {
 			if(challengeMode) pawns[i].setChallengePosition();
 		}
 		
+		canRemoveFences = challengeMode;
 		pawnTurn = 0;
 		startTurn();
 	}
@@ -163,17 +165,36 @@ public class Board {
 		}
 		return pawnPositions;
 	}
+	/**
+	 * @return Number of fences available to pawns as an array in order of pawn id.
+	 */
+	public int[] getPawnFenceCountArray()
+	{
+		int[] fenceCount = new int[pawns.length];
+		for(int i = 0; i < pawns.length; i++)
+		{
+			fenceCount[i] = pawns[i].getFenceCount();
+		}
+		return fenceCount;
+	}
 	public int getNumberOfPawns()
 	{
 		return pawns.length;
 	}
+	
 	/**
 	 * @return The valid positions of the current Pawn
 	 */
 	public Position[] getValidPositionArray()
 	{
 		Pawn p = this.getCurrentPawn();
-		return (Position[]) p.getValidMoves().toArray();
+		Object[] array = p.getValidMoves().toArray();
+		Position[] validPositions = new Position[array.length];
+		for(int i = 0; i < validPositions.length; i++)
+		{
+			validPositions[i] = (Position)array[i];
+		}
+		return validPositions;
 	}
 	
 	/*
@@ -231,6 +252,8 @@ public class Board {
 	 */
 	public boolean pawnRemoveFence(Fence fenceObject)
 	{
+		if(!canRemoveFences) return false;
+
 		int id = getFenceOwnerID(fenceObject);
 		if(id == pawnTurn || id < 0) return false;
 		
@@ -239,14 +262,14 @@ public class Board {
 		{
 			this.startTurn();
 		}
-		return false;
+		return true;
 	}
 	
 	/**
 	 * @param fenceObject
 	 * @return The Pawn the fence is stored in, or -1 if there is no match.
 	 */
-	private int getFenceOwnerID(Fence fenceObject)
+	public int getFenceOwnerID(Fence fenceObject)
 	{
 		for(Pawn p : pawns)
 		{

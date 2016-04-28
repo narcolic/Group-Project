@@ -1,5 +1,6 @@
 package Menu;
 
+import Game.Board;
 import Game.GameView;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -406,6 +407,7 @@ public class MainView extends Application {
         singlePlayer.setMinSize(250, 350);
         // go to single player mode
         singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+    		Board.getInstance().setupBoard(false, false);
             Platform.runLater(() -> new GameView().start(new Stage()));
             stage.hide();
         });

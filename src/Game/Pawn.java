@@ -8,7 +8,6 @@ public class Pawn {
 
     private int pawnID;
     private Position position;
-    private Color pawnColor;
     private ArrayList<Position> validMoves;
     private ArrayList<Fence> myFences;
 
@@ -89,7 +88,6 @@ public class Pawn {
         position = new Position();
         myFences = new ArrayList<Fence>();
         setDefaultPosition();
-        setDefaultColor();
     }
     
     /**
@@ -123,6 +121,9 @@ public class Pawn {
         return this.myFences;
     }
 
+    /**
+     * @return Number of fences active.
+     */
     public int getFenceCount() {
         return this.myFences.size();
     }
@@ -174,23 +175,6 @@ public class Pawn {
 	            break;
 	    }
 	}
-
-    public void setDefaultColor() {
-        switch (pawnID) {
-            case 0:
-                this.pawnColor = Color.RED;
-                break;
-            case 1:
-                this.pawnColor = Color.BLUE;
-                break;
-            case 2:
-                this.pawnColor = Color.GREEN;
-                break;
-            case 3:
-                this.pawnColor = Color.YELLOW;
-                break;
-        }
-    }
     
     /**
      * Calculates ALL valid moves a pawn can make this turn.

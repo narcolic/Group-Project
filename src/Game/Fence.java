@@ -128,12 +128,16 @@ public class Fence
 		if(fence.isVertical)
 		{
 			if(fence.pos.getY() < 0
-			|| fence.pos.getY() + fence.length > boardHeight) return false;
+			|| fence.pos.getY() + fence.length > boardHeight
+			|| fence.pos.getX() < 1
+			|| fence.pos.getX() >= boardWidth) return false;
 		}
 		else
 		{
 			if(fence.pos.getX() < 0
-			|| fence.pos.getX() + fence.length > boardWidth) return false;
+			|| fence.pos.getX() + fence.length > boardWidth
+			|| fence.pos.getY() < 1
+			|| fence.pos.getY() >= boardHeight) return false;
 		}
 		return true;
 	}
