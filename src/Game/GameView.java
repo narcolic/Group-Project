@@ -684,17 +684,19 @@ public class GameView extends Application {
             ignoreMouse = true;
 
             Button backB = new Button();
-            backB.setMaxWidth(Double.MAX_VALUE);
+            //backB.setMaxWidth(Double.MAX_VALUE);
             backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
             backB.getStyleClass().add("button");
+            backB.setMinSize(120,120);
             backB.setOnAction(event -> stage.hide());
             final Label label = new Label("Player " + (Board.getInstance().getPawnTurn()+1) + " wins!");
             label.setStyle("-fx-text-fill: goldenrod; -fx-font-style: italic; -fx-font-weight: bold; -fx-padding: 0 0 20 0;");
 
-            StackPane glass = new StackPane();
-            StackPane.setAlignment(backB,Pos.TOP_LEFT);
-            StackPane.setAlignment(label, Pos.CENTER);
-            glass.getChildren().addAll(label, backB);
+            GridPane glass = new GridPane();
+            GridPane.setConstraints(backB,0,1);
+            GridPane.setConstraints(label,2,7);
+            GridPane.setColumnSpan(label,2);
+            glass.getChildren().addAll(label,backB);
             glass.setStyle("-fx-background-color: rgba(0, 100, 100, 0.5); -fx-background-radius: 10;");
 
 
