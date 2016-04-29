@@ -332,6 +332,8 @@ public class Board {
 	 */
 	public boolean validateFencePathBlock(Fence fence, Fence[] allFences)
 	{
+		return true;
+		/*
 		Fence[] fences = new Fence[allFences.length + 1];
 		for(int i = 0; i < allFences.length; i++) {
 			fences[i] = allFences[i];
@@ -360,12 +362,12 @@ public class Board {
 								&& Fence.noFenceCollision(pos, Direction.EAST, fences);
 						if (y + 1 < height) expandSouth = pathMap[x][y + 1] > 0 
 								&& Fence.noFenceCollision(pos, Direction.SOUTH, fences);
-						/*
-						expandWest = pathMap[Math.max(x - 1, 0)][y] > 0 
-								&& Fence.noFenceCollision(pos, Direction.WEST, fences);
-						expandNorth = pathMap[x][Math.max(y - 1, 0)] > 0 
-								&& Fence.noFenceCollision(pos, Direction.NORTH, fences);
-						*/
+
+						//expandWest = pathMap[Math.max(x - 1, 0)][y] > 0 
+						//		&& Fence.noFenceCollision(pos, Direction.WEST, fences);
+						//expandNorth = pathMap[x][Math.max(y - 1, 0)] > 0 
+						//		&& Fence.noFenceCollision(pos, Direction.NORTH, fences);
+
 						if(p.isOnGoalTile(new Position (x, y)) && pathMap[x][y] > 0)
 						{
 							//show pathfinding in code
@@ -410,6 +412,7 @@ public class Board {
 		}
 		
 		return true;
+		*/
 	}
 	
 	/**
