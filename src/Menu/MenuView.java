@@ -32,7 +32,7 @@ public class MenuView extends Application {
     private Options optionsModel = new Options();
     private Language languageModel = new Language();
     private GameView gv = new GameView();
-    private BooleanProperty mainStageState = new SimpleBooleanProperty(true);
+    private static BooleanProperty mainStageState = new SimpleBooleanProperty(true);
 
     private Stage mainStage;
     private Button backB; // go to previous scene
@@ -238,7 +238,7 @@ public class MenuView extends Application {
         return scene;
     }
 
-    private void setFlag(boolean val) {
+    public static void setFlag(boolean val) {
         mainStageState.set(val);
     }
 
@@ -508,6 +508,5 @@ public class MenuView extends Application {
             mainStage.setScene(HelpScene(helpModel, languageModel));
         }
     }
-
 
 }

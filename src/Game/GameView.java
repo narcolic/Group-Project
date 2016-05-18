@@ -1,6 +1,8 @@
 package Game;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -13,8 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import javafx.geometry.Pos;
-import javafx.application.Platform;
+import Menu.MenuView;
 
 import java.util.Optional;
 
@@ -282,9 +283,10 @@ public class GameView extends Application {
         if (result.get() == ButtonType.OK) {
             // close Quoridor
             Platform.setImplicitExit(false);
-            //Platform.exit();
             stage.close();
             stageClosedBoolean = true;
+            MenuView.setFlag(stageClosedBoolean);
+            Platform.setImplicitExit(true);
         }
     }
 
@@ -683,16 +685,24 @@ public class GameView extends Application {
             //backB.setMaxWidth(Double.MAX_VALUE);
             backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
             backB.getStyleClass().add("button");
-            backB.setMinSize(120,120);
-            backB.setOnAction(event -> stage.hide());
-            final Label label = new Label("Player " + (Board.getInstance().getPawnTurn()+1) + " wins!");
+            backB.setMinSize(120, 120);
+            backB.setOnAction(event -> {
+                Platform.setImplicitExit(false);
+                //Platform.exit();
+                stage.close();
+                stageClosedBoolean = true;
+                MenuView.setFlag(stageClosedBoolean);
+                Platform.setImplicitExit(true);
+            });
+
+            final Label label = new Label("Player " + (Board.getInstance().getPawnTurn() + 1) + " wins!");
             label.setStyle("-fx-text-fill: goldenrod; -fx-font-style: italic; -fx-font-weight: bold; -fx-padding: 0 0 20 0;");
 
             GridPane glass = new GridPane();
-            GridPane.setConstraints(backB,0,1);
-            GridPane.setConstraints(label,2,7);
-            GridPane.setColumnSpan(label,2);
-            glass.getChildren().addAll(label,backB);
+            GridPane.setConstraints(backB, 0, 1);
+            GridPane.setConstraints(label, 2, 7);
+            GridPane.setColumnSpan(label, 2);
+            glass.getChildren().addAll(label, backB);
             glass.setStyle("-fx-background-color: rgba(0, 100, 100, 0.5); -fx-background-radius: 10;");
 
 
@@ -705,7 +715,7 @@ public class GameView extends Application {
         }
     }
 
-    public boolean isWindowClosed(){
+    public boolean isWindowClosed() {
         return this.stageClosedBoolean;
     }
 
