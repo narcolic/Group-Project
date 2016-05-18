@@ -45,6 +45,7 @@ public class GameView extends Application {
     private Image playerFenceUsedImg;
 
     private boolean ignoreMouse;
+    private boolean stageClosedBoolean = false;
 
     private Stage stage;
 
@@ -97,12 +98,6 @@ public class GameView extends Application {
     public void start(final Stage primaryStage) {
 
         this.stage = primaryStage;
-        //TODO: Remove this when debug is done
-        try {
-            int test = Board.getInstance().getNumberOfPawns();
-        } catch (Exception e) {
-            Board.getInstance().setupBoard(false, false);
-        }
 
         // Set up the images ready to be used
         setupImages();
@@ -286,7 +281,10 @@ public class GameView extends Application {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             // close Quoridor
-            Platform.exit();
+            Platform.setImplicitExit(false);
+            //Platform.exit();
+            stage.close();
+            stageClosedBoolean = true;
         }
     }
 
@@ -706,4 +704,9 @@ public class GameView extends Application {
             stage.show();
         }
     }
+
+    public boolean isWindowClosed(){
+        return this.stageClosedBoolean;
+    }
+
 }

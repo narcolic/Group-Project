@@ -7,7 +7,7 @@ public class MenuController {
         new Thread() {
             @Override
             public void run() {
-                javafx.application.Application.launch(MainView.class);
+                javafx.application.Application.launch(MenuView.class);
             }
         }.start();
     }
