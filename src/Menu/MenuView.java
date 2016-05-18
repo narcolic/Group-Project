@@ -6,6 +6,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -33,6 +35,7 @@ public class MenuView extends Application {
     private Language languageModel = new Language();
     private GameView gv = new GameView();
     private static BooleanProperty mainStageState = new SimpleBooleanProperty(true);
+    private static StringProperty menuStageChangeTo = new SimpleStringProperty("Menu");
 
     private Stage mainStage;
     private Button backB; // go to previous scene
@@ -143,6 +146,22 @@ public class MenuView extends Application {
                 "    -fx-background-size: cover, auto;\n" +
                 "    -fx-padding: 10 50 10 30;");
 
+        menuStageChangeTo.addListener((observable, oldValue, newValue) -> {
+            switch (newValue) {
+                case "Menu":
+                    mainStage.setScene(StartScene(languageModel));
+                    break;
+                case "Options":
+                    mainStage.setScene(OptionsScene(optionsModel, languageModel));
+                    break;
+                case "Help":
+                    mainStage.setScene(HelpScene(helpModel, languageModel));
+                    break;
+                default:
+                    mainStage.setScene(StartScene(languageModel));
+            }
+        });
+
         mainStage.setResizable(false);
         // display components in scene
         Scene scene = new Scene(root, 800, 600); // optimal window size 800x600
@@ -240,6 +259,10 @@ public class MenuView extends Application {
 
     public static void setFlag(boolean val) {
         mainStageState.set(val);
+    }
+
+    public static void setMenuFlag(String val) {
+        menuStageChangeTo.set(val);
     }
 
     /**

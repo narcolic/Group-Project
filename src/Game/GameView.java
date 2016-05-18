@@ -47,6 +47,7 @@ public class GameView extends Application {
 
     private boolean ignoreMouse;
     private boolean stageClosedBoolean = false;
+    private String menuChangeTo = "Main";
 
     private Stage stage;
 
@@ -79,7 +80,7 @@ public class GameView extends Application {
     private ImageView[] pawns;
     private TilePane[] players;
 
-    private MenuBar menuBar;
+    private ToolBar toolBar;
 
     //fence buttons on left
     private ImageView buttonPlaceHor;
@@ -117,7 +118,7 @@ public class GameView extends Application {
         layout.setLeft(left);
         layout.setCenter(board);
         layout.setRight(right);
-        layout.setTop(menuBar);
+        layout.setTop(toolBar);
         stage.getIcons().add(new Image("/Menu/Images/quoridorIcon.jpg"));
         stage.show();
 
@@ -262,15 +263,37 @@ public class GameView extends Application {
     }
 
     private void setupMenu() {
-        Menu optionMenu = new Menu("Options");
-        Menu helpMenu = new Menu("Help");
-        Menu gameMenu = new Menu("Game");
-        MenuItem quitMenu = new MenuItem("Quit");
-        gameMenu.getItems().add(quitMenu);
-        menuBar = new MenuBar();
-        menuBar.getMenus().addAll(optionMenu, helpMenu, gameMenu);
+        toolBar = new ToolBar();
 
+        Button quitMenu = new Button("Quit");
+        Button helpMenu = new Button("Help");
+        Button optionsMenu = new Button("Options");
+
+        toolBar.getItems().addAll(optionsMenu, helpMenu, quitMenu);
+        
         quitMenu.setOnAction(event -> quitGameAction());
+        helpMenu.setOnAction(event -> helpAction());
+        optionsMenu.setOnAction(event -> optionsAction());
+    }
+
+    private void optionsAction() {
+        menuChangeTo = "Options";
+        MenuView.setMenuFlag("Options");
+        hideGameVIew();
+    }
+
+    private void helpAction() {
+        menuChangeTo = "Help";
+        MenuView.setMenuFlag("Help");
+        hideGameVIew();
+    }
+
+    private void hideGameVIew() {
+        Platform.setImplicitExit(false);
+        stage.hide();
+        stageClosedBoolean = true;
+        MenuView.setFlag(true);
+        Platform.setImplicitExit(true);
     }
 
     private void quitGameAction() {
@@ -282,12 +305,16 @@ public class GameView extends Application {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             // close Quoridor
-            Platform.setImplicitExit(false);
-            stage.close();
-            stageClosedBoolean = true;
-            MenuView.setFlag(stageClosedBoolean);
-            Platform.setImplicitExit(true);
+            closeGameView();
         }
+    }
+
+    private void closeGameView() {
+        Platform.setImplicitExit(false);
+        stage.close();
+        stageClosedBoolean = true;
+        MenuView.setFlag(true);
+        Platform.setImplicitExit(true);
     }
 
     private void setupBoardComp() {
@@ -686,14 +713,7 @@ public class GameView extends Application {
             backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
             backB.getStyleClass().add("button");
             backB.setMinSize(120, 120);
-            backB.setOnAction(event -> {
-                Platform.setImplicitExit(false);
-                //Platform.exit();
-                stage.close();
-                stageClosedBoolean = true;
-                MenuView.setFlag(stageClosedBoolean);
-                Platform.setImplicitExit(true);
-            });
+            backB.setOnAction(event -> closeGameView());
 
             final Label label = new Label("Player " + (Board.getInstance().getPawnTurn() + 1) + " wins!");
             label.setStyle("-fx-text-fill: goldenrod; -fx-font-style: italic; -fx-font-weight: bold; -fx-padding: 0 0 20 0;");
@@ -717,6 +737,10 @@ public class GameView extends Application {
 
     public boolean isWindowClosed() {
         return this.stageClosedBoolean;
+    }
+
+    public String getMenuChangedTo(){
+        return this.menuChangeTo;
     }
 
 }
