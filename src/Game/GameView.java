@@ -15,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import Menu.MenuView;
 
 import java.util.Optional;
@@ -101,6 +102,9 @@ public class GameView extends Application {
 
         this.stage = primaryStage;
 
+        stage.initStyle(StageStyle.UNDECORATED);
+        //stage.setFullScreen(true);
+        
         // Set up the images ready to be used
         setupImages();
 
