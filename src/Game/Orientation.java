@@ -8,12 +8,17 @@ class Orientation {
 
 		private Direction counterClockwise;
 		private Direction clockwise;
+		private Direction opposite;
 
 		/**
 		 * Initialisation block
 		 */
 		static{
 			// set opposite directions for each direction
+			NORTH.opposite = SOUTH;
+			EAST.opposite = WEST;
+			SOUTH.opposite = NORTH;
+			WEST.opposite = EAST;
 
 			// set counter clockwise directions for each direction
 			NORTH.counterClockwise = WEST;
@@ -26,6 +31,14 @@ class Orientation {
 			EAST.clockwise = SOUTH;
 			SOUTH.clockwise = WEST;
 			WEST.clockwise = NORTH;
+		}
+
+		/**
+		 * Gets the opposite direction
+		 * @return opposite Opposite direction
+		 */
+		public Direction getOpposite(){
+			return opposite;
 		}
 
 		/**

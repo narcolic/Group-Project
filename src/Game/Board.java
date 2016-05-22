@@ -332,87 +332,112 @@ public class Board {
 	 */
 	public boolean validateFencePathBlock(Fence fence, Fence[] allFences)
 	{
-		return true;
-		/*
+		//create fence map with proposed fence
 		Fence[] fences = new Fence[allFences.length + 1];
-		for(int i = 0; i < allFences.length; i++) {
+		for (int i = 0; i < allFences.length; i++) {
 			fences[i] = allFences[i];
 		}
 		fences[fences.length - 1] = fence;
 		
 		for(Pawn p : pawns)
 		{
-			boolean foundGoal = false;
-			boolean exploring = true;
-			int[][] pathMap = new int[width][height];
-			pathMap[p.getPosition().getX()][p.getPosition().getY()] = 1;
+			boolean foundGoal = false; //set to true if a pawn can reach a goal square
+			boolean exploring = true; //
+			int[][] pathMap = generatePathMap(p.getPosition(), p.getGoalTileArray(), fences);
 			
-			//recurse until can't expand further
-			while (exploring) {
-				exploring = false;
-				for(int y = 0; y < height; y++) {
-					for(int x = 0; x < width; x++) {
-						Position pos = new Position(x, y);
-						//boolean expandWest = false;
-						boolean expandEast = false;
-						//boolean expandNorth = false;
-						boolean expandSouth = false;
-						
-						if (x + 1 < width) expandEast = pathMap[x + 1][y] > 0 
-								&& Fence.noFenceCollision(pos, Direction.EAST, fences);
-						if (y + 1 < height) expandSouth = pathMap[x][y + 1] > 0 
-								&& Fence.noFenceCollision(pos, Direction.SOUTH, fences);
-
-						//expandWest = pathMap[Math.max(x - 1, 0)][y] > 0 
-						//		&& Fence.noFenceCollision(pos, Direction.WEST, fences);
-						//expandNorth = pathMap[x][Math.max(y - 1, 0)] > 0 
-						//		&& Fence.noFenceCollision(pos, Direction.NORTH, fences);
-
-						if(p.isOnGoalTile(new Position (x, y)) && pathMap[x][y] > 0)
-						{
-							//show pathfinding in code
-							System.out.println("Pawn " + p.getPawnID());
-							for(int b = 0; b < height; b++) {
-								System.out.print("    | ");
-								for(int a = 0; a < width; a++) {
-									System.out.print(" " + pathMap[a][b] + " ");
-								}
-								System.out.println(" | ");
-							}
-							
-							foundGoal = true;
-							exploring = false;
-							break;
-						}
-						else
-						{
-							if(expandEast || expandSouth)
-							{
-								if(pathMap[x][y] == 0) 
-								{
-									pathMap[x][y] = 1;
-								} else {
-									pathMap[x][y]++;
-									if (expandEast && pathMap[x + 1][y] == 0) { 
-										pathMap[x + 1][y] += 1; }
-									if (expandSouth && pathMap[x][y + 1] == 0) {
-										pathMap[x][y + 1] += 1; }
-								}
-								exploring = true;
+			//if left at 0, no path can be made so invalid!
+			if(pathMap[p.getPosition().getX()][p.getPosition().getY()] == 0) return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Generates a 2D array of numbers starting from x and counting down to 0.
+	 * @param start
+	 * @param array of possible end positions
+	 * @return An array list of numbers between 0 and x distance from end
+	 */
+	public int[][] generatePathMap(Position start, Position[] end, Fence[] checkFences)
+	{
+		int[][] pathMap = new int[this.width][this.height];
+		int startX = start.getX(); //start pos
+		int startY = start.getY();
+		for (int i = 0; i < end.length; i++) { //seed end squares
+			pathMap[end[i].getX()][end[i].getY()] = 1;
+		}
+		int numberExpansion = 0; //the number that will expand outwards in each loop
+		boolean expanded = true; //set to true each time a branch expands in each loop
+		Position pos = new Position();
+		
+		while(expanded) {
+		//while there are branches from a previous loop that expanded
+			expanded = false;//reset to false
+			numberExpansion++; //increment number expansion;
+			//run loop
+			//on finding a number of numberExpansion on the grid, 
+			//add surrounding numbers going outwards
+			for(int y = 0; y < height; y++) {
+				for(int x = 0; x < width; x++) {
+					if(pathMap[x][y] == numberExpansion) {
+						pos.setXY(x, y);
+						//expand north
+						if(checkExpand(pos, Direction.NORTH, checkFences)) {
+							if	(pathMap[x][y-1] == 0) {
+								pathMap[x][y-1] = numberExpansion + 1;
+								expanded = true;
 							}
 						}
-						
-						if (pathMap[x][y] > width * height + 1) return false; //break infinite loops
+						//expand south
+						if(checkExpand(pos, Direction.SOUTH, checkFences)) {
+							if	(pathMap[x][y+1] == 0) {
+								pathMap[x][y+1] = numberExpansion + 1;
+								expanded = true;
+							}
+						}
+						//expand west
+						if(checkExpand(pos, Direction.WEST, checkFences)) {
+							if	(pathMap[x-1][y] == 0) {
+									pathMap[x-1][y] = numberExpansion + 1;
+									expanded = true;
+							}
+						}
+						//expand east
+						if(checkExpand(pos, Direction.EAST, checkFences)) {
+							if	(pathMap[x+1][y] == 0) {
+									pathMap[x+1][y] = numberExpansion + 1;
+									expanded = true;
+							}
+						}
 					}
-					if (foundGoal) break;
 				}
 			}
-			
-			if (!foundGoal) return false;
+			//if a path has been made from an end tile to the start, then we end the loop now
+			if (pathMap[start.getX()][start.getY()] != 0) {
+				expanded = false;
+			}
+		}
+		//print pathmap in system
+		System.out.println("===========================");
+		for(int b = 0; b < height; b++) {
+			System.out.print("    | ");
+			for(int a = 0; a < width; a++) {
+				System.out.print(" " + pathMap[a][b] + " ");
+			}
+			System.out.println(" | ");
 		}
 		
+		return pathMap;
+	}
+	/**
+	 * @param pos
+	 * @param direction
+	 * @return True when direction is inside border and can be reached, ignoring pawns
+	 */
+	private boolean checkExpand(Position pos, Orientation.Direction direction, Fence[] checkFences) {
+		Position checkPos = Pawn.directionPosition(pos, direction);
+		if (Pawn.outsideBoundary(checkPos, width, height)) return false;
+		if (!Fence.noFenceCollision(checkPos, direction.getOpposite(), checkFences)) return false;
 		return true;
-		*/
 	}
 	
 	/**

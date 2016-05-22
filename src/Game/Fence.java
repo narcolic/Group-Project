@@ -44,8 +44,15 @@ public class Fence
 		result = validateIntersections(new Fence(new Position(2,1), false, 2), allFences);
 		System.out.println(result + ": Check place vertical fence at 2,1.");
 		result = validateIntersections(new Fence(new Position(2,0), true, 2), allFences);
-		System.out.println(result + ": Check place vertical fence at 2,0.");
-		allFences[1] = new Fence(new Position(2,0), false, 2);
+		System.out.println(result + ": Place vertical fence at 2,0.");
+		allFences[1] = new Fence(new Position(2,0), true, 2);
+
+		result = noFenceCollision(new Position(1,0), Orientation.Direction.EAST, allFences);
+		System.out.println(result + ": Attempt move from 1,0 to 2,0 with fence blocking.");
+		result = noFenceCollision(new Position(2,1), Orientation.Direction.WEST, allFences);
+		System.out.println(result + ": Attempt move from 2,1 to 1,1 with fence blocking.");
+		result = noFenceCollision(new Position(1,2), Orientation.Direction.EAST, allFences);
+		System.out.println(result + ": Move from 1,2 to 2,2 with fence blocking.");
 		
 	}
 	

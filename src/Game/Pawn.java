@@ -119,6 +119,14 @@ public class Pawn {
     ArrayList<Position> getValidMoves() {
         return validMoves;
     }
+    
+    Position[] getGoalTileArray() {
+    	Position[] positions = new Position[goalTiles.size()];
+    	for(int i = 0; i < positions.length; i++) {
+    		positions[i] = goalTiles.get(i);
+    	}
+    	return positions;
+    }
 
     boolean positionIsValidMove(Position position) {
         for (Position pos : validMoves) {
@@ -309,12 +317,23 @@ public class Pawn {
         return false;
     }
 
-    private boolean outsideBoundary(Position position, int boardWidth, int boardHeight) {
+    /**
+     * @param position
+     * @param boardWidth
+     * @param boardHeight
+     * @return True if outside boundary
+     */
+    public static boolean outsideBoundary(Position position, int boardWidth, int boardHeight) {
         return position.getX() < 0 || position.getX() >= boardWidth
                 || position.getY() < 0 || position.getY() >= boardHeight;
     }
 
-    private static Position directionPosition(Position position, Orientation.Direction direction) {
+    /**
+     * @param position
+     * @param direction
+     * @return Position 1 away in direction from in position
+     */
+    public static Position directionPosition(Position position, Orientation.Direction direction) {
         switch (direction) {
             case EAST:
                 position = new Position(position, 1, 0);
