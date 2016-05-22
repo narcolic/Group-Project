@@ -1,5 +1,6 @@
 package Game;
 
+import Menu.MenuView;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -16,7 +17,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import Menu.MenuView;
 
 import java.util.Optional;
 
@@ -104,7 +104,7 @@ public class GameView extends Application {
 
         stage.initStyle(StageStyle.UNDECORATED);
         //stage.setFullScreen(true);
-        
+
         // Set up the images ready to be used
         setupImages();
 
@@ -269,15 +269,28 @@ public class GameView extends Application {
     private void setupMenu() {
         toolBar = new ToolBar();
 
-        Button quitMenu = new Button("Quit");
-        Button helpMenu = new Button("Help");
-        Button optionsMenu = new Button("Options");
+        Button quitMenu = new Button();
+        quitMenu.setMaxWidth(Double.MAX_VALUE);
+        quitMenu.setStyle("-fx-background-image: url('/Menu/Images/Icons/quit.png')");
+        quitMenu.getStyleClass().add("button");
+        quitMenu.setOnAction(event -> quitGameAction());
+
+        Button helpMenu = new Button();
+        helpMenu.setMaxWidth(Double.MAX_VALUE);
+        helpMenu.setStyle("-fx-background-image: url('/Menu/Images/Icons/help.png')");
+        helpMenu.getStyleClass().add("button");
+        helpMenu.setOnAction(event -> helpAction());
+
+        Button optionsMenu = new Button();
+        optionsMenu.setMaxWidth(Double.MAX_VALUE);
+        optionsMenu.setStyle("-fx-background-image: url('/Menu/Images/Icons/options.png')");
+        optionsMenu.getStyleClass().add("button");
+        optionsMenu.setOnAction(event -> optionsAction());
 
         toolBar.getItems().addAll(optionsMenu, helpMenu, quitMenu);
-        
-        quitMenu.setOnAction(event -> quitGameAction());
-        helpMenu.setOnAction(event -> helpAction());
-        optionsMenu.setOnAction(event -> optionsAction());
+        //toolBar.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        toolBar.setMinHeight(60);
+        toolBar.getStyleClass().add("tool-bar:horizontal");
     }
 
     private void optionsAction() {
@@ -290,6 +303,12 @@ public class GameView extends Application {
         menuChangeTo = "Help";
         MenuView.setMenuFlag("Help");
         hideGameVIew();
+    }
+
+    public void showGameView() {
+        stage.show();
+        stageClosedBoolean = false;
+        MenuView.setFlag(false);
     }
 
     private void hideGameVIew() {
@@ -309,6 +328,8 @@ public class GameView extends Application {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             // close Quoridor
+            menuChangeTo = "Menu";
+            MenuView.setMenuFlag("Menu");
             closeGameView();
         }
     }
@@ -743,7 +764,7 @@ public class GameView extends Application {
         return this.stageClosedBoolean;
     }
 
-    public String getMenuChangedTo(){
+    public String getMenuChangedTo() {
         return this.menuChangeTo;
     }
 

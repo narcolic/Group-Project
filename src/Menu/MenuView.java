@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -22,8 +23,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.geometry.Pos;
 
 import java.util.Optional;
 
@@ -151,7 +150,7 @@ public class MenuView extends Application {
         menuStageChangeTo.addListener((observable, oldValue, newValue) -> {
             switch (newValue) {
                 case "Menu":
-                    mainStage.setScene(StartScene(languageModel));
+                    mainStage.setScene(menuScene(languageModel));
                     break;
                 case "Options":
                     mainStage.setScene(OptionsSceneWithoutBackButton(optionsModel, languageModel));
@@ -533,7 +532,7 @@ public class MenuView extends Application {
             mainStage.setScene(HelpScene(helpModel, languageModel));
         }
     }
-    
+
     private Scene OptionsSceneWithoutBackButton(Options option, Language language) {
 
         mainStage.setTitle("Options");
@@ -590,18 +589,17 @@ public class MenuView extends Application {
         soundTitleLabel.setGraphic(soundIco);
         languageTitleLabel.setGraphic(languageIco);
 
-        /*// Back button
+        // Back button
         backB = new Button();
         backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
-        backB.setOnAction(event -> mainStage.setScene(menuScene(languageModel))); // go back to main menu
-*/        /*Label backBLabel = new Label((String) language.getCurrentLanguage().get("Back"));
-        backBLabel.getStyleClass().add("menu");
-        backBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(menuScene(languageModel)));*/
+        backB.setOnAction(event -> gv.showGameView());
+
 
         // set component layouts
         //GridPane.setConstraints(backB, 0, 1);
         //GridPane.setConstraints(backBLabel, 1, 1);
+        GridPane.setConstraints(backB, 0, 1);
         GridPane.setColumnSpan(soundTitleLabel, 2);
         GridPane.setConstraints(soundTitleLabel, 0, 2);
         GridPane.setConstraints(soundVolumeLabel, 0, 3);
@@ -643,7 +641,7 @@ public class MenuView extends Application {
         // add components
         root.getChildren().addAll(soundTitleLabel, soundVolumeLabel,
                 languageLabel, languageTitleLabel, languageListBox,
-                soundSlider, soundValue, muteLabel, muteBox);
+                soundSlider, soundValue, muteLabel, muteBox, backB);
 
         root.setVgap(30);
         root.setHgap(60);
@@ -655,7 +653,7 @@ public class MenuView extends Application {
         scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
         return scene;
     }
-    
+
     private Scene HelpSceneWithoutBackButton(Help help, Language language) {
 
         mainStage.setTitle("Help");
@@ -683,6 +681,12 @@ public class MenuView extends Application {
         /*
          * Buttons 
          */
+
+        // Back button
+        backB = new Button();
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
+        backB.getStyleClass().add("button");
+        backB.setOnAction(event -> gv.showGameView());
 
         // Next button
         Button nextB = new Button();
@@ -726,6 +730,7 @@ public class MenuView extends Application {
         // set layout restrictions
         //GridPane.setConstraints(backB, 0, 1);
         //GridPane.setConstraints(backBLabel, 1, 1);
+        GridPane.setConstraints(backB, 0, 1);
         GridPane.setColumnSpan(box, 2);
         GridPane.setConstraints(box, 1, 2);
         GridPane.setConstraints(nextB, 4, 2);
