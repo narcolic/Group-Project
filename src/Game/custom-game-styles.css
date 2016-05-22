@@ -33,3 +33,21 @@
     -fx-background-color: linear-gradient(#beb2a6, #423c37);
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0.0, 0, 1);
 }
+
+.winScreenLabel{
+    -fx-text-fill: goldenrod;
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 20 0;
+}
+
+.winScreenGlass{
+    -fx-background-color: rgba(0, 100, 100, 0.5);
+    -fx-background-radius: 10;
+}
+
+.winLayout{
+    -fx-background-color: silver;
+    -fx-font-size: 20;
+    -fx-padding: 10;
+}

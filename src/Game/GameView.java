@@ -48,7 +48,6 @@ public class GameView extends Application {
 
     private boolean ignoreMouse;
     private boolean stageClosedBoolean = false;
-    private String menuChangeTo = "Main";
 
     private Stage stage;
 
@@ -294,13 +293,11 @@ public class GameView extends Application {
     }
 
     private void optionsAction() {
-        menuChangeTo = "Options";
         MenuView.setMenuFlag("Options");
         hideGameVIew();
     }
 
     private void helpAction() {
-        menuChangeTo = "Help";
         MenuView.setMenuFlag("Help");
         hideGameVIew();
     }
@@ -328,7 +325,6 @@ public class GameView extends Application {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             // close Quoridor
-            menuChangeTo = "Menu";
             MenuView.setMenuFlag("Menu");
             closeGameView();
         }
@@ -734,7 +730,7 @@ public class GameView extends Application {
             ignoreMouse = true;
 
             Button backB = new Button();
-            //backB.setMaxWidth(Double.MAX_VALUE);
+            backB.setMaxWidth(Double.MAX_VALUE);
             backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
             backB.getStyleClass().add("button");
             backB.setMinSize(120, 120);
@@ -751,21 +747,17 @@ public class GameView extends Application {
             glass.setStyle("-fx-background-color: rgba(0, 100, 100, 0.5); -fx-background-radius: 10;");
 
 
-            final StackPane layout = new StackPane();
-            layout.getChildren().addAll(glass);
-            layout.setStyle("-fx-background-color: silver; -fx-font-size: 20; -fx-padding: 10;");
+            final StackPane winLayout = new StackPane();
+            winLayout.getChildren().addAll(glass);
+            winLayout.setStyle("-fx-background-color: silver; -fx-font-size: 20; -fx-padding: 10;");
 
-            stage.setScene(new Scene(layout, 800, 600));
+            stage.setScene(new Scene(winLayout, 800, 600));
             stage.show();
         }
     }
 
     public boolean isWindowClosed() {
         return this.stageClosedBoolean;
-    }
-
-    public String getMenuChangedTo() {
-        return this.menuChangeTo;
     }
 
 }

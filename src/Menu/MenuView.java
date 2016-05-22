@@ -458,6 +458,29 @@ public class MenuView extends Application {
         GridPane.setConstraints(languageLabel, 0, 7);
         GridPane.setConstraints(languageListBox, 1, 7);
 
+        optionSliderCheckBox(option, soundSlider, muteBox, soundValue);
+
+        languageListBox.valueProperty().addListener(observable -> {
+            language.setLanguage(languageListBox.getValue());
+        });
+
+        // add components
+        root.getChildren().addAll(soundTitleLabel, soundVolumeLabel,
+                languageLabel, languageTitleLabel, languageListBox,
+                soundSlider, soundValue, muteLabel, muteBox, backB);
+
+        root.setVgap(30);
+        root.setHgap(60);
+        root.setAlignment(Pos.TOP_LEFT);
+        root.getStyleClass().add("background");
+
+        mainStage.setResizable(false);
+        Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
+        return scene;
+    }
+
+    private void optionSliderCheckBox(Options option, Slider soundSlider, CheckBox muteBox, Label soundValue) {
         soundSlider.valueProperty().addListener(observable -> {
             // display current value for volume
             soundValue.setText(String.format("%.1f", soundSlider.getValue()));
@@ -479,25 +502,6 @@ public class MenuView extends Application {
                 option.changeMuteState();
             }
         }));
-
-        languageListBox.valueProperty().addListener(observable -> {
-            language.setLanguage(languageListBox.getValue());
-        });
-
-        // add components
-        root.getChildren().addAll(soundTitleLabel, soundVolumeLabel,
-                languageLabel, languageTitleLabel, languageListBox,
-                soundSlider, soundValue, muteLabel, muteBox, backB);
-
-        root.setVgap(30);
-        root.setHgap(60);
-        root.setAlignment(Pos.TOP_LEFT);
-        root.getStyleClass().add("background");
-
-        mainStage.setResizable(false);
-        Scene scene = new Scene(root, 800, 600);
-        scene.getStylesheets().add(getClass().getResource("custom-font-styles.css").toExternalForm());
-        return scene;
     }
 
     private void quitButtonAction() {
@@ -612,27 +616,7 @@ public class MenuView extends Application {
         GridPane.setConstraints(languageLabel, 0, 7);
         GridPane.setConstraints(languageListBox, 1, 7);
 
-        soundSlider.valueProperty().addListener(observable -> {
-            // display current value for volume
-            soundValue.setText(String.format("%.1f", soundSlider.getValue()));
-            option.setVolume(soundSlider.getValue());
-            audio.stop(); // stop sounds
-            audio.setVolume(option.getVolumePercent());
-            audio.play(); // play sound
-        });
-
-        muteBox.setOnAction((event -> {
-            if (muteBox.isSelected()) {
-                // stop sound
-                audio.stop();
-                option.changeMuteState();
-            } else {
-                audio.stop(); // stop sound
-                audio.setVolume(option.getVolumePercent());
-                audio.play(); // play sound
-                option.changeMuteState();
-            }
-        }));
+        optionSliderCheckBox(option, soundSlider, muteBox, soundValue);
 
         languageListBox.valueProperty().addListener(observable -> {
             language.setLanguage(languageListBox.getValue());
