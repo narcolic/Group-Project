@@ -735,11 +735,48 @@ public class GameView extends Application {
     private void checkPlayerWon() {
         if (Board.getInstance().getCurrentPawn().isOnGoalTile()) {
             ignoreMouse = true;
+
             fenceCount = Board.getInstance().getPawnFenceCountArray();
+            int turns;
+            if (Board.getInstance().getNumberOfPawns() == 4) {
+                turns = Board.getInstance().getTurnCounter() / 4;
+            } else {
+                turns = Board.getInstance().getTurnCounter() / 2;
+            }
+            int playerNumberWon = Board.getInstance().getPawnTurn() + 1;
+            int[] playerMoves = new int[4];
+
+            switch (playerNumberWon) {
+                case 1:
+                    playerMoves[0] = turns;
+                    playerMoves[1] = turns - 1;
+                    playerMoves[2] = turns - 1;
+                    playerMoves[3] = turns - 1;
+                    break;
+                case 2:
+                    playerMoves[0] = turns;
+                    playerMoves[1] = turns;
+                    playerMoves[2] = turns - 1;
+                    playerMoves[3] = turns - 1;
+                    break;
+                case 3:
+                    playerMoves[0] = turns;
+                    playerMoves[1] = turns;
+                    playerMoves[2] = turns;
+                    playerMoves[3] = turns - 1;
+                    break;
+                case 4:
+                    playerMoves[0] = turns;
+                    playerMoves[1] = turns;
+                    playerMoves[2] = turns;
+                    playerMoves[3] = turns;
+                    break;
+
+            }
 
             ToolBar tbar = new ToolBar();
 
-            final Label label = new Label("Player " + (Board.getInstance().getPawnTurn() + 1) + " wins!");
+            final Label label = new Label("Player " + playerNumberWon + " wins!");
             label.getStyleClass().add("winScreenLabel");
             final Label statisticsLabel = new Label("Game Statistics");
             statisticsLabel.getStyleClass().add("winScreenLabel");
@@ -754,7 +791,6 @@ public class GameView extends Application {
 
             //Toolbar
             tbar.getItems().add(backB);
-            //toolBar.getItems().addAll(quitMenu, helpMenu ,optionsMenu);
             tbar.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
             tbar.getStyleClass().add("tool-bar:horizontal");
             toolbarDrag(tbar);
@@ -764,15 +800,15 @@ public class GameView extends Application {
             final ObservableList<Statistics> data;
             if (Board.getInstance().getNumberOfPawns() == 4) {
                 data = FXCollections.observableArrayList(
-                        new Statistics("Player 1", 8.0, 5 - fenceCount[0]),
-                        new Statistics("Player 2", 8.0, 5 - fenceCount[1]),
-                        new Statistics("Player 3", 8.0, 5 - fenceCount[2]),
-                        new Statistics("Player 4", 8.0, 5 - fenceCount[3])
+                        new Statistics("Player 1", playerMoves[0], 5 - fenceCount[0]),
+                        new Statistics("Player 2", playerMoves[1], 5 - fenceCount[1]),
+                        new Statistics("Player 3", playerMoves[2], 5 - fenceCount[2]),
+                        new Statistics("Player 4", playerMoves[3], 5 - fenceCount[3])
                 );
             } else {
                 data = FXCollections.observableArrayList(
-                        new Statistics("Player 1", 8.0, 10 - fenceCount[0]),
-                        new Statistics("Player 2", 8.0, 10 - fenceCount[1])
+                        new Statistics("Player 1", playerMoves[0], 10 - fenceCount[0]),
+                        new Statistics("Player 2", playerMoves[1], 10 - fenceCount[1])
                 );
             }
 
@@ -787,19 +823,25 @@ public class GameView extends Application {
             TableColumn fencesCol = new TableColumn("Spare Fences");
             fencesCol.setMinWidth(200);
             fencesCol.setCellValueFactory(new PropertyValueFactory<>("fences"));
-
             table.setItems(data);
             table.getColumns().addAll(playerCol, movesCol, fencesCol);
 
 
             final VBox vbox = new VBox();
             vbox.setSpacing(5);
-            vbox.setPadding(new Insets(0, 0, 0, 0));
+            vbox.setPadding(new Insets(100, 0, 0, 0));
             vbox.getChildren().addAll(statisticsLabel, table);
+            vbox.setAlignment(Pos.CENTER);
+
+            final VBox playerWonLabelVbox = new VBox();
+            playerWonLabelVbox.setSpacing(5);
+            playerWonLabelVbox.setPadding(new Insets(70, 0, 0, 0));
+            playerWonLabelVbox.getChildren().addAll(label);
+            playerWonLabelVbox.setAlignment(Pos.CENTER);
 
             //BoarderPane
             BorderPane winLayout = new BorderPane();
-            winLayout.setCenter(label);
+            winLayout.setCenter(playerWonLabelVbox);
             winLayout.setTop(tbar);
             winLayout.setBottom(vbox);
             winLayout.getStyleClass().add("winLayout");

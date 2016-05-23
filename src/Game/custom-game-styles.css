@@ -40,6 +40,7 @@
     -fx-font-weight: bold;
     -fx-padding: 0 0 20 0;
     -fx-font-size: 40;
+    -fx-effect: dropshadow(gaussian, black, 0, 0, 0, 2);
 }
 
 .winScreenGlass{

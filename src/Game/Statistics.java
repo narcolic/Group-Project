@@ -1,18 +1,17 @@
 package Game;
 
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Statistics {
 
     private final SimpleStringProperty playerName;
-    private final SimpleDoubleProperty moves;
+    private final SimpleIntegerProperty moves;
     private final SimpleIntegerProperty fences;
 
-    Statistics(String playerName, Double moves, Integer fences) {
+    Statistics(String playerName, Integer moves, Integer fences) {
         this.playerName = new SimpleStringProperty(playerName);
-        this.moves = new SimpleDoubleProperty(moves);
+        this.moves = new SimpleIntegerProperty(moves);
         this.fences = new SimpleIntegerProperty(fences);
     }
 
@@ -24,11 +23,11 @@ public class Statistics {
         playerName.set(player);
     }
 
-    public Double getMoves() {
+    public Integer getMoves() {
         return moves.get();
     }
 
-    public void setMoves(Double move) {
+    public void setMoves(Integer move) {
         moves.set(move);
     }
 
