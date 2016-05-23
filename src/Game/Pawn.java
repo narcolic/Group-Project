@@ -197,6 +197,7 @@ public class Pawn {
     
     public void setChallengeGoal()
     {
+        goalTiles.clear();
         switch (pawnID) {
         case 0:
         	goalTiles.add(new Position(8, 0));
