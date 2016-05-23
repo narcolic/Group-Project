@@ -825,6 +825,7 @@ public class GameView extends Application {
             fencesCol.setCellValueFactory(new PropertyValueFactory<>("fences"));
             table.setItems(data);
             table.getColumns().addAll(playerCol, movesCol, fencesCol);
+            table.getStyleClass().add("table-view");
 
 
             final VBox vbox = new VBox();
