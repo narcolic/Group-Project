@@ -3,7 +3,6 @@ package Game;
 import Menu.MenuView;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,9 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import javax.xml.soap.Node;
-import java.awt.event.MouseEvent;
 import java.util.Optional;
 
 public class GameView extends Application {
@@ -291,6 +287,7 @@ public class GameView extends Application {
         optionsMenu.setOnAction(event -> optionsAction());
 
         toolBar.getItems().addAll(optionsMenu, helpMenu, quitMenu);
+        //toolBar.getItems().addAll(quitMenu, helpMenu ,optionsMenu);
         //toolBar.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         toolBar.setMinHeight(60);
         toolBar.getStyleClass().add("tool-bar:horizontal");
@@ -353,7 +350,7 @@ public class GameView extends Application {
     private void closeGameView() {
         Platform.setImplicitExit(false);
         stage.close();
-        stageClosedBoolean = true;
+        stageClosedBoolean =false;
         MenuView.setFlag(true);
         Platform.setImplicitExit(true);
     }
