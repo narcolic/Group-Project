@@ -2,7 +2,7 @@ package Game;
 
 public class Fence 
 {
-	private final int FENCE_LENGTH = 2;
+	public final int FENCE_LENGTH = 2;
 	
 	/**Origin of fence, from top left*/ 
 	private Position pos;

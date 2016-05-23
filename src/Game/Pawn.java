@@ -7,6 +7,7 @@ public class Pawn {
 
     private int pawnID;
     private Position position;
+    private boolean aiPlayer;
     private ArrayList<Position> validMoves;
     private ArrayList<Position> goalTiles;
     private ArrayList<Fence> myFences;
@@ -109,6 +110,9 @@ public class Pawn {
         return this.myFences;
     }
 
+    boolean isAi() {
+        return aiPlayer;
+    }
     /**
      * @return Number of fences active.
      */
@@ -129,6 +133,7 @@ public class Pawn {
     }
 
     boolean positionIsValidMove(Position position) {
+        if(position == null) return false;
         for (Position pos : validMoves) {
             if (pos.equals(position)) return true;
         }
@@ -176,6 +181,10 @@ public class Pawn {
             }
             break;
         }
+    }
+
+    public void setBehaviour(boolean makeAI) {
+        aiPlayer = makeAI;
     }
 
     void setChallengePosition() {

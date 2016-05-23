@@ -202,7 +202,7 @@ public class MenuView extends Application {
         singlePlayer.setMinSize(250, 350);
         // go to single player mode
         singlePlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            Board.getInstance().setupBoard(false, challengeBox.isSelected());
+            Board.getInstance().setupBoard(false, challengeBox.isSelected(), false);
             //Platform.setImplicitExit(false);
             Platform.runLater(() -> gv.start(new Stage()));
             setFlag(gv.isWindowClosed());
@@ -213,7 +213,7 @@ public class MenuView extends Application {
         multiPlayer.setMinSize(250, 350);
         // go to multiplayer mode
         multiPlayer.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            Board.getInstance().setupBoard(true, challengeBox.isSelected());
+            Board.getInstance().setupBoard(true, challengeBox.isSelected(), false);
             Platform.runLater(() -> gv.start(new Stage()));
             setFlag(gv.isWindowClosed());
         });
@@ -223,7 +223,7 @@ public class MenuView extends Application {
         practice.setMinSize(250, 350);
         // go to practice mode
         practice.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            Board.getInstance().setupBoard(false, challengeBox.isSelected());
+            Board.getInstance().setupBoard(false, challengeBox.isSelected(),  true);
             Platform.runLater(() -> gv.start(new Stage()));
             setFlag(gv.isWindowClosed());
         });

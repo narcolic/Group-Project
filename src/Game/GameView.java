@@ -18,12 +18,18 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.awt.event.MouseEvent;
+import java.beans.EventHandler;
 import java.util.Optional;
 
 public class GameView extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    //Drag variables
+    private int offsetX;
+    private int offsetY;
 
     //Images
     private Image defaultSquareImg;
@@ -336,6 +342,14 @@ public class GameView extends Application {
         stageClosedBoolean = true;
         MenuView.setFlag(true);
         Platform.setImplicitExit(true);
+    }
+
+    private void toolBarMousePress(MouseEvent e) {
+
+    }
+
+    private void toolBarMouseDragged(MouseEvent e) {
+
     }
 
     private void setupBoardComp() {

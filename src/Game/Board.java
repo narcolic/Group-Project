@@ -15,6 +15,8 @@ public class Board {
 	private boolean canRemoveFences;
 	private Pawn[] pawns;
 	private int pawnTurn;
+
+	private SimpleAI ai;
 	
 	
 	/**
@@ -53,9 +55,11 @@ public class Board {
 	 * Sets up the board and begins a game based on a set of conditions.
 	 * @param fourPlayer: false for two players, true for four players.
 	 * @param challengeMode: false for classic, true for challenge rules.
+	 * @param practiceMode: true in two player mode for ai.
 	 */
-	public void setupBoard(boolean fourPlayer, boolean challengeMode)
+	public void setupBoard(boolean fourPlayer, boolean challengeMode, boolean practiceMode)
 	{
+		if(practiceMode) ai = new SimpleAI();
 		if(!fourPlayer){
 			pawns = new Pawn[2];
 		}else{
@@ -65,6 +69,7 @@ public class Board {
 		for(int i = 0; i < pawns.length; i++)
 		{
 			pawns[i] = new Pawn(i);
+			if(practiceMode && i != 0) pawns[i].setBehaviour(true);
 			if(challengeMode) 
 			{
 				pawns[i].setChallengePosition();
@@ -106,6 +111,20 @@ public class Board {
 				Board.height, 
 				this.pawns, 
 				this.getFencesArray());
+		//wait for input from gameview
+
+		if(getCurrentPawn().isAi())
+		{
+			ai.calculateMove(this);
+			boolean actionMade = false;
+			if(ai.getPlaceFence())
+			{
+				actionMade = pawnPlaceFence(ai.getFencePosition(), ai.getFenceOrientation());
+			}
+			if(!actionMade) {
+				pawnMove(ai.getBestMove());
+			}
+		}
 	}
 	
 	/**
@@ -155,6 +174,23 @@ public class Board {
 		
 	}
 	/**
+	 * Gets a list of all fences from all pawns, and converts it to an read-only array.
+	 * @fence includes this fence in the array
+	 * @return Complete Fence[] array of fences on the board.
+	 */
+	Fence[] getFencesArray(Fence fence)
+	{
+		Object[] array = getFences().toArray();
+		Fence[] fences = new Fence[array.length + 1];
+		for(int i = 0; i < array.length; i++)
+		{
+			fences[i] = (Fence)array[i];
+		}
+		fences[fences.length - 1] = fence;
+		return fences;
+
+	}
+	/**
 	 * @return Position of all pawns in order of pawn id.
 	 */
 	Position[] getPawnPositionsArray()
@@ -165,6 +201,16 @@ public class Board {
 			pawnPositions[i] = pawns[i].getPosition();
 		}
 		return pawnPositions;
+	}
+
+	/**
+	 * @param index
+	 * @return Goal tiles of pawns, or null if index is invalid
+	 */
+	Position[] getPawnGoalsArray(int index)
+	{
+		if(index < 0 || index >= pawns.length) return null;
+		return pawns[index].getGoalTileArray();
 	}
 	/**
 	 * @return Number of fences available to pawns as an array in order of pawn id.
@@ -240,9 +286,7 @@ public class Board {
 		if(!Fence.isPlaceable(fence, Board.width, Board.height, getFencesArray())) return false;
 		Pawn p = getCurrentPawn();
 		if(p.getFenceCount() >= this.getMaxPawnFences()) return false;
-		
-		//TODO: cannot stop any player from reaching their goal tile/s!
-		if(!validateFencePathBlock(fence, getFencesArray())) return false;
+		if(!validateFencePathBlock(fence)) return false;
 		
 		p.addFence(fence);
 		if(this.endTurn())
@@ -326,19 +370,14 @@ public class Board {
 	}
 	
 	/**
-	 * TODO: Not working yet
 	 * Checks each pawn to see if they can get to their respective goals through Dijkstra's algorithm
 	 * @return True if the fence does not block
 	 */
-	public boolean validateFencePathBlock(Fence fence, Fence[] allFences)
+	public boolean validateFencePathBlock(Fence fence)
 	{
 		//create fence map with proposed fence
-		Fence[] fences = new Fence[allFences.length + 1];
-		for (int i = 0; i < allFences.length; i++) {
-			fences[i] = allFences[i];
-		}
-		fences[fences.length - 1] = fence;
-		
+		Fence[] fences = getFencesArray(fence);
+
 		for(Pawn p : pawns)
 		{
 			boolean foundGoal = false; //set to true if a pawn can reach a goal square
@@ -416,8 +455,9 @@ public class Board {
 				expanded = false;
 			}
 		}
-		//print pathmap in system
-		System.out.println("===========================");
+		//print pathmap in system DEBUGGING PURPOSES
+		/*
+		System.out.println("================================");
 		for(int b = 0; b < height; b++) {
 			System.out.print("    | ");
 			for(int a = 0; a < width; a++) {
@@ -425,7 +465,7 @@ public class Board {
 			}
 			System.out.println(" | ");
 		}
-		
+		*/
 		return pathMap;
 	}
 	/**
