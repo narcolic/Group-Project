@@ -3,35 +3,36 @@ package Game;
 import Menu.MenuView;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.awt.event.MouseEvent;
-import java.beans.EventHandler;
 import java.util.Optional;
 
 public class GameView extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
-    //Drag variables
-    private int offsetX;
-    private int offsetY;
 
     //Images
     private Image defaultSquareImg;
@@ -87,6 +88,7 @@ public class GameView extends Application {
      */
     private ImageView[] pawns;
     private TilePane[] players;
+    int[] fenceCount;
 
     private ToolBar toolBar;
 
@@ -349,14 +351,6 @@ public class GameView extends Application {
         Platform.setImplicitExit(true);
     }
 
-    private void toolBarMousePress(MouseEvent e) {
-
-    }
-
-    private void toolBarMouseDragged(MouseEvent e) {
-
-    }
-
     private void setupBoardComp() {
         for (int x = 0; x < boardCompX; x = x + 2) {
             for (int y = 0; y < boardCompY; y = y + 2) {
@@ -539,7 +533,7 @@ public class GameView extends Application {
         players[currentPawnT].getChildren().set(0, pointer);
 
         //update the fences and fenceCount of each player
-        int[] fenceCount = Board.getInstance().getPawnFenceCountArray();
+        fenceCount = Board.getInstance().getPawnFenceCountArray();
         for (int i = 0; i < players.length; i++) {
             for (int j = 0; j < Board.getInstance().getMaxPawnFences(); j++) {
                 ImageView fence = playerFences[i][j];
@@ -741,12 +735,16 @@ public class GameView extends Application {
     private void checkPlayerWon() {
         if (Board.getInstance().getCurrentPawn().isOnGoalTile()) {
             ignoreMouse = true;
+            fenceCount = Board.getInstance().getPawnFenceCountArray();
 
             ToolBar tbar = new ToolBar();
 
             final Label label = new Label("Player " + (Board.getInstance().getPawnTurn() + 1) + " wins!");
             label.getStyleClass().add("winScreenLabel");
+            final Label statisticsLabel = new Label("Game Statistics");
+            statisticsLabel.getStyleClass().add("winScreenLabel");
 
+            //Return to game Button
             Button backB = new Button();
             backB.setMaxWidth(Double.MAX_VALUE);
             backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/quit.png')");
@@ -754,17 +752,56 @@ public class GameView extends Application {
             backB.setMinSize(120, 120);
             backB.setOnAction(event -> closeGameView());
 
-
-
+            //Toolbar
             tbar.getItems().add(backB);
             //toolBar.getItems().addAll(quitMenu, helpMenu ,optionsMenu);
             tbar.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
             tbar.getStyleClass().add("tool-bar:horizontal");
             toolbarDrag(tbar);
 
+            //Statistics table
+            final TableView<Statistics> table = new TableView<>();
+            final ObservableList<Statistics> data;
+            if (Board.getInstance().getNumberOfPawns() == 4) {
+                data = FXCollections.observableArrayList(
+                        new Statistics("Player 1", 8.0, 5 - fenceCount[0]),
+                        new Statistics("Player 2", 8.0, 5 - fenceCount[1]),
+                        new Statistics("Player 3", 8.0, 5 - fenceCount[2]),
+                        new Statistics("Player 4", 8.0, 5 - fenceCount[3])
+                );
+            } else {
+                data = FXCollections.observableArrayList(
+                        new Statistics("Player 1", 8.0, 10 - fenceCount[0]),
+                        new Statistics("Player 2", 8.0, 10 - fenceCount[1])
+                );
+            }
+
+            table.setEditable(true);
+            TableColumn playerCol = new TableColumn("Player");
+            playerCol.setMinWidth(200);
+            //noinspection unchecked
+            playerCol.setCellValueFactory(new PropertyValueFactory<>("playerName"));
+            TableColumn movesCol = new TableColumn("Moves");
+            movesCol.setMinWidth(200);
+            movesCol.setCellValueFactory(new PropertyValueFactory<>("moves"));
+            TableColumn fencesCol = new TableColumn("Spare Fences");
+            fencesCol.setMinWidth(200);
+            fencesCol.setCellValueFactory(new PropertyValueFactory<>("fences"));
+
+            table.setItems(data);
+            table.getColumns().addAll(playerCol, movesCol, fencesCol);
+
+
+            final VBox vbox = new VBox();
+            vbox.setSpacing(5);
+            vbox.setPadding(new Insets(0, 0, 0, 0));
+            vbox.getChildren().addAll(statisticsLabel, table);
+
+            //BoarderPane
             BorderPane winLayout = new BorderPane();
             winLayout.setCenter(label);
             winLayout.setTop(tbar);
+            winLayout.setBottom(vbox);
             winLayout.getStyleClass().add("winLayout");
 
             Scene scene = new Scene(winLayout, 800, 600);

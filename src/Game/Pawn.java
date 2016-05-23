@@ -77,7 +77,7 @@ public class Pawn {
     Pawn(int newID) {
         pawnID = newID;
         position = new Position();
-        goalTiles = new ArrayList<Position>();
+        goalTiles = new ArrayList<>();
         myFences = new ArrayList<>();
         setDefaultPosition();
         setDefaultGoal();

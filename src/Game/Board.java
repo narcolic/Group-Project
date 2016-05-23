@@ -1,8 +1,8 @@
 package Game;
 
-import java.util.ArrayList;
-
 import Game.Orientation.Direction;
+
+import java.util.ArrayList;
 
 
 public class Board {
@@ -244,7 +244,7 @@ public class Board {
 		return validPositions;
 	}
 	
-	public boolean isChallengeMode() {
+	boolean isChallengeMode() {
 		return this.canRemoveFences;
 	}
 	
@@ -302,7 +302,7 @@ public class Board {
 	 * @param fenceObject
 	 * @return True if the action was successful.
 	 */
-	public boolean pawnRemoveFence(Fence fenceObject)
+	private boolean pawnRemoveFence(Fence fenceObject)
 	{
 		if(!canRemoveFences) return false;
 
@@ -325,13 +325,12 @@ public class Board {
 	 * @param determineFenceOrientation Number between 0-2 indicating if the direction is Hor, Ver or Cross
 	 * @return True if the action was successful.
 	 */
-	public boolean pawnRemoveFence(int boardX, int boardY, int determineFenceOrientation) {
+	boolean pawnRemoveFence(int boardX, int boardY, int determineFenceOrientation) {
 		Fence fence = getFenceAtPos(boardX, boardY, determineFenceOrientation);
-		if(fence == null) return false;
-		return pawnRemoveFence(fence);
+		return fence != null && pawnRemoveFence(fence);
 	}
 	
-	public Fence getFenceAtPos(int x, int y, int knownOrientation) {
+	private Fence getFenceAtPos(int x, int y, int knownOrientation) {
 		if(knownOrientation < 2)
 		{
 			boolean vertical = (knownOrientation == 1);
@@ -373,15 +372,13 @@ public class Board {
 	 * Checks each pawn to see if they can get to their respective goals through Dijkstra's algorithm
 	 * @return True if the fence does not block
 	 */
-	public boolean validateFencePathBlock(Fence fence)
+	private boolean validateFencePathBlock(Fence fence)
 	{
 		//create fence map with proposed fence
 		Fence[] fences = getFencesArray(fence);
 
 		for(Pawn p : pawns)
 		{
-			boolean foundGoal = false; //set to true if a pawn can reach a goal square
-			boolean exploring = true; //
 			int[][] pathMap = generatePathMap(p.getPosition(), p.getGoalTileArray(), fences);
 			
 			//if left at 0, no path can be made so invalid!
@@ -389,20 +386,18 @@ public class Board {
 		}
 		return true;
 	}
-	
+
+
+
 	/**
 	 * Generates a 2D array of numbers starting from x and counting down to 0.
-	 * @param start
-	 * @param array of possible end positions
 	 * @return An array list of numbers between 0 and x distance from end
 	 */
-	public int[][] generatePathMap(Position start, Position[] end, Fence[] checkFences)
+	int[][] generatePathMap(Position start, Position[] end, Fence[] checkFences)
 	{
-		int[][] pathMap = new int[this.width][this.height];
-		int startX = start.getX(); //start pos
-		int startY = start.getY();
-		for (int i = 0; i < end.length; i++) { //seed end squares
-			pathMap[end[i].getX()][end[i].getY()] = 1;
+		int[][] pathMap = new int[width][height];
+		for (Position anEnd : end) { //seed end squares
+			pathMap[anEnd.getX()][anEnd.getY()] = 1;
 		}
 		int numberExpansion = 0; //the number that will expand outwards in each loop
 		boolean expanded = true; //set to true each time a branch expands in each loop
@@ -420,11 +415,9 @@ public class Board {
 					if(pathMap[x][y] == numberExpansion) {
 						pos.setXY(x, y);
 						//expand north
-						if(checkExpand(pos, Direction.NORTH, checkFences)) {
-							if	(pathMap[x][y-1] == 0) {
-								pathMap[x][y-1] = numberExpansion + 1;
-								expanded = true;
-							}
+						if(checkExpand(pos, Direction.NORTH, checkFences)) if (pathMap[x][y - 1] == 0) {
+							pathMap[x][y - 1] = numberExpansion + 1;
+							expanded = true;
 						}
 						//expand south
 						if(checkExpand(pos, Direction.SOUTH, checkFences)) {
@@ -475,9 +468,7 @@ public class Board {
 	 */
 	private boolean checkExpand(Position pos, Orientation.Direction direction, Fence[] checkFences) {
 		Position checkPos = Pawn.directionPosition(pos, direction);
-		if (Pawn.outsideBoundary(checkPos, width, height)) return false;
-		if (!Fence.noFenceCollision(checkPos, direction.getOpposite(), checkFences)) return false;
-		return true;
+		return !Pawn.outsideBoundary(checkPos, width, height) && Fence.noFenceCollision(checkPos, direction.getOpposite(), checkFences);
 	}
 	
 	/**
