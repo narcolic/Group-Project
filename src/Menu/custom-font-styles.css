@@ -75,15 +75,29 @@
 }
 
 .p1MenuBox:hover {
-    -fx-background-color:#81E6DD;
+    -fx-background-color: #81E6DD;
 }
 
 .p2MenuBox:hover {
-    -fx-background-color:#81E6DD;
+    -fx-background-color: #81E6DD;
 }
 
 .pcMenuBox:hover {
-    -fx-background-color:#81E6DD;
+    -fx-background-color: #81E6DD;
 }
 
+.helpbox {
+    -fx-background-color: cadetblue;
+    -fx-border-width: 2;
+    -fx-border-color: green;
+    -fx-background-radius: 10;
+}
+
+.helpLabel{
+    -fx-background-color: #FFFFFF;
+    -fx-border-width: 2;
+    -fx-border-color: green;
+    -fx-background-radius: 20;
+
+}
 

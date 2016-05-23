@@ -294,7 +294,7 @@ public class MenuView extends Application {
         textLabel.setText(help.getCurrentText());
         textLabel.setMaxSize(550, 150);
         textLabel.setWrapText(true);
-        textLabel.setStyle("-fx-background-color: #FFFFFF;");
+        textLabel.getStyleClass().add("helpLabel");
 
         /*
          * Buttons 
@@ -335,18 +335,14 @@ public class MenuView extends Application {
         backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
         backB.getStyleClass().add("button");
         backB.setOnAction(event -> mainStage.setScene(menuScene(languageModel))); // back to main menu
-        /*Label backBLabel = new Label((String) language.getCurrentLanguage().get("Back"));
-        backBLabel.getStyleClass().add("menu");
-        backBLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> stage.setScene(menuScene(languageModel)));*/
+
 
         box.getChildren().add(imageView);
         box.setAlignment(Pos.CENTER);
         box.setMinSize(250, 350);
 
         box.setFillWidth(true);
-        box.setStyle("-fx-background-color: cadetblue;"
-                + "-fx-border-width: 2;"
-                + "-fx-border-color: black");
+        box.getStyleClass().add("helpbox");
 
         // set layout restrictions
         GridPane.setConstraints(backB, 0, 1);
@@ -595,7 +591,7 @@ public class MenuView extends Application {
 
         // Back button
         backB = new Button();
-        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/revertBTN.png')");
         backB.getStyleClass().add("button");
         backB.setOnAction(event -> gv.showGameView());
 
@@ -668,9 +664,12 @@ public class MenuView extends Application {
 
         // Back button
         backB = new Button();
-        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
+        backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/revertBTN.png')");
         backB.getStyleClass().add("button");
-        backB.setOnAction(event -> gv.showGameView());
+        backB.setOnAction(event -> {
+            gv.showGameView();
+            mainStage.setScene(HelpSceneWithoutBackButton(helpModel, languageModel));
+        });
 
         // Next button
         Button nextB = new Button();
@@ -690,7 +689,7 @@ public class MenuView extends Application {
         // Previous button
         Button previousB = new Button();
         previousB.setMaxWidth(Double.MAX_VALUE);
-        previousB.setStyle("-fx-background-image: url('/Menu/Images/Icons/Start.png')");
+        previousB.setStyle("-fx-background-image: url('/Menu/Images/Icons/previousBTN.png')");
         previousB.getStyleClass().add("button");
         previousB.setTooltip(new Tooltip(PREVIOUS_SLIDE_TOOLTIP));
         previousB.setOnAction(event -> previousButtonAction(help));
