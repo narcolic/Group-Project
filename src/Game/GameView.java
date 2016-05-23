@@ -3,6 +3,7 @@ package Game;
 import Menu.MenuView;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 import java.util.Optional;
 
 public class GameView extends Application {
@@ -291,21 +293,7 @@ public class GameView extends Application {
         //toolBar.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         toolBar.setMinHeight(60);
         toolBar.getStyleClass().add("tool-bar:horizontal");
-        final double[] initialX = new double[1];
-        final double[] initialY = new double[1];
-        toolBar.setOnMousePressed(me -> {
-            if (me.getButton() != MouseButton.MIDDLE) {
-                initialX[0] = me.getSceneX();
-                initialY[0] = me.getSceneY();
-            }
-        });
-
-        toolBar.setOnMouseDragged(me -> {
-            if (me.getButton() != MouseButton.MIDDLE) {
-                toolBar.getScene().getWindow().setX(me.getScreenX() - initialX[0]);
-                toolBar.getScene().getWindow().setY(me.getScreenY() - initialY[0]);
-            }
-        });
+        toolbarDrag(toolBar);
     }
 
 
@@ -350,7 +338,7 @@ public class GameView extends Application {
     private void closeGameView() {
         Platform.setImplicitExit(false);
         stage.close();
-        stageClosedBoolean =false;
+        stageClosedBoolean = false;
         MenuView.setFlag(true);
         Platform.setImplicitExit(true);
     }
@@ -423,9 +411,6 @@ public class GameView extends Application {
 
     /**
      * Converts the position from the model to the view
-     *
-     * @param boardPos
-     * @return
      */
     private static int getBoardSquarePosition(int boardPos) {
         return boardPos * 2;
@@ -433,9 +418,6 @@ public class GameView extends Application {
 
     /**
      * Converts the position from the view to the model
-     *
-     * @param boardPos
-     * @return
      */
     private static int getBoardModelPosition(int boardPos) {
         return boardPos / 2;
@@ -746,31 +728,55 @@ public class GameView extends Application {
         if (Board.getInstance().getCurrentPawn().isOnGoalTile()) {
             ignoreMouse = true;
 
+            ToolBar tbar = new ToolBar();
+
+            final Label label = new Label("Player " + (Board.getInstance().getPawnTurn() + 1) + " wins!");
+            label.getStyleClass().add("winScreenLabel");
+
             Button backB = new Button();
             backB.setMaxWidth(Double.MAX_VALUE);
-            backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/backBTN.png')");
+            backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/quit.png')");
             backB.getStyleClass().add("button");
             backB.setMinSize(120, 120);
             backB.setOnAction(event -> closeGameView());
 
-            final Label label = new Label("Player " + (Board.getInstance().getPawnTurn() + 1) + " wins!");
-            label.setStyle("-fx-text-fill: goldenrod; -fx-font-style: italic; -fx-font-weight: bold; -fx-padding: 0 0 20 0;");
-
-            GridPane glass = new GridPane();
-            GridPane.setConstraints(backB, 0, 1);
-            GridPane.setConstraints(label, 2, 7);
-            GridPane.setColumnSpan(label, 2);
-            glass.getChildren().addAll(label, backB);
-            glass.setStyle("-fx-background-color: rgba(0, 100, 100, 0.5); -fx-background-radius: 10;");
 
 
-            final StackPane winLayout = new StackPane();
-            winLayout.getChildren().addAll(glass);
-            winLayout.setStyle("-fx-background-color: silver; -fx-font-size: 20; -fx-padding: 10;");
+            tbar.getItems().add(backB);
+            //toolBar.getItems().addAll(quitMenu, helpMenu ,optionsMenu);
+            tbar.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+            tbar.getStyleClass().add("tool-bar:horizontal");
+            toolbarDrag(tbar);
 
-            stage.setScene(new Scene(winLayout, 800, 600));
+            BorderPane winLayout = new BorderPane();
+            winLayout.setCenter(label);
+            winLayout.setTop(tbar);
+            winLayout.getStyleClass().add("winLayout");
+
+            Scene scene = new Scene(winLayout, 800, 600);
+            scene.getStylesheets().add(getClass().getResource("custom-game-styles.css").toExternalForm());
+
+            stage.setScene(scene);
             stage.show();
         }
+    }
+
+    private void toolbarDrag(ToolBar tbar) {
+        final double[] initialX = new double[1];
+        final double[] initialY = new double[1];
+        tbar.setOnMousePressed(me -> {
+            if (me.getButton() != MouseButton.MIDDLE) {
+                initialX[0] = me.getSceneX();
+                initialY[0] = me.getSceneY();
+            }
+        });
+
+        tbar.setOnMouseDragged(me -> {
+            if (me.getButton() != MouseButton.MIDDLE) {
+                tbar.getScene().getWindow().setX(me.getScreenX() - initialX[0]);
+                tbar.getScene().getWindow().setY(me.getScreenY() - initialY[0]);
+            }
+        });
     }
 
     public boolean isWindowClosed() {

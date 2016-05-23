@@ -39,6 +39,7 @@
     -fx-font-style: italic;
     -fx-font-weight: bold;
     -fx-padding: 0 0 20 0;
+    -fx-font-size: 40;
 }
 
 .winScreenGlass{
@@ -47,7 +48,8 @@
 }
 
 .winLayout{
-    -fx-background-color: silver;
+    -fx-background-image: url('/Menu/Images/menuBG.jpg');
+    -fx-background-size: cover, auto;
     -fx-font-size: 20;
-    -fx-padding: 10;
+    -fx-background-radius: 10;
 }
