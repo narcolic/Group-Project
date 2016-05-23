@@ -89,7 +89,15 @@
 .helpbox {
     -fx-background-color: cadetblue;
     -fx-border-width: 2;
-    -fx-border-color: black;
+    -fx-border-color: green;
+    -fx-background-radius: 10;
+}
+
+.helpLabel{
+    -fx-background-color: #FFFFFF;
+    -fx-border-width: 2;
+    -fx-border-color: green;
     -fx-background-radius: 20;
+
 }
 

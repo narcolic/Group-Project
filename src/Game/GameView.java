@@ -3,6 +3,7 @@ package Game;
 import Menu.MenuView;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,12 +13,15 @@ import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javax.xml.soap.Node;
+import java.awt.event.MouseEvent;
 import java.util.Optional;
 
 public class GameView extends Application {
@@ -290,7 +294,23 @@ public class GameView extends Application {
         //toolBar.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         toolBar.setMinHeight(60);
         toolBar.getStyleClass().add("tool-bar:horizontal");
+        final double[] initialX = new double[1];
+        final double[] initialY = new double[1];
+        toolBar.setOnMousePressed(me -> {
+            if (me.getButton() != MouseButton.MIDDLE) {
+                initialX[0] = me.getSceneX();
+                initialY[0] = me.getSceneY();
+            }
+        });
+
+        toolBar.setOnMouseDragged(me -> {
+            if (me.getButton() != MouseButton.MIDDLE) {
+                toolBar.getScene().getWindow().setX(me.getScreenX() - initialX[0]);
+                toolBar.getScene().getWindow().setY(me.getScreenY() - initialY[0]);
+            }
+        });
     }
+
 
     private void optionsAction() {
         MenuView.setMenuFlag("Options");

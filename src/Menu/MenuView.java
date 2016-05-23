@@ -294,7 +294,7 @@ public class MenuView extends Application {
         textLabel.setText(help.getCurrentText());
         textLabel.setMaxSize(550, 150);
         textLabel.setWrapText(true);
-        textLabel.setStyle("-fx-background-color: #FFFFFF;");
+        textLabel.getStyleClass().add("helpLabel");
 
         /*
          * Buttons 
@@ -666,7 +666,10 @@ public class MenuView extends Application {
         backB = new Button();
         backB.setStyle("-fx-background-image: url('/Menu/Images/Icons/revertBTN.png')");
         backB.getStyleClass().add("button");
-        backB.setOnAction(event -> gv.showGameView());
+        backB.setOnAction(event -> {
+            gv.showGameView();
+            mainStage.setScene(HelpSceneWithoutBackButton(helpModel, languageModel));
+        });
 
         // Next button
         Button nextB = new Button();
