@@ -34,10 +34,12 @@ public class SimpleAI {
         System.out.println("Calculating turns to win (Current Pawn " + (board.getCurrentPawn().getPawnID()+1) + ")");
         Position[] pos = board.getPawnPositionsArray();
         turnsToWin = new int[pos.length];
+        int currentPawnID = board.getCurrentPawn().getPawnID();
         for(int i = 0; i < pos.length; i++) {
             int[][] pathMap = board.generatePathMap(pos[i], board.getPawnGoalsArray(i), board.getFencesArray());
-            turnsToWin[i] = pathMap[pos[i].getX()][pos[i].getY()] + i;//first player advantage
-            System.out.println("Pawn " + (i + 1) + ": " + turnsToWin[i]);
+            turnsToWin[i] = pathMap[pos[i].getX()][pos[i].getY()] + i;//first to last player advantage
+            if(pathMap[pos[i].getX()][pos[i].getY()] == 2) turnsToWin[i] = 2;//except when at the goal
+            System.out.println("Pawn " + (i+1) + ": " + turnsToWin[i]);
         }
     }
 
@@ -66,7 +68,8 @@ public class SimpleAI {
             }
         }
         calculateMovePosition(board, myPawn);
-
+        
+        System.out.println("Lead Pawn is " + leadPawnID);
         if (leadPawnID != myPawn.getPawnID())
         {//Another pawn is beating me
             calculateFencePlacement(board, myPawn, leadPawnID);
@@ -115,7 +118,8 @@ public class SimpleAI {
                 placementID = i;
             }
         }
-        //placementID = 0;
+    	System.out.println("Best fence is " + bestWorth);
+
         if(placementID != -1) {
             placeFence = true;
             fencePosition = moves[placementID].fence.getPosition();
