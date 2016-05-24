@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,6 +20,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -191,6 +193,12 @@ public class MenuView extends Application {
         VBox singlePlayer = new VBox();
         VBox multiPlayer = new VBox();
         VBox practice = new VBox();
+        VBox practiceMulti = new VBox();
+        SplitPane verticalPane = new SplitPane();
+        verticalPane.setOrientation(Orientation.VERTICAL);
+        final StackPane top = new StackPane();
+        final StackPane bottom = new StackPane();
+        verticalPane.setMinSize(250, 350);
 
         CheckBox challengeBox = new CheckBox();
         Label challengeLabel = new Label((String) language.getCurrentLanguage().get("Enable Challenge"));
@@ -218,9 +226,8 @@ public class MenuView extends Application {
             setFlag(gv.isWindowClosed());
         });
 
-        practice.setAlignment(Pos.CENTER_RIGHT);
         practice.getStyleClass().add("pcMenuBox");
-        practice.setMinSize(250, 350);
+        practice.setMinSize(250, 175);
         // go to practice mode
         practice.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             Board.getInstance().setupBoard(false, challengeBox.isSelected(),  true);
@@ -228,18 +235,30 @@ public class MenuView extends Application {
             setFlag(gv.isWindowClosed());
         });
 
+        practiceMulti.getStyleClass().add("pc2MenuBox");
+        practiceMulti.setMinSize(250, 175);
+        // go to practice mode with 4 players
+        practiceMulti.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            Board.getInstance().setupBoard(true, challengeBox.isSelected(),  true);
+            Platform.runLater(() -> gv.start(new Stage()));
+            setFlag(gv.isWindowClosed());
+        });
+
         // set component layouts
+        top.getChildren().add(practice);
+        bottom.getChildren().add(practiceMulti);
+        verticalPane.getItems().addAll(top,bottom);
         GridPane.setRowIndex(backB, 1);
         GridPane.setConstraints(singlePlayer, 0, 2);
         GridPane.setConstraints(multiPlayer, 1, 2);
-        GridPane.setConstraints(practice, 2, 2);
+        GridPane.setConstraints(verticalPane, 2, 2);
         GridPane.setConstraints(challengeLabel, 0, 3);
         GridPane.setConstraints(challengeBox, 1, 3);
 
         root.getStyleClass().add("background");
 
         // add components
-        root.getChildren().addAll(singlePlayer, multiPlayer, practice, backB, challengeLabel, challengeBox);
+        root.getChildren().addAll(singlePlayer, multiPlayer, verticalPane, backB, challengeLabel, challengeBox);
         root.setVgap(10);
         root.setHgap(10);
         root.setAlignment(Pos.CENTER);

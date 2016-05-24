@@ -74,6 +74,16 @@
     -fx-background-color: lightgreen;
 }
 
+.pc2MenuBox {
+    -fx-background-image: url(/Menu/Images/pc2.png);
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-background-radius: 10;
+    -fx-background-color: lightgreen;
+}
+
 .p1MenuBox:hover {
     -fx-background-color: #81E6DD;
 }
@@ -83,6 +93,10 @@
 }
 
 .pcMenuBox:hover {
+    -fx-background-color: #81E6DD;
+}
+
+.pc2MenuBox:hover {
     -fx-background-color: #81E6DD;
 }
 
